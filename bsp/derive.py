@@ -30,6 +30,8 @@ RULES = {
     "range_exponent": 1.5,
     # Indirect fire: IF = round(average LRM/MML hits / 5), only if hits >= this.
     "if_min_hits": 5,
+    # Leave LRMs/MMLs out of the direct attack when other weapons reach.
+    "if_separate": False,
 }
 
 _NOT_ATTACKS = ("ams", "anti-missile", "tag", "narc", "arrow", "long tom",
@@ -117,14 +119,25 @@ def derive_damage(ws: list[Weapon], rules=RULES):
     front = [w for w in ws if w.location != "Rear"]
     if not front:
         return None, None, []
+    if all(w.long < 3 for w in front):
+        front = [Weapon(w.location, w.name, w.damage, w.per_hit, 3, w.cluster,
+                        w.indirect, w.bv) for w in front]
     cands = sorted({_bracket_for(w.long) for w in front})
     best = None
     for b in cands:
         reach = [w for w in front if w.long >= b[2]]
+        if not reach:
+            continue
+        if rules.get("if_separate") and any(not w.indirect for w in reach):
+            # Indirect-capable launchers feed the IF special, not the main attack,
+            # when the unit has other weapons at this range.
+            reach = [w for w in reach if not w.indirect] or reach
         total = sum(w.damage * (rules["cluster_factor"] if w.cluster else 1) for w in reach)
         score = total * (b[2] ** rules["range_exponent"])
         if best is None or score > best[0]:
             best = (score, b, total, reach)
+    if best is None:
+        return None, None, []
     _, bracket, total, reach = best
     # Group size: the per-hit damage of the weapon type carrying most damage.
     by_type: dict[str, list[Weapon]] = {}

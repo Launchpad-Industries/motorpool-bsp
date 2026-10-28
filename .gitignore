@@ -7,3 +7,6 @@ cache/
 *.tsv
 credentials*.json
 token*.json
+mm-data/
+megamek-src/
+specs/

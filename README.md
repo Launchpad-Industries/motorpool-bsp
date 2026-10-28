@@ -28,13 +28,37 @@ contain mistakes.
 
 Specs use MegaMek's `.bfs` asset format, extended with provenance fields.
 
+## Getting started
+
+Needs Python 3.11+ and git.
+
+```
+pip install pyyaml numpy scipy pytest
+python -m bsp.setup_data                      # fetch MegaMek data, build caches
+python -m bsp.generate --mm-data mm-data/data/mekfiles --out specs
+python -m pytest tests
+```
+
+`generate` writes one `.bfs` spec per combat vehicle plus `specs/index.csv`.
+Add `--name Behemoth` to generate only matching units.
+
 ## Layout
 
 | Path | Contents |
 |---|---|
 | `bsp/megamek.py` | Reads MegaMek `.blk` unit files |
+| `bsp/weapons.py` | Weapon stats from MegaMek's weapon definitions |
 | `bsp/match.py` | Links asset cards to MegaMek units |
+| `bsp/derive.py` | First-pass spec: MP, TMM, range, damage, IF, Check, Threshold |
+| `bsp/cost.py` | BSP cost from a spec's card stats |
+| `bsp/bv.py` | Total Warfare vehicle BV (TechManual pp. 307-308), for reference |
+| `bsp/bfs.py` | Reads and writes `.bfs` specs with provenance fields |
+| `bsp/generate.py` | Command line: MegaMek units to `.bfs` specs |
+| `bsp/report.py` | Official vs calculated comparison page (private use) |
 | `data/card_links.yaml` | Manual card-to-unit links |
+
+All tunable constants are in `RULES` (`derive.py`) and `COST_RULES`
+(`cost.py`).
 
 ## Data and licensing
 
