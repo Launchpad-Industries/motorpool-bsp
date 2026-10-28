@@ -1,0 +1,62 @@
+# BSP Card Generator
+
+A local tool for making BattleTech **Battlefield Support asset cards** for
+units that don't have official cards, using each unit's full Total Warfare
+statistics as the starting point.
+
+It reads unit data from [MegaMek](https://megamek.org/), derives an asset
+spec (MP, TMM, range, Skill, damage, Destroy Check, Threshold, specials and
+BSP cost), records where every spec came from, and prints cards eight to a
+page.
+
+> **Status:** early development. The rules for turning a unit into an asset
+> spec are still being worked out against the official cards.
+
+## How specs are labelled
+
+Every asset carries a provenance label, which also prints on the card:
+
+| Label | Meaning |
+|---|---|
+| **Official** | As printed by Catalyst Game Labs. Never overwritten. |
+| **Approved** | Calculated or hand-tuned, then approved by a named person. History is kept. |
+| **Auto** | Calculated by this tool and not yet reviewed. |
+
+For official units the app can show the printed values, the calculated
+values, or the differences between them, since printed cards occasionally
+contain mistakes.
+
+Specs use MegaMek's `.bfs` asset format, extended with provenance fields.
+
+## Layout
+
+| Path | Contents |
+|---|---|
+| `bsp/megamek.py` | Reads MegaMek `.blk` unit files |
+| `bsp/match.py` | Links asset cards to MegaMek units |
+| `data/card_links.yaml` | Manual card-to-unit links |
+
+## Data and licensing
+
+**Code:** GNU General Public License v3 or later. See [LICENSE](LICENSE).
+
+**Unit data:** downloaded at run time from
+[MegaMek Data](https://github.com/MegaMek/mm-data), (C) The MegaMek Team,
+licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+It is not stored in this repository. Asset specs and cards this tool
+generates are derived from that data, so if you share them they fall under
+the same license: credit MegaMek, non-commercial use only, share alike.
+
+**Official asset specs** are not stored here either. They are read at run
+time from the owner's own spreadsheet.
+
+## Unofficial fan content
+
+This is an unofficial, non-commercial fan project. It is not affiliated
+with, endorsed by, or sponsored by The Topps Company, Inc., Catalyst Game
+Labs, or InMediaRes Productions, LLC.
+
+BattleTech, MechWarrior, BattleMech, 'Mech and related names are registered
+trademarks and/or trademarks of The Topps Company, Inc. Catalyst Game Labs
+and the Catalyst Game Labs logo are trademarks of InMediaRes Productions,
+LLC. Cards produced by this tool are not official cards.
