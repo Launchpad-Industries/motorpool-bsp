@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+# MegaMek data is downloaded at run time, never committed.
+mm-data/
+cache/
+# Official card specs live in the Google Sheet, not here.
+*.tsv
+credentials*.json
+token*.json

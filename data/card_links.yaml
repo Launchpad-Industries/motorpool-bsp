@@ -1,0 +1,50 @@
+# Manual links from asset card names to MegaMek unit files, for cards the
+# automatic matcher gets wrong or can't separate. Paths are relative to
+# mm-data/data/mekfiles. "review: true" means Will should confirm the choice.
+#
+# Card names are BattleTech names (trademarks of The Topps Company, Inc.);
+# this file contains no card statistics.
+
+links:
+  "Behemoth Heavy Tank|Kurita": "vehicles/Rec Guides ilClan/Vol 31/Behemoth Heavy Tank (Kurita).blk"
+  "Condor Heavy Hover Tank|Laser": "vehicles/Rec Guides ilClan/Vol 26/Condor Heavy Hover Tank (Laser).blk"
+  "Condor Heavy Hover Tank|Upgrade": "vehicles/3075/Condor Heavy Hover Tank (Upgrade).blk"
+  "Drillson Heavy Hover Tank|C": "vehicles/Rec Guides ilClan/Vol 32/Drillson Heavy Hover Tank  C.blk"
+  "LRM Carrier|Arrow IV Carrier": "vehicles/FM DC/Arrow IV Carrier.blk"
+  "M.A.S.H. Truck|Standard": "vehicles/3039u/MASH Truck.blk"
+  "Manticore Heavy Tank|Standard": "vehicles/3039u/Manticore Heavy Tank.blk"
+  "Maxim Hover Transport|Standard": "vehicles/3039u/Maxim Heavy Hover Transport.blk"
+  "Saracen Mk II|HCV": "vehicles/3145/Kurita/Saracen Mk II HCV.blk"
+  "Schrek AC Carrier|Standard": "vehicles/Rec Guides ilClan/Vol 32/Schrek AC Carrier.blk"
+  "Schrek Gauss Carrier|Standard": "vehicles/Rec Guides ilClan/Vol 32/Schrek Gauss Carrier.blk"
+  "Schrek PPC Carrier|Standard": "vehicles/3039u/Schrek PPC Carrier.blk"
+  "Skulker Wheeled Scout Tank|Standard": "vehicles/3039u/Skulker Wheeled Scout Tank.blk"
+  "Mobile HQ|Standard": "vehicles/3039u/Mobile Headquarters.blk"
+  "Hover APC|Heavy": "vehicles/3060u/Heavy Hover APC (MG).blk"
+
+review:
+  # Card has AI and 4 damage; the MG variant fits, but the plain APC is possible.
+  "Hover APC|Standard": "vehicles/3039u/APC (Hover MG).blk"
+  # Card shows 2 damage (one machine gun?) and TMM 3, where 6 MP should give +2.
+  "Tracked APC|Standard": "vehicles/3039u/APC (Tracked MG).blk"
+  # Mk. I and Mk. II both have 160 armor; Mk. I carries two AC/20s (card 20x2).
+  "Demolisher Heavy Tank|Standard": "vehicles/3039u/Demolisher Heavy Tank (Mk. I).blk"
+  # Your sheet has 11h; this file is 9h with matching 109 armor.
+  "Pegasus Scout Hover Tank|Upgrade": "vehicles/Rec Guides ilClan/Vol 25/Pegasus Scout Hover Tank (Upgrade).blk"
+  # MegaMek has 14 cruise MP; the card shows 11.
+  "Fox Armored Car|Standard": "vehicles/3085u/Cutting Edge/Fox Armored Car.blk"
+
+# Generic asset cards that stand for a type of unit, not one specific design.
+generic:
+  - "Heavy Emplacement|Heavy"
+  - "Light Emplacement|Light"
+  - "Medium Emplacement|Medium"
+  - "MG Nest|Standard"
+  - "Clan Foot Point|Standard"
+  - "Foot Conv. Infantry|Standard"
+  - "Jump Con. Infantry|Standard"
+  - "Mechanized/Motorized Conv. Infantry|Standard"
+  - "Inner Sphere Battle Armor|Standard"
+  - "Elemental Battle Armor|Standard"
+  - "Elemental Battle Armor (AP Gauss)|(AP Gauss)"
+  - "Elemental III Battle Armor|Standard"
