@@ -42,6 +42,11 @@ python -m pytest tests
 `generate` writes one `.bfs` spec per combat vehicle plus `specs/index.csv`.
 Add `--name Behemoth` to generate only matching units.
 
+`python -m bsp.listing --mm-data mm-data/data/mekfiles --out asset-specs.csv --official cards.tsv`
+writes one spreadsheet row per asset (chassis and variant split, range in three
+columns, damage as `5dx4`, with a Source column). The official TSV is optional
+and stays on your machine.
+
 ## Layout
 
 | Path | Contents |
@@ -54,6 +59,7 @@ Add `--name Behemoth` to generate only matching units.
 | `bsp/bv.py` | Total Warfare vehicle BV (TechManual pp. 307-308), for reference |
 | `bsp/bfs.py` | Reads and writes `.bfs` specs with provenance fields |
 | `bsp/generate.py` | Command line: MegaMek units to `.bfs` specs |
+| `bsp/listing.py` | Spreadsheet list: official rows, calculated rows where they differ |
 | `bsp/report.py` | Official vs calculated comparison page (private use) |
 | `data/card_links.yaml` | Manual card-to-unit links |
 
