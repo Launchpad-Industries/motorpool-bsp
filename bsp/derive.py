@@ -50,11 +50,11 @@ RULES = {
     # Commander: C3 Master / C3 Boosted Master (not C3i or slaves), or this
     # many tons of communications equipment.
     "commander_comms_tons": 5.0,
-    # Crit-Seeker: small-cluster weapons (SRM, Streak SRM, MML, LB 20-X) give
-    # at least this share of the main attack and at least this much damage.
+    # Crit-Seeker: small-cluster weapons (SRM, Streak SRM, MML, LB 20-X) in the
+    # main attack deal at least crit_min_damage (and crit_share of it).
     # MRMs (5-point groups) and smaller LB-X don't count, matching the cards.
-    "crit_share": 0.4,
-    "crit_min_damage": 10,
+    "crit_share": 0.0,
+    "crit_min_damage": 14,
 }
 
 # Artillery pieces and their card codes ("Artillery (LT)" on official cards).
