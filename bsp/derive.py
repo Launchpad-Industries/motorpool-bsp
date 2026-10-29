@@ -33,6 +33,8 @@ RULES = {
     # "top_bv": bracket from the highest-BV weapon type (91/110 official
     # ranges); "score": bracket maximising damage x range^exponent (87/110).
     "range_rule": "top_bv",
+    "main_share": None,     # see derive_damage
+    "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
     "reach_bracket": "medium",
     # Indirect fire: IF = round(average LRM/MML hits / 5), only if hits >= this.
@@ -207,8 +209,22 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         groups: dict[str, list[Weapon]] = {}
         for w in front:
             groups.setdefault(w.name, []).append(w)
-        top = max(groups.values(), key=lambda g: sum(x.bv for x in g))
-        cands = [_bracket_for(top[0].long)]
+        gbv = lambda g: sum(x.bv for x in g)
+        top = max(groups.values(), key=gbv)
+        b = _bracket_for(top[0].long)
+        # Other main weapons (BV at least main_share of the top type's) with a
+        # similar bracket (one step away at most) pull the range down to the
+        # shorter bracket: Will picks the shorter of two close main weapons
+        # (Challenger X: Gauss 7/14/21 + LB 10-X 6/12/18 -> 6/12/18).
+        share = rules.get("main_share")
+        if share:
+            i = STANDARD_BRACKETS.index(b)
+            for g in groups.values():
+                gb = _bracket_for(g[0].long)
+                j = STANDARD_BRACKETS.index(gb)
+                if gbv(g) >= share * gbv(top) and i - rules.get("main_steps", 1) <= j < i:
+                    b, i = gb, j
+        cands = [b]
     else:
         cands = sorted({_bracket_for(w.long) for w in front})
     best = None
