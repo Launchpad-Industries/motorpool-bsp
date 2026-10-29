@@ -44,7 +44,7 @@ points average error (2.9 on cards left out of the fit).
 | MP | MegaMek cruise MP | Matches the cards except the Fox (confirmed real). |
 | TMM | Standard TW movement table on card MP; +1 VTOL, +1 WiGE, +1 vehicle stealth | 107/118 official vehicles. |
 | Skill | 6; 5 for Clan front-line designs; −1 with a targeting computer; 8 for artillery | 114/116. Clan versions of Inner Sphere designs stay at 6, as on the cards. |
-| Range | Long range of the weapon type with the most BV (the unit's "character" weapon), as a standard bracket | 91/110 official ranges (the alternative, maximising damage × range, gets 87 and picks the Bulldog (Plasma)'s Streaks over its plasma rifle). |
+| Range | Long range of the weapon type with the most BV (the unit's "character" weapon), as a standard bracket | 93/110 official ranges (the alternative, maximising damage × range, gets 87 and picks the Bulldog (Plasma)'s Streaks over its plasma rifle). |
 | Damage | Average damage of weapons reaching the bracket's medium range; cluster weapons ×0.75 | Grouping is mostly judgment on the cards: total within 15% on 67/115. |
 | Threshold | 8 at 75+ tons, else 5 | 117/118 (Von Luckner at 75 t is 8). |
 | Check | Armor BV = (armor × 2.5 + structure × 1.5) × armor mod × motive mod, then cutoffs | 111/118. Motive: hover/WiGE 0.55, VTOL 0.7, wheeled 0.8, tracked 0.9. Hover is lower than the TechManual's 0.7 because hover cards are consistently less durable. Cutoffs: 6 ≥ 80, 7 ≥ 128, 8 ≥ 199, 9 ≥ 353, 10 ≥ 395, 11 ≥ 559, 12 ≥ 754. |
@@ -69,13 +69,15 @@ Armor modifiers for Check:
 | Arrow and artillery units keep other weapons | Regular attack from the remaining weapons | Priced normally, on top | The rules allow either attack each turn; Will would include them. Official cards omit them. |
 | BRA, RCA, RFA | From MegaMek armor type | Defense ×1.5 | TacOps/MegaMek armor BV multiplier. Matches the Savannah (Reflective) +1 point. |
 | Commander | C3 Master or C3 Boosted Master (not C3i or slaves), or 5+ tons of communications equipment | +15 points flat | Matches Catalyst: the Skulker/Skulker C3M and Mobile HQ/Browning comparisons all imply 15–17. Will thinks it's worth less in play but chose to match the cards. |
-| Crit-Seeker | Small-cluster weapons in the main attack land at least 14 average damage. Counts SRMs, Streak SRMs and MMLs at their average damage, and every LB-X at its average pellet hits on the Cluster Hits Table (1 point each: LB 5-X 3.2, 10-X 6.3, 20-X 12.7). | Offense ×1.05 (fitted) | Weapons whose TW damage lands in 1–2 point clusters. 114/118 official vehicles, no false positives. Three LB 5-X average 9.5 hits, which is why the Pike (LB-X) just misses, as Will predicted. MRMs (5-point groups) don't count. Misses: Pegasus (Upgrade) and Striker (Stealth) (MMLs undercounted), Behemoth and SturmFeur (SRM) (SRMs outside the main attack). |
+| Crit-Seeker | Small-cluster weapons in the main attack land at least 14 average damage. Counts SRMs, Streak SRMs and MMLs at their average damage, and every LB-X at its average pellet hits on the Cluster Hits Table (1 point each: LB 5-X 3.2, 10-X 6.3, 20-X 12.7). | Offense ×1.05 (fitted) | Weapons whose TW damage lands in 1–2 point clusters. 116/118 official vehicles, no false positives. Three LB 5-X average 9.5 hits, which is why the Pike (LB-X) just misses, as Will predicted. MRMs (5-point groups) don't count. Misses: Behemoth and SturmFeur (SRM) (SRMs outside the main attack). |
 | ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
-| IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
+| IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
 | No Turret | Vehicle has no turret | Offense ×0.88 | Fitted. |
 | PRB | Active probe fitted | Offense ×1.08 | Fitted; to be reviewed. |
 | TAG | TAG fitted | Offense ×1.05 | Fitted; to be reviewed. |
 | TC | Targeting computer | Through Skill (one step better) | |
+
+| MML | Dual mode: SRM mode (2 points per hit, 3/6/9) for the direct attack and Crit-Seeker; LRM mode for IF | — | Will: an MML can fire either, so it can give both Crit-Seeker and IF. Fixed Crit-Seeker on the Pegasus (Upgrade) and Striker (Stealth). |
 
 ## Known exceptions
 

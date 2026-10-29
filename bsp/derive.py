@@ -78,6 +78,7 @@ class Weapon:
     indirect: bool
     bv: float
     anti_infantry: bool = False
+    if_damage: float | None = None   # damage counted for IF, if not `damage`
 
 
 @dataclass
@@ -130,13 +131,19 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
             continue
         long = s.get("longRange") or 0
         nm = (s.get("name") or name)
+        if_dmg = None
         if "MML" in nm:
-            long = 21
+            # MMLs fire SRMs (2 points per hit, 3/6/9) as their direct attack
+            # and LRMs (1 point per hit) for indirect fire.
+            m = re.search(r"(\d+)", nm)
+            hits = average_cluster_hits(int(m.group(1)) if m else 3)
+            avg, if_dmg, long = 2 * hits, hits, 9
         out.append(Weapon(loc, nm, float(avg), float(per), int(long), cluster,
                           indirect=("LRM" in nm or "MML" in nm) and "Streak" not in nm,
                           bv=float(s.get("bv") or 0),
                           anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
-                                         or "plasma" in nm.lower())))
+                                         or "plasma" in nm.lower()),
+                          if_damage=if_dmg))
     return out
 
 
@@ -193,7 +200,7 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         return None, None, []
     if all(w.long < 3 for w in front):
         front = [Weapon(w.location, w.name, w.damage, w.per_hit, 3, w.cluster,
-                        w.indirect, w.bv) for w in front]
+                        w.indirect, w.bv, w.anti_infantry, w.if_damage) for w in front]
     if rules.get("range_rule") == "top_bv":
         # The weapon type with the most BV gives the unit its character;
         # its long range sets the bracket (e.g. Bulldog (Plasma): plasma rifle).
@@ -236,7 +243,8 @@ def derive_damage(ws: list[Weapon], rules=RULES):
 
 
 def derive_indirect(ws: list[Weapon], rules=RULES) -> int:
-    hits = sum(w.damage for w in ws if w.indirect)
+    hits = sum(w.if_damage if w.if_damage is not None else w.damage
+               for w in ws if w.indirect)
     if hits < rules["if_min_hits"]:
         return 0
     return int(math.floor(hits / 5 + 0.5))
