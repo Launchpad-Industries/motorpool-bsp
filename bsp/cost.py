@@ -52,7 +52,7 @@ COST_RULES = {
     # carrier pays about twice a Check 7 one, not five times. 1.1 per level
     # fitted on the 7 official APC cards (all Check 5-7).
     "apc_points": 1.1,
-    "special_mult": {"Crit-Seeker": 1.054,
+    "special_mult": {"Crit-Seeker": 1.1,   # +55% crits per crit roll; cards fit best at 1.1
                      "No Turret": 0.876,    # 12% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }
