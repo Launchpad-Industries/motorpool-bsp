@@ -18,7 +18,9 @@ from .megamek import Unit
 RULES = {
     # Check: armor BV = (armor*2.5 + structure*1.5) * armor mod * motive mod
     "motive_mod": {"t": 0.9, "w": 0.8, "h": 0.55, "v": 0.7, "g": 0.55, "n": 0.6},
-    "armor_mod": {4: 2.0, 16: 1.5},          # hardened, ferro-lamellor
+    # Hardened x2 (fitted); ferro-lamellor x1.4: about +25% vs 5-point groups,
+    # more vs small hits, and the least that keeps both Eurus cards at Check 11.
+    "armor_mod": {4: 2.0, 16: 1.4},
     # Lower bound of armor BV for each Check value (fitted to official cards).
     # Midpoints between the official cards' ranges for neighbouring Checks.
     "check_cutoffs": [(754, 12), (559, 11), (395, 10), (353, 9), (199, 8),
