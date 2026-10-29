@@ -32,8 +32,8 @@ RULES = {
     "if_min_hits": 5,
     # Leave LRMs/MMLs out of the direct attack when other weapons reach.
     "if_separate": False,
-    # AI special: anti-infantry weapons (MegaMek burst-fire flag, plus plasma
-    # rifles) supply at least this share of the card's main attack.
+    # AI special: anti-infantry weapons (MegaMek burst-fire flag, plus all plasma
+    # weapons) supply at least this share of the card's main attack.
     "ai_share": 0.5,
 }
 
@@ -108,7 +108,7 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
                           indirect=("LRM" in nm or "MML" in nm) and "Streak" not in nm,
                           bv=float(s.get("bv") or 0),
                           anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
-                                         or "plasma rifle" in nm.lower())))
+                                         or "plasma" in nm.lower())))
     return out
 
 
