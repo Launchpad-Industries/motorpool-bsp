@@ -34,13 +34,18 @@ COST_RULES = {
     "arrow_points": 38,
     "artillery_points": {"LT": 57, "Sniper": 38, "Thumper": 29},
     # Flat points for specials that don't scale with firepower.
-    "flat_points": {"Commander": 15},
+    # ECM6 from the Savannah (Interdictor) and Browning cards; ECM3 scaled
+    # by radius.
+    "flat_points": {"Commander": 15, "ECM6": 7, "ECM3": 3.5, "ECM": 7},
     # Special armors multiply defensive BV (MegaMek/TacOps: reactive,
     # reflective and ballistic-reinforced x1.5). Applied to the defense part
     # of cost, not to Check: putting it in Check broke two official cards.
-    "armor_defense_mult": {"RCA": 1.5, "RFA": 1.5, "BRA": 1.5},
-    "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049, "ECM": 1.624,
-                     "PRB": 1.079, "AMS": 1.028, "APC": 1.129,
+    # AMS works like a special armor against missiles only (-4 on the cluster
+    # roll), so it is worth more on tougher units. x1.15 is the most the
+    # official AMS cards support; they value AMS at under a point.
+    "armor_defense_mult": {"RCA": 1.5, "RFA": 1.5, "BRA": 1.5, "AMS": 1.15},
+    "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049,
+                     "PRB": 1.079, "APC": 1.129,
                      "No Turret": 0.876,
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }

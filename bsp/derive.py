@@ -243,8 +243,10 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         sp.specials.append("TAG")
     if "anti-missile" in names or "antimissile" in names or " ams" in f" {names}":
         sp.specials.append("AMS")
-    if "ecm" in names or "guardian" in names:
-        sp.specials.append("ECM")
+    if "watchdog" in names:
+        sp.specials.append("ECM3")          # Watchdog CEWS: 3-hex bubble
+    elif "ecm" in names or "guardian" in names:
+        sp.specials.append("ECM6")          # Guardian, Clan, Angel: 6-hex
     if "probe" in names or "beagle" in names:
         sp.specials.append("PRB")
     sp.notes.append(f"armor BV {armor_bv:.0f}")

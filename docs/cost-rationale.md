@@ -60,7 +60,7 @@ Armor modifiers for Check:
 | Special | When the generator adds it | Cost | Why |
 |---|---|---|---|
 | AI | Anti-infantry weapons give at least half of the main attack. Anti-infantry = MegaMek burst-fire weapons (machine guns, flamers, small/micro/ER small/X-pulse small pulse lasers, AP Gauss) plus all plasma weapons. Standard and ER small lasers don't count. | Offense ×1.05 (set by hand) | Matches the Hover APCs. Tracked APC and Coolant Trucks are known exceptions. The fitted value (×0.44) was meaningless: only 4 cards. |
-| AMS | Anti-missile system fitted | Offense ×1.03 (to be revised) | Under review: should be flat, so units with no weapons still pay for it. |
+| AMS | Anti-missile system fitted | Defense ×1.15 | Works like a special armor against missiles only (−4 on the cluster roll), so it is worth more on tougher units. TechManual counts AMS as defensive equipment (32 BV + ammo). The official AMS cards value it at under a point; ×1.15 is the most they support. |
 | APC X | Troop space: under 4 t = APC1; each full 4 t = 2 points (a battle armor squad) | Offense ×1.13 | Matches all 6 official APC vehicles. Savior (3 t, APC2) is an exception. |
 | Arrow X | One per Arrow IV launcher | 38 points each | Scaled from the Long Tom by one-shot Strike cost (Arrow IV Strike 16 vs Long Tom 24). The Pilum fits; the early Arrow IV Carrier card (58) is a known outlier, likely due for an update. |
 | Artillery (type) X | One per artillery piece | Long Tom 57, Sniper 38, Thumper 29 | Long Tom from the two Mobile Long Tom cards; others scaled by Strike cost (24 / 16 / 12). Artillery gets Skill 8 and no Veteran cost (the rules forbid Skill upgrades). |
@@ -68,7 +68,7 @@ Armor modifiers for Check:
 | BRA, RCA, RFA | From MegaMek armor type | Defense ×1.5 | TacOps/MegaMek armor BV multiplier. Matches the Savannah (Reflective) +1 point. |
 | Commander | C3 Master or C3 Boosted Master (not C3i or slaves), or 5+ tons of communications equipment | +15 points flat | Matches Catalyst: the Skulker/Skulker C3M and Mobile HQ/Browning comparisons all imply 15–17. Will thinks it's worth less in play but chose to match the cards. |
 | Crit-Seeker | Not yet detected | Offense ×1.05 | To be reviewed. |
-| ECM | ECM suite fitted | Offense ×1.62 (to be revised) | Under review: should be flat. |
+| ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
 | IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
 | No Turret | Vehicle has no turret | Offense ×0.88 | Fitted. |
 | PRB | Active probe fitted | Offense ×1.08 | Fitted; to be reviewed. |
