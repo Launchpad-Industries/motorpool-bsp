@@ -91,6 +91,18 @@ class Unit:
         per = math.ceil(self.tonnage / 10)
         return per * len(self.armor)
 
+    @property
+    def troop_space(self) -> float:
+        """Tons of infantry compartment (MegaMek 'troopspace' transporters)."""
+        total = 0.0
+        for t in self.raw.get("transporters", []):
+            if t.lower().startswith("troopspace:"):
+                try:
+                    total += float(t.split(":")[1])
+                except ValueError:
+                    pass
+        return total
+
     def weapons(self) -> list[tuple[str, str]]:
         """(location, item) pairs, excluding ammo."""
         return [(loc, it) for loc, items in self.equipment.items()

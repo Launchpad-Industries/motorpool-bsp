@@ -21,12 +21,11 @@ links:
   "Skulker Wheeled Scout Tank|Standard": "vehicles/3039u/Skulker Wheeled Scout Tank.blk"
   "Mobile HQ|Standard": "vehicles/3039u/Mobile Headquarters.blk"
   "Hover APC|Heavy": "vehicles/3060u/Heavy Hover APC (MG).blk"
+  # Plain APCs: troop space plus 2 MGs (hover) / 1 MG (tracked), matching the cards.
+  "Hover APC|Standard": "vehicles/3039u/APC (Hover).blk"
+  "Tracked APC|Standard": "vehicles/3039u/APC (Tracked).blk"
 
 review:
-  # Card has AI and 4 damage; the MG variant fits, but the plain APC is possible.
-  "Hover APC|Standard": "vehicles/3039u/APC (Hover MG).blk"
-  # Card shows 2 damage (one machine gun?) and TMM 3, where 6 MP should give +2.
-  "Tracked APC|Standard": "vehicles/3039u/APC (Tracked MG).blk"
   # Mk. I and Mk. II both have 160 armor; Mk. I carries two AC/20s (card 20x2).
   "Demolisher Heavy Tank|Standard": "vehicles/3039u/Demolisher Heavy Tank (Mk. I).blk"
   # Your sheet has 11h; this file is 9h with matching 109 armor.

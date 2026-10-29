@@ -35,6 +35,9 @@ RULES = {
     # AI special: anti-infantry weapons (MegaMek burst-fire flag, plus all plasma
     # weapons) supply at least this share of the card's main attack.
     "ai_share": 0.5,
+    # APC X from troop space (tons): under 4 t carries one platoon (APC1);
+    # each full 4 t carries a battle armor squad, which needs 2 APC points.
+    "apc_ton_step": 4.0,
 }
 
 _NOT_ATTACKS = ("ams", "anti-missile", "tag", "narc", "arrow", "long tom",
@@ -194,6 +197,10 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         sp.specials.append("No Turret")
     if sp.indirect:
         sp.specials.append(f"IF{sp.indirect}")
+    if unit.troop_space > 0:
+        step = rules["apc_ton_step"]
+        apc = 1 if unit.troop_space < step else 2 * int(unit.troop_space // step)
+        sp.specials.append(f"APC{apc}")
     names = " ".join(w for _, w in unit.weapons()).lower()
     if "tag" in names:
         sp.specials.append("TAG")
