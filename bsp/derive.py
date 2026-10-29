@@ -68,6 +68,7 @@ class Spec:
     range: tuple | None = None
     damage: tuple | None = None        # (per hit, hits)
     indirect: int = 0
+    arrow: int = 0                     # Arrow IV launchers
     check: int = 0
     threshold: int = 5
     specials: list = field(default_factory=list)
@@ -187,6 +188,12 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         sp.tmm += 1
     ws = weapons(unit, table)
     sp.range, sp.damage, reach = derive_damage(ws, rules)
+    sp.arrow = sum(1 for _, it in unit.weapons()
+                   if (table.get(_clean(it)) or {}).get("name") == "Arrow IV")
+    if sp.arrow:
+        # Arrow IV replaces the regular attack on official cards (range "Arrow").
+        sp.range, sp.damage, reach = None, None, []
+        sp.specials.append("Arrow" if sp.arrow == 1 else f"Arrow{sp.arrow}")
     total = sum(w.damage for w in reach)
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
         sp.specials.append("AI")

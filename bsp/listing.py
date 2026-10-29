@@ -60,7 +60,7 @@ def _type(unit: Unit) -> str:
 
 def calc_row(unit: Unit, weapons: dict, chassis=None, variant=None) -> dict:
     sp, skill, c = spec_for(unit, weapons)
-    rng = sp.range or ("-", "-", "-")
+    rng = sp.range or (("Arrow", "-", "-") if sp.arrow else ("-", "-", "-"))
     return {
         "Chassis": chassis or unit.name, "Variant": variant or split_variant(unit),
         "Type": _type(unit), "Source": "Calculated",

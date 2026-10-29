@@ -13,6 +13,7 @@ points to tune, not published rules."""
 from __future__ import annotations
 
 import math
+import re
 
 SPEED_FACTOR = [0.44, 0.54, 0.65, 0.77, 0.88, 1.0, 1.12, 1.24, 1.37, 1.5, 1.63,
                 1.76, 1.89, 2.02, 2.16, 2.3, 2.44, 2.58, 2.72, 2.86, 3.0, 3.15,
@@ -26,6 +27,9 @@ COST_RULES = {
     "defense_scale": 0.574,     # x the Check value curve below
     "skill_step": 1.101,        # offense x this per point of Skill below 6
     "veteran": 1.15,
+    # Fixed points per Arrow IV launcher, set by Will: between what the
+    # Arrow IV Carrier (~24) and the newer Pilum (~42) imply.
+    "arrow_points": 30,
     "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049, "ECM": 1.624,
                      "PRB": 1.079, "AMS": 1.028, "APC": 1.129,
                      "No Turret": 0.876,
@@ -69,6 +73,10 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
             off *= mult
     de = rules["defense_scale"] * check_value(check) * (1 + tmm / 10)
     raw = rules["base"] + (off + de) / 20
+    for sp in specials:
+        m = re.fullmatch(r"arrow(\d*)", sp.strip().lower())
+        if m:
+            raw += rules["arrow_points"] * int(m.group(1) or 1)
     return {"regular": int(math.floor(raw + 0.5)),
             "veteran": int(math.floor(raw * rules["veteran"] + 0.5)),
             "unrounded": raw, "offense_bv": off, "defense_bv": de}
