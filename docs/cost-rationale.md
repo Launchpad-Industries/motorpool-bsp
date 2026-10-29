@@ -44,6 +44,8 @@ points average error (2.9 on cards left out of the fit).
 | MP | MegaMek cruise MP | Matches the cards except the Fox (confirmed real). |
 | TMM | Standard TW movement table on card MP; +1 VTOL, +1 WiGE, +1 vehicle stealth | 107/118 official vehicles. |
 | Skill | 6; 5 for Clan front-line designs; −1 with a targeting computer; 8 for artillery | 114/116. Clan versions of Inner Sphere designs stay at 6, as on the cards. |
+| Range | Long range of the weapon type with the most BV (the unit's "character" weapon), as a standard bracket | 91/110 official ranges (the alternative, maximising damage × range, gets 87 and picks the Bulldog (Plasma)'s Streaks over its plasma rifle). |
+| Damage | Average damage of weapons reaching the bracket's medium range; cluster weapons ×0.75 | Grouping is mostly judgment on the cards: total within 15% on 67/115. |
 | Threshold | 8 at 75+ tons, else 5 | 117/118 (Von Luckner at 75 t is 8). |
 | Check | Armor BV = (armor × 2.5 + structure × 1.5) × armor mod × motive mod, then cutoffs | 111/118. Motive: hover/WiGE 0.55, VTOL 0.7, wheeled 0.8, tracked 0.9. Hover is lower than the TechManual's 0.7 because hover cards are consistently less durable. Cutoffs: 6 ≥ 80, 7 ≥ 128, 8 ≥ 199, 9 ≥ 353, 10 ≥ 395, 11 ≥ 559, 12 ≥ 754. |
 

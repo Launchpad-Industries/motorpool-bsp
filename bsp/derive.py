@@ -30,6 +30,11 @@ RULES = {
     "cluster_factor": 0.75,
     # Range bracket choice: maximise total damage x (long range ** exponent).
     "range_exponent": 1.5,
+    # "top_bv": bracket from the highest-BV weapon type (91/110 official
+    # ranges); "score": bracket maximising damage x range^exponent (87/110).
+    "range_rule": "top_bv",
+    # Weapons reaching the bracket's medium range count toward damage.
+    "reach_bracket": "medium",
     # Indirect fire: IF = round(average LRM/MML hits / 5), only if hits >= this.
     "if_min_hits": 5,
     # Leave LRMs/MMLs out of the direct attack when other weapons reach.
@@ -155,10 +160,21 @@ def derive_damage(ws: list[Weapon], rules=RULES):
     if all(w.long < 3 for w in front):
         front = [Weapon(w.location, w.name, w.damage, w.per_hit, 3, w.cluster,
                         w.indirect, w.bv) for w in front]
-    cands = sorted({_bracket_for(w.long) for w in front})
+    if rules.get("range_rule") == "top_bv":
+        # The weapon type with the most BV gives the unit its character;
+        # its long range sets the bracket (e.g. Bulldog (Plasma): plasma rifle).
+        groups: dict[str, list[Weapon]] = {}
+        for w in front:
+            groups.setdefault(w.name, []).append(w)
+        top = max(groups.values(), key=lambda g: sum(x.bv for x in g))
+        cands = [_bracket_for(top[0].long)]
+    else:
+        cands = sorted({_bracket_for(w.long) for w in front})
     best = None
     for b in cands:
-        reach = [w for w in front if w.long >= b[2]]
+        # Weapons count toward the attack if they reach this far.
+        cut = b[2] if rules.get("reach_bracket", "long") == "long" else b[1]
+        reach = [w for w in front if w.long >= cut]
         if not reach:
             continue
         if rules.get("if_separate") and any(not w.indirect for w in reach):
