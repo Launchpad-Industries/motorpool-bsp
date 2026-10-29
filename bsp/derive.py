@@ -34,6 +34,10 @@ RULES = {
     # ranges); "score": bracket maximising damage x range^exponent (87/110).
     "range_rule": "top_bv",
     "main_share": None,     # see derive_damage
+    # Weapon types with under this share of the top type's BV are secondary
+    # and don't add to damage (Will). 0.3 keeps the Challenger X's LRM 10
+    # (28% of the Gauss's BV) in the attack; damage within 15%: 68 -> 73.
+    "damage_main_share": 0.3,
     "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
     "reach_bracket": "medium",
@@ -232,6 +236,15 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         # Weapons count toward the attack if they reach this far.
         cut = b[2] if rules.get("reach_bracket", "long") == "long" else b[1]
         reach = [w for w in front if w.long >= cut]
+        dshare = rules.get("damage_main_share")
+        if dshare and reach:
+            # Secondary weapons (small BV next to the main weapons) don't add
+            # to the attack (Will's hand method).
+            tbv: dict[str, float] = {}
+            for w in reach:
+                tbv[w.name] = tbv.get(w.name, 0) + w.bv
+            top_bv = max(tbv.values())
+            reach = [w for w in reach if tbv[w.name] >= dshare * top_bv]
         if not reach:
             continue
         if rules.get("if_separate") and any(not w.indirect for w in reach):
@@ -252,9 +265,9 @@ def derive_damage(ws: list[Weapon], rules=RULES):
     main = max(by_type.values(), key=lambda g: sum(x.damage for x in g))
     size = main[0].per_hit if not main[0].cluster else min(10, max(5, round(total / max(1, len(reach)))))
     size = max(1, min(int(round(size)), int(round(total))))
-    hits = max(1, int(round(total / size)))
-    if hits == 1:
-        size = int(round(total))
+    hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
+    if hits == 1 or rules.get("group_spread"):
+        size = int(round(total / hits))
     return bracket, (size, hits), reach
 
 
