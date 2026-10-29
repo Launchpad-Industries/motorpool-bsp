@@ -40,7 +40,7 @@ def default_skill(unit: Unit) -> int:
 
 def spec_for(unit: Unit, weapons: dict):
     sp = derive_vehicle(unit, weapons)
-    skill = default_skill(unit)
+    skill = 8 if sp.artillery else default_skill(unit)   # official artillery cards
     if skill < 6 and "TC" not in sp.specials and any(
             "targeting" in it.lower() for _, it in unit.weapons()):
         sp.specials.append("TC")
@@ -69,9 +69,9 @@ def main(argv=None):
                      "mp": f"{sp.mp}{sp.mode}", "tmm": sp.tmm,
                      "range": "/".join(map(str, sp.range)) if sp.range else "-",
                      "damage": f"{sp.damage[0]}x{sp.damage[1]}" if sp.damage else "-",
-                     "skill": f"{skill} ({skill - 1})", "check": sp.check,
+                     "skill": f"{skill}" if c["veteran"] is None else f"{skill} ({skill - 1})", "check": sp.check,
                      "threshold": sp.threshold,
-                     "cost": f"{c['regular']} ({c['veteran']})",
+                     "cost": f"{c['regular']}" if c["veteran"] is None else f"{c['regular']} ({c['veteran']})",
                      "specials": ", ".join(sorted(set(sp.specials))) or "-",
                      "file": fn})
     with open(a.out / "index.csv", "w", newline="", encoding="utf-8") as f:

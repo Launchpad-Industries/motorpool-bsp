@@ -46,7 +46,7 @@ def _calc(u, weapons) -> dict:
             "range": "/".join(map(str, sp.range)) if sp.range else "-",
             "dmg": dmg, "skill": str(skill), "check": str(sp.check),
             "thr": str(sp.threshold), "if": str(sp.indirect),
-            "cost": f"{c['regular']} ({c['veteran']})",
+            "cost": f"{c['regular']}" if c['veteran'] is None else f"{c['regular']} ({c['veteran']})",
             "_cost": c["regular"]}
 
 

@@ -27,9 +27,12 @@ COST_RULES = {
     "defense_scale": 0.574,     # x the Check value curve below
     "skill_step": 1.101,        # offense x this per point of Skill below 6
     "veteran": 1.15,
-    # Fixed points per Arrow IV launcher, set by Will: between what the
-    # Arrow IV Carrier (~24) and the newer Pilum (~42) imply.
-    "arrow_points": 30,
+    # Fixed points per launcher / piece. Long Tom (57) from the two Mobile
+    # Long Tom cards; the rest scaled from it by one-shot Strike cost
+    # (Long Tom 24, Arrow IV 16, Sniper 16, Thumper 12). The early Arrow IV
+    # Carrier card (58) is a known outlier; the Pilum fits.
+    "arrow_points": 38,
+    "artillery_points": {"LT": 57, "Sniper": 38, "Thumper": 29},
     "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049, "ECM": 1.624,
                      "PRB": 1.079, "AMS": 1.028, "APC": 1.129,
                      "No Turret": 0.876,
@@ -73,10 +76,16 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
             off *= mult
     de = rules["defense_scale"] * check_value(check) * (1 + tmm / 10)
     raw = rules["base"] + (off + de) / 20
+    artillery = False
     for sp in specials:
         m = re.fullmatch(r"arrow(\d*)", sp.strip().lower())
         if m:
             raw += rules["arrow_points"] * int(m.group(1) or 1)
+        m = re.fullmatch(r"artillery \((\w+)\)(\d*)", sp.strip(), re.I)
+        if m:
+            artillery = True
+            raw += rules["artillery_points"].get(m.group(1), 0) * int(m.group(2) or 1)
     return {"regular": int(math.floor(raw + 0.5)),
-            "veteran": int(math.floor(raw * rules["veteran"] + 0.5)),
+            # Artillery assets can't buy Skill upgrades (BSP rules).
+            "veteran": None if artillery else int(math.floor(raw * rules["veteran"] + 0.5)),
             "unrounded": raw, "offense_bv": off, "defense_bv": de}

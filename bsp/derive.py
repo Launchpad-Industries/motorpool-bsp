@@ -42,6 +42,9 @@ RULES = {
     "arrow_keeps_weapons": True,
 }
 
+# Artillery pieces and their card codes ("Artillery (LT)" on official cards).
+ARTILLERY_CODES = {"Long Tom": "LT", "Sniper": "Sniper", "Thumper": "Thumper"}
+
 _NOT_ATTACKS = ("ams", "anti-missile", "tag", "narc", "arrow", "long tom",
                 "sniper", "thumper", "c3", "ecm", "probe")
 
@@ -71,6 +74,7 @@ class Spec:
     damage: tuple | None = None        # (per hit, hits)
     indirect: int = 0
     arrow: int = 0                     # Arrow IV launchers
+    artillery: dict = field(default_factory=dict)   # {"LT": 1, ...}
     check: int = 0
     threshold: int = 5
     specials: list = field(default_factory=list)
@@ -198,6 +202,12 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         if not rules["arrow_keeps_weapons"]:
             sp.range, sp.damage, reach = None, None, []
         sp.specials.append("Arrow" if sp.arrow == 1 else f"Arrow{sp.arrow}")
+    for _, it in unit.weapons():
+        code = ARTILLERY_CODES.get((table.get(_clean(it)) or {}).get("name"))
+        if code:
+            sp.artillery[code] = sp.artillery.get(code, 0) + 1
+    for code, n in sorted(sp.artillery.items()):
+        sp.specials.append(f"Artillery ({code})" + (str(n) if n > 1 else ""))
     total = sum(w.damage for w in reach)
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
         sp.specials.append("AI")

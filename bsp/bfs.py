@@ -42,11 +42,13 @@ def to_bfs(unit: Unit, spec, cost: dict, skill: int,
         "movement": {"mp": spec.mp, "mode": MODE.get(spec.mode, spec.mode.upper())},
         "tmm": spec.tmm,
         "range": rng,
-        "skill": {"standard": skill, "veteran": skill - 1},
+        "skill": {"standard": skill} if cost["veteran"] is None else
+                 {"standard": skill, "veteran": skill - 1},
         "damage": {"perHit": int(dmg[0]), "hits": int(dmg[1])},
         "destroyCheck": spec.check,
         "threshold": spec.threshold,
-        "cost": {"standard": cost["regular"], "veteran": cost["veteran"]},
+        "cost": {"standard": cost["regular"]} if cost["veteran"] is None else
+                {"standard": cost["regular"], "veteran": cost["veteran"]},
         "specials": sorted(set(spec.specials)) or [],
         # --- BSP Card Generator extensions ---
         "provenance": provenance,           # official | approved | auto
