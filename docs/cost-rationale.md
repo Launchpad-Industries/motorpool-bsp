@@ -72,7 +72,7 @@ Armor modifiers for Check:
 | Crit-Seeker | Small-cluster weapons in the main attack land at least 14 average damage. Counts SRMs, Streak SRMs and MMLs at their average damage, and every LB-X at its average pellet hits on the Cluster Hits Table (1 point each: LB 5-X 3.2, 10-X 6.3, 20-X 12.7). | Offense ×1.05 (fitted) | Weapons whose TW damage lands in 1–2 point clusters. 116/118 official vehicles, no false positives. Three LB 5-X average 9.5 hits, which is why the Pike (LB-X) just misses, as Will predicted. MRMs (5-point groups) don't count. Misses: Behemoth and SturmFeur (SRM) (SRMs outside the main attack). |
 | ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
 | IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
-| No Turret | Vehicle has no turret | Offense ×0.88 | Fitted. |
+| No Turret | Vehicle has no turret | Offense ×0.88 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. The fitted value (12% off, 25 cards) sits inside that range, so it stays. |
 | PRB | Active probe fitted | Offense ×1.08 | Fitted; to be reviewed. |
 | TAG | TAG fitted | Offense ×1.05 | Fitted; to be reviewed. |
 | TC | Targeting computer | Through Skill (one step better) | |

@@ -46,7 +46,7 @@ COST_RULES = {
     "armor_defense_mult": {"RCA": 1.5, "RFA": 1.5, "BRA": 1.5, "AMS": 1.15},
     "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049,
                      "PRB": 1.079, "APC": 1.129,
-                     "No Turret": 0.876,
+                     "No Turret": 0.876,    # 12% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }
 
