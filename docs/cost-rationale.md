@@ -73,7 +73,7 @@ Armor modifiers for Check:
 | ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
 | IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
 | No Turret | Vehicle has no turret | Offense ×0.88 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. The fitted value (12% off, 25 cards) sits inside that range, so it stays. |
-| PRB | Active probe fitted | Offense ×1.08 | Fitted; to be reviewed. |
+| PRB | Active probe fitted | +1 point flat | A sensor, so its value doesn't scale with firepower (Will). TechManual probe BV is 10–25 (½–1¼ points); without a probe adjustment the 8 PRB cards price about 1 point low. Replaced a fitted ×1.08 offense multiplier. |
 | TAG | TAG fitted | Offense ×1.05 | Fitted; to be reviewed. |
 | TC | Targeting computer | Through Skill (one step better) | |
 
