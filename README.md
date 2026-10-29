@@ -63,6 +63,8 @@ and stays on your machine.
 | `bsp/report.py` | Official vs calculated comparison page (private use) |
 | `data/card_links.yaml` | Manual card-to-unit links |
 
+The reasoning behind every rule and cost is in [docs/cost-rationale.md](docs/cost-rationale.md).
+
 All tunable constants are in `RULES` (`derive.py`) and `COST_RULES`
 (`cost.py`).
 

@@ -33,6 +33,8 @@ COST_RULES = {
     # Carrier card (58) is a known outlier; the Pilum fits.
     "arrow_points": 38,
     "artillery_points": {"LT": 57, "Sniper": 38, "Thumper": 29},
+    # Flat points for specials that don't scale with firepower.
+    "flat_points": {"Commander": 15},
     # Special armors multiply defensive BV (MegaMek/TacOps: reactive,
     # reflective and ballistic-reinforced x1.5). Applied to the defense part
     # of cost, not to Check: putting it in Check broke two official cards.
@@ -83,6 +85,9 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
         if key in (sp.strip() for sp in specials):
             de *= mult
     raw = rules["base"] + (off + de) / 20
+    for key, pts in rules["flat_points"].items():
+        if key in (sp.strip() for sp in specials):
+            raw += pts
     artillery = False
     for sp in specials:
         m = re.fullmatch(r"arrow(\d*)", sp.strip().lower())

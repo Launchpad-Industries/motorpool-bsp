@@ -42,6 +42,9 @@ RULES = {
     "apc_ton_step": 4.0,
     # Arrow IV units keep their other weapons as a regular attack.
     "arrow_keeps_weapons": True,
+    # Commander: C3 Master / C3 Boosted Master (not C3i or slaves), or this
+    # many tons of communications equipment.
+    "commander_comms_tons": 5.0,
 }
 
 # Artillery pieces and their card codes ("Artillery (LT)" on official cards).
@@ -224,6 +227,14 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         step = rules["apc_ton_step"]
         apc = 1 if unit.troop_space < step else 2 * int(unit.troop_space // step)
         sp.specials.append(f"APC{apc}")
+    comms = 0.0
+    for _, it in unit.weapons():
+        m = re.match(r"Communications Equipment:SIZE:([\d.]+)", it)
+        if m:
+            comms += float(m.group(1))
+    if any(it in ("ISC3MasterUnit", "ISC3MasterBoostedSystemUnit") for _, it in unit.weapons()) \
+            or comms >= rules["commander_comms_tons"]:
+        sp.specials.append("Commander")
     special_armor = {2: "RCA", 3: "RFA", 26: "BRA"}.get(unit.armor_type)
     if special_armor:
         sp.specials.append(special_armor)
