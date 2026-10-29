@@ -28,7 +28,8 @@ COST_RULES = {
     "veteran": 1.15,
     "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049, "ECM": 1.624,
                      "PRB": 1.079, "AMS": 1.028, "APC": 1.129,
-                     "No Turret": 0.876, "AI": 0.444},
+                     "No Turret": 0.876,
+                     "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }
 
 

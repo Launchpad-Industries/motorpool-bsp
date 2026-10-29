@@ -32,6 +32,9 @@ RULES = {
     "if_min_hits": 5,
     # Leave LRMs/MMLs out of the direct attack when other weapons reach.
     "if_separate": False,
+    # AI special: anti-infantry weapons (MegaMek burst-fire flag, plus plasma
+    # rifles) supply at least this share of the card's main attack.
+    "ai_share": 0.5,
 }
 
 _NOT_ATTACKS = ("ams", "anti-missile", "tag", "narc", "arrow", "long tom",
@@ -51,6 +54,7 @@ class Weapon:
     cluster: bool
     indirect: bool
     bv: float
+    anti_infantry: bool = False
 
 
 @dataclass
@@ -102,7 +106,9 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
             long = 21
         out.append(Weapon(loc, nm, float(avg), float(per), int(long), cluster,
                           indirect=("LRM" in nm or "MML" in nm) and "Streak" not in nm,
-                          bv=float(s.get("bv") or 0)))
+                          bv=float(s.get("bv") or 0),
+                          anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
+                                         or "plasma rifle" in nm.lower())))
     return out
 
 
@@ -178,6 +184,9 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         sp.tmm += 1
     ws = weapons(unit, table)
     sp.range, sp.damage, reach = derive_damage(ws, rules)
+    total = sum(w.damage for w in reach)
+    if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
+        sp.specials.append("AI")
     sp.indirect = derive_indirect(ws, rules)
     sp.check, armor_bv = derive_check(unit, rules)
     sp.threshold = 8 if unit.tonnage >= rules["threshold_heavy_tons"] else 5
