@@ -46,8 +46,13 @@ COST_RULES = {
     # roll), so it is worth more on tougher units. x1.15 is the most the
     # official AMS cards support; they value AMS at under a point.
     "armor_defense_mult": {"RCA": 1.5, "RFA": 1.5, "BRA": 1.5, "AMS": 1.15},
+    # APC X: flat points per level, scaled by how well the carrier protects
+    # its troops: sqrt(defensive BV / defensive BV at Check 7, TMM 0). Faster
+    # and tougher carriers keep troops alive (Will). Square root so a Check 11
+    # carrier pays about twice a Check 7 one, not five times. 1.1 per level
+    # fitted on the 7 official APC cards (all Check 5-7).
+    "apc_points": 1.1,
     "special_mult": {"Crit-Seeker": 1.054,
-                     "APC": 1.129,
                      "No Turret": 0.876,    # 12% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }
@@ -95,6 +100,11 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
     for key, pts in rules["flat_points"].items():
         if key in (sp.strip() for sp in specials):
             raw += pts
+    for sp in specials:
+        m = re.fullmatch(r"apc(\d*)", sp.strip().lower())
+        if m:
+            durability = math.sqrt(de / (rules["defense_scale"] * 75))
+            raw += rules["apc_points"] * int(m.group(1) or 1) * durability
     artillery = False
     for sp in specials:
         m = re.fullmatch(r"arrow(\d*)", sp.strip().lower())
