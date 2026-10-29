@@ -45,6 +45,11 @@ RULES = {
     # Commander: C3 Master / C3 Boosted Master (not C3i or slaves), or this
     # many tons of communications equipment.
     "commander_comms_tons": 5.0,
+    # Crit-Seeker: small-cluster weapons (SRM, Streak SRM, MML, LB 20-X) give
+    # at least this share of the main attack and at least this much damage.
+    # MRMs (5-point groups) and smaller LB-X don't count, matching the cards.
+    "crit_share": 0.4,
+    "crit_min_damage": 10,
 }
 
 # Artillery pieces and their card codes ("Artillery (LT)" on official cards).
@@ -125,6 +130,13 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
                           anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
                                          or "plasma" in nm.lower())))
     return out
+
+
+def _crit_seeker_weapon(name: str) -> bool:
+    n = name.upper()
+    if "LB" in n and "X" in n:
+        return "20" in n
+    return ("SRM" in n or "MML" in n) and "MRM" not in n
 
 
 def _bracket_for(long: int) -> tuple:
@@ -214,6 +226,9 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     for code, n in sorted(sp.artillery.items()):
         sp.specials.append(f"Artillery ({code})" + (str(n) if n > 1 else ""))
     total = sum(w.damage for w in reach)
+    crit = sum(w.damage for w in reach if w.location != "Rear" and _crit_seeker_weapon(w.name))
+    if total and crit >= rules["crit_share"] * total and crit >= rules["crit_min_damage"]:
+        sp.specials.append("Crit-Seeker")
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
         sp.specials.append("AI")
     sp.indirect = derive_indirect(ws, rules)
