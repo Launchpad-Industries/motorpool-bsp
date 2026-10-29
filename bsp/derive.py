@@ -222,6 +222,9 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         step = rules["apc_ton_step"]
         apc = 1 if unit.troop_space < step else 2 * int(unit.troop_space // step)
         sp.specials.append(f"APC{apc}")
+    special_armor = {2: "RCA", 3: "RFA", 26: "BRA"}.get(unit.armor_type)
+    if special_armor:
+        sp.specials.append(special_armor)
     names = " ".join(w for _, w in unit.weapons()).lower()
     if "tag" in names:
         sp.specials.append("TAG")
