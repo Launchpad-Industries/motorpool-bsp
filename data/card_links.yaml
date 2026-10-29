@@ -24,6 +24,8 @@ links:
   # Plain APCs: troop space plus 2 MGs (hover) / 1 MG (tracked), matching the cards.
   "Hover APC|Standard": "vehicles/3039u/APC (Hover).blk"
   "Tracked APC|Standard": "vehicles/3039u/APC (Tracked).blk"
+  # Support vehicle; no calculated spec until support vehicles are handled.
+  "Savior Repair Vehicle|Standard": "vehicles/3145/Merc/Savior Repair Vehicle.blk"
 
 review:
   # Mk. I and Mk. II both have 160 armor; Mk. I carries two AC/20s (card 20x2).
