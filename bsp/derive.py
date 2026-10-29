@@ -38,6 +38,8 @@ RULES = {
     # APC X from troop space (tons): under 4 t carries one platoon (APC1);
     # each full 4 t carries a battle armor squad, which needs 2 APC points.
     "apc_ton_step": 4.0,
+    # Arrow IV units keep their other weapons as a regular attack.
+    "arrow_keeps_weapons": True,
 }
 
 _NOT_ATTACKS = ("ams", "anti-missile", "tag", "narc", "arrow", "long tom",
@@ -191,8 +193,10 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     sp.arrow = sum(1 for _, it in unit.weapons()
                    if (table.get(_clean(it)) or {}).get("name") == "Arrow IV")
     if sp.arrow:
-        # Arrow IV replaces the regular attack on official cards (range "Arrow").
-        sp.range, sp.damage, reach = None, None, []
+        # Official cards drop the regular attack on Arrow units; the rules allow
+        # one (Arrow or regular each turn), so keeping it is a switch.
+        if not rules["arrow_keeps_weapons"]:
+            sp.range, sp.damage, reach = None, None, []
         sp.specials.append("Arrow" if sp.arrow == 1 else f"Arrow{sp.arrow}")
     total = sum(w.damage for w in reach)
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
