@@ -116,8 +116,11 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
             continue
         d = s.get("damage")
         av = s.get("shortAV")
-        cluster = not isinstance(d, (int, float))
-        if cluster:
+        missile = not isinstance(d, (int, float))
+        # Streak launchers always hit with the full cluster (no table roll),
+        # so they aren't discounted like other cluster weapons.
+        cluster = missile and "streak" not in (s.get("name") or name).lower()
+        if missile:
             avg = av if isinstance(av, (int, float)) else 0
             per = 5
         else:
