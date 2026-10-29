@@ -30,12 +30,14 @@ Veteran = round( unrounded Regular x 1.15 )
 | Part | Value | Why |
 |---|---|---|
 | Base | 8.0 points | Every asset has a floor; cheap units cost ~10–13 regardless of stats. Fitted. |
-| Offense | 9.56 × speed factor(card MP) × damage × (long range ÷ 9)^0.58 × specials × 1.10^(6 − Skill) | BV-style: damage × range × speed, as in TechManual weapon BV. Scale and range exponent fitted on 110 official vehicles. |
-| Defense | 0.574 × Check value × (1 + TMM ÷ 10) | TMM uses the TechManual defensive factor. Check value: Check 7 = 75, +75 per step above, ×2/3 per step below (Will's rule; the forum scale fits equally well). |
+| Offense | 9.6 × speed factor(card MP) × damage × (long range ÷ 9)^0.6 × specials × 1.1^(6 − Skill) | BV-style: damage × range × speed, as in TechManual weapon BV. Scale and range exponent fitted on 110 official vehicles. |
+| Defense | 0.6 × Check value × (1 + TMM ÷ 10) | TMM uses the TechManual defensive factor. Check value: Check 7 = 75, +75 per step above, ×2/3 per step below (Will's rule; the forum scale fits equally well). |
 | Veteran | × 1.15 on the unrounded cost | Fits 126 of 127 official cards, Clan Skill 5 and 4 included. |
 
-Accuracy on official vehicles priced from their printed stats: about 2.2
-points average error (2.9 on cards left out of the fit).
+Constants are fitted, then rounded to one decimal place, as the TechManual
+does (Veteran ×1.15 and ECM3 3.5 stay as they are: both are exact rules).
+Accuracy on 117 official vehicles priced from their printed stats: 2.36
+points average error, 83 within 2 points (2.30 before rounding).
 
 ## Card stats
 
@@ -71,8 +73,8 @@ Armor modifiers for Check:
 | Commander | C3 Master or C3 Boosted Master (not C3i or slaves), or 5+ tons of communications equipment | +15 points flat | Matches Catalyst: the Skulker/Skulker C3M and Mobile HQ/Browning comparisons all imply 15–17. Will thinks it's worth less in play but chose to match the cards. |
 | Crit-Seeker | Small-cluster weapons in the main attack land at least 14 average damage. Counts SRMs, Streak SRMs and MMLs at their average damage, and every LB-X at its average pellet hits on the Cluster Hits Table (1 point each: LB 5-X 3.2, 10-X 6.3, 20-X 12.7). | Offense ×1.1 | +1 on the Determining Critical Hits roll raises average crits per roll from 0.61 to 0.94 (+55%). Crits are only part of an attack's killing power (rough guess 15–25%), so about +8–14% on offense. The 21 official Crit-Seeker vehicles fit best at ×1.10 (average error 2.44 vs 2.57 at the old fitted 1.05). When it applies: weapons whose TW damage lands in 1–2 point clusters. 116/118 official vehicles, no false positives. Three LB 5-X average 9.5 hits, which is why the Pike (LB-X) just misses, as Will predicted. MRMs (5-point groups) don't count. Misses: Behemoth and SturmFeur (SRM) (SRMs outside the main attack). |
 | ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
-| IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
-| No Turret | Vehicle has no turret | Offense ×0.88 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. The fitted value (12% off, 25 cards) sits inside that range, so it stays. |
+| IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.8; the larger of IF or direct fire | 23/30. |
+| No Turret | Vehicle has no turret | Offense ×0.9 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. Fitted 12% off on 25 cards, rounded to one decimal. |
 | PRB | Active probe fitted | +1 point flat | A sensor, so its value doesn't scale with firepower (Will). TechManual probe BV is 10–25 (½–1¼ points); without a probe adjustment the 8 PRB cards price about 1 point low. Replaced a fitted ×1.08 offense multiplier. |
 | TAG | TAG fitted | +2 points flat | Support for guided weapons, not firepower, so flat. TW BV is 0 (the benefit is counted in the guided weapons). The 8 TAG cards fit best at 2.5–3 points, but only slightly better than 2 (average error 2.0–2.1 vs 2.2); Will thought 2 was already a bit high, so 2. Replaced a fitted ×1.05 offense multiplier. |
 | TC | Targeting computer | Through Skill (one step better) | |

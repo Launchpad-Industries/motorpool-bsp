@@ -6,9 +6,10 @@
 Cost (Regular) = base + (offense + defense) / 20, rounded.
 Cost (Veteran) = the unrounded Regular cost x 1.15, rounded.
 
-Parameter values were fitted against 110 official vehicle cards (average
-error about 2.9 points on cards left out of the fit). They are starting
-points to tune, not published rules."""
+Parameter values were fitted against the official vehicle cards, then
+rounded to one decimal place (TechManual style); rounding changed the
+average error from 2.30 to 2.36 points. They are starting points to tune,
+not published rules."""
 
 from __future__ import annotations
 
@@ -20,12 +21,12 @@ SPEED_FACTOR = [0.44, 0.54, 0.65, 0.77, 0.88, 1.0, 1.12, 1.24, 1.37, 1.5, 1.63,
                 3.29, 3.44, 3.59, 3.74]
 
 COST_RULES = {
-    "base": 7.991,              # points every asset costs
-    "offense_scale": 9.563,
-    "range_exponent": 0.579,    # offense grows with (long range / 9) ** this
-    "if_weight": 0.833,         # IF X counts as X*5 damage at 7/14/21, x this
-    "defense_scale": 0.574,     # x the Check value curve below
-    "skill_step": 1.101,        # offense x this per point of Skill below 6
+    "base": 8.0,              # points every asset costs
+    "offense_scale": 9.6,
+    "range_exponent": 0.6,    # offense grows with (long range / 9) ** this
+    "if_weight": 0.8,         # IF X counts as X*5 damage at 7/14/21, x this
+    "defense_scale": 0.6,     # x the Check value curve below
+    "skill_step": 1.1,        # offense x this per point of Skill below 6
     "veteran": 1.15,
     # Fixed points per launcher / piece. Long Tom (57) from the two Mobile
     # Long Tom cards; the rest scaled from it by one-shot Strike cost
@@ -53,7 +54,7 @@ COST_RULES = {
     # fitted on the 7 official APC cards (all Check 5-7).
     "apc_points": 1.1,
     "special_mult": {"Crit-Seeker": 1.1,   # +55% crits per crit roll; cards fit best at 1.1
-                     "No Turret": 0.876,    # 12% off offense; Will: 10-20% is right
+                     "No Turret": 0.9,     # 10% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
 }
 
