@@ -38,6 +38,7 @@ RULES = {
     # and don't add to damage (Will). 0.3 keeps the Challenger X's LRM 10
     # (28% of the Gauss's BV) in the attack; damage within 15%: 68 -> 73.
     "damage_main_share": 0.3,
+    "rapid_one_group": False,  # UAC/RAC shots as one group (Hetzer (Cell): 30)
     "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
     "reach_bracket": "medium",
@@ -114,7 +115,8 @@ def _clean(name: str) -> str:
     return re.sub(r"(:OMNI|\(ST\))$", "", name).strip()
 
 
-def weapons(unit: Unit, table: dict) -> list[Weapon]:
+def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
+    rules = rules or RULES
     out = []
     for loc, raw in unit.weapons():
         name = _clean(raw)
@@ -137,6 +139,13 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
             continue
         long = s.get("longRange") or 0
         nm = (s.get("name") or name)
+        if not missile and ("Ultra" in nm or "Rotary" in nm):
+            # UACs fire 2 shots and RACs are usually fired at 5 (avoiding the
+            # jam risk at 6); both roll on the Cluster Hits Table (Will). A UAC
+            # counts 1.5x (table average 1.42); a RAC averages 3.17 hits of 5.
+            hits = rules.get("uac_mult", 1.5) if "Ultra" in nm else average_cluster_hits(5)
+            avg = d * hits
+            per = avg if rules.get("rapid_one_group") else d
         if_dmg = None
         if "MML" in nm:
             # MMLs fire SRMs (2 points per hit, 3/6/9) as their direct attack
@@ -296,7 +305,7 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     sp.tmm = tmm_for_mp(sp.mp) + (1 if unit.motion in ("v", "g") else 0)
     if unit.armor_type == 22:          # vehicle stealth armor
         sp.tmm += 1
-    ws = weapons(unit, table)
+    ws = weapons(unit, table, rules)
     sp.range, sp.damage, reach = derive_damage(ws, rules)
     sp.arrow = sum(1 for _, it in unit.weapons()
                    if (table.get(_clean(it)) or {}).get("name") == "Arrow IV")
