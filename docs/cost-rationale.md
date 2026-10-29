@@ -74,7 +74,7 @@ Armor modifiers for Check:
 | IF X | Round(average LRM/MML hits ÷ 5); none under 5 hits. MMLs count in LRM mode (1 point per hit) | Counted as X × 5 damage at 7/14/21, ×0.83; the larger of IF or direct fire | 23/30. |
 | No Turret | Vehicle has no turret | Offense ×0.88 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. The fitted value (12% off, 25 cards) sits inside that range, so it stays. |
 | PRB | Active probe fitted | +1 point flat | A sensor, so its value doesn't scale with firepower (Will). TechManual probe BV is 10–25 (½–1¼ points); without a probe adjustment the 8 PRB cards price about 1 point low. Replaced a fitted ×1.08 offense multiplier. |
-| TAG | TAG fitted | Offense ×1.05 | Fitted; to be reviewed. |
+| TAG | TAG fitted | +2 points flat | Support for guided weapons, not firepower, so flat. TW BV is 0 (the benefit is counted in the guided weapons). The 8 TAG cards fit best at 2.5–3 points, but only slightly better than 2 (average error 2.0–2.1 vs 2.2); Will thought 2 was already a bit high, so 2. Replaced a fitted ×1.05 offense multiplier. |
 | TC | Targeting computer | Through Skill (one step better) | |
 
 | MML | Dual mode: SRM mode (2 points per hit, 3/6/9) for the direct attack and Crit-Seeker; LRM mode for IF | — | Will: an MML can fire either, so it can give both Crit-Seeker and IF. Fixed Crit-Seeker on the Pegasus (Upgrade) and Striker (Stealth). |

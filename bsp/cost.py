@@ -37,7 +37,8 @@ COST_RULES = {
     # ECM6 from the Savannah (Interdictor) and Browning cards; ECM3 scaled
     # by radius.
     "flat_points": {"Commander": 15, "ECM6": 7, "ECM3": 3.5, "ECM": 7,
-                    "PRB": 1},   # sensor, so flat; Beagle 10 BV ~ 0.5 pt
+                    "PRB": 1,     # sensor, so flat; Beagle 10 BV ~ 0.5 pt
+                    "TAG": 2},   # support, so flat; cards fit 2.5-3, Will felt 2 is the most it's worth
     # Special armors multiply defensive BV (MegaMek/TacOps: reactive,
     # reflective and ballistic-reinforced x1.5). Applied to the defense part
     # of cost, not to Check: putting it in Check broke two official cards.
@@ -45,7 +46,7 @@ COST_RULES = {
     # roll), so it is worth more on tougher units. x1.15 is the most the
     # official AMS cards support; they value AMS at under a point.
     "armor_defense_mult": {"RCA": 1.5, "RFA": 1.5, "BRA": 1.5, "AMS": 1.15},
-    "special_mult": {"Crit-Seeker": 1.054, "TAG": 1.049,
+    "special_mult": {"Crit-Seeker": 1.054,
                      "APC": 1.129,
                      "No Turret": 0.876,    # 12% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
