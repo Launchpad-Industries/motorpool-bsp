@@ -50,7 +50,7 @@ RULES = {
     # Commander: C3 Master / C3 Boosted Master (not C3i or slaves), or this
     # many tons of communications equipment.
     "commander_comms_tons": 5.0,
-    # Crit-Seeker: small-cluster weapons (SRM, Streak SRM, MML, LB 20-X) in the
+    # Crit-Seeker: small-cluster weapons (SRM, Streak SRM, MML, any LB-X) in the
     # main attack deal at least crit_min_damage (and crit_share of it).
     # MRMs (5-point groups) and smaller LB-X don't count, matching the cards.
     "crit_share": 0.0,
@@ -137,11 +137,42 @@ def weapons(unit: Unit, table: dict) -> list[Weapon]:
     return out
 
 
+# Cluster Hits Table (TW p. 74): hits for each 2D6 roll 2..12, by weapon size.
+CLUSTER_TABLE = {
+    2: [1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2], 3: [1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3],
+    4: [1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4], 5: [1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5],
+    6: [2, 2, 3, 3, 4, 4, 4, 5, 5, 6, 6], 7: [2, 2, 3, 4, 4, 4, 4, 6, 6, 7, 7],
+    9: [3, 3, 4, 5, 5, 5, 5, 7, 7, 9, 9], 10: [3, 3, 4, 6, 6, 6, 6, 8, 8, 10, 10],
+    12: [4, 4, 5, 8, 8, 8, 8, 10, 10, 12, 12], 15: [5, 5, 6, 9, 9, 9, 9, 12, 12, 15, 15],
+    20: [6, 6, 9, 12, 12, 12, 12, 16, 16, 20, 20], 30: [10, 10, 12, 18, 18, 18, 18, 24, 24, 30, 30],
+    40: [12, 12, 18, 24, 24, 24, 24, 32, 32, 40, 40]}
+_P2D6 = [n / 36 for n in (1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1)]
+
+
+def average_cluster_hits(size: int) -> float:
+    """Average hits on the Cluster Hits Table for a weapon of this size."""
+    col = CLUSTER_TABLE.get(size) or CLUSTER_TABLE[min(CLUSTER_TABLE, key=lambda k: abs(k - size))]
+    return sum(p * h for p, h in zip(_P2D6, col))
+
+
+def _is_lbx(name: str) -> bool:
+    n = name.upper()
+    return "LB" in n and "X" in n
+
+
 def _crit_seeker_weapon(name: str) -> bool:
     n = name.upper()
-    if "LB" in n and "X" in n:
-        return "20" in n
-    return ("SRM" in n or "MML" in n) and "MRM" not in n
+    return _is_lbx(name) or (("SRM" in n or "MML" in n) and "MRM" not in n)
+
+
+def _crit_seeker_damage(w: "Weapon") -> float:
+    """Average damage the weapon lands in 1-2 point clusters. LB-X fire
+    cluster rounds: one point per pellet hit on the Cluster Hits Table."""
+    if not _crit_seeker_weapon(w.name):
+        return 0.0
+    if _is_lbx(w.name):
+        return average_cluster_hits(int(w.per_hit))
+    return w.damage
 
 
 def _bracket_for(long: int) -> tuple:
@@ -242,7 +273,7 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     for code, n in sorted(sp.artillery.items()):
         sp.specials.append(f"Artillery ({code})" + (str(n) if n > 1 else ""))
     total = sum(w.damage for w in reach)
-    crit = sum(w.damage for w in reach if w.location != "Rear" and _crit_seeker_weapon(w.name))
+    crit = sum(_crit_seeker_damage(w) for w in reach if w.location != "Rear")
     if total and crit >= rules["crit_share"] * total and crit >= rules["crit_min_damage"]:
         sp.specials.append("Crit-Seeker")
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
