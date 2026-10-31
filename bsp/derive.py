@@ -193,7 +193,8 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             hits = cluster_hits(int(m.group(1)) if m else 3, rules, artemis)
             avg, if_dmg, long = 2 * hits, hits, 9
         out.append(Weapon(loc, nm, float(avg), float(per), int(long), cluster,
-                          indirect=("LRM" in nm or "MML" in nm) and "Streak" not in nm,
+                          # Thunderbolts can fire indirectly too, at full damage (Will).
+                          indirect=(("LRM" in nm or "MML" in nm) and "Streak" not in nm) or large,
                           bv=float(s.get("bv") or 0),
                           anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
                                          or "plasma" in nm.lower()),
