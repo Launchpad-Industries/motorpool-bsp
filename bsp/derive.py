@@ -27,7 +27,7 @@ RULES = {
                       (128, 7), (80, 6), (0, 5)],
     "threshold_heavy_tons": 75,              # vehicles this heavy get Threshold 8
     # Damage: cluster weapons count at this share of their average damage.
-    "cluster_factor": 0.9,
+    "cluster_factor": 1.0,   # averages come from the Cluster Hits Table
     # Range bracket choice: maximise total damage x (long range ** exponent).
     "range_exponent": 1.5,
     # "top_bv": bracket from the highest-BV weapon type (91/110 official
@@ -41,6 +41,10 @@ RULES = {
     # A weapon type with hits over 5 sets the group size when it carries at
     # least this share of the attack's damage; otherwise groups of 5 (Will).
     "group_share": 0.4,
+    "artemis_mod": 2,
+    # IF X = average indirect hits / 5, rounded up from .7 (26/30 official
+    # vehicles with exact Cluster Hits Table averages and Artemis +2).
+    "if_round": 0.3,
     "rapid_one_group": False,  # UAC/RAC shots as one group (Hetzer (Cell): 30)
     "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
@@ -120,6 +124,10 @@ def _clean(name: str) -> str:
 
 def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
     rules = rules or RULES
+    # Artemis IV fire control: +2 on the Cluster Hits Table roll for its
+    # launchers (applied to every LRM/SRM/MML when the unit carries any).
+    artemis = any("artemis" in it.lower() for _, it in unit.weapons()) or \
+        any("artemis" in it.lower() for it in getattr(unit, "equipment_names", lambda: [])())
     out = []
     for loc, raw in unit.weapons():
         name = _clean(raw)
@@ -133,7 +141,18 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
         # so they aren't discounted like other cluster weapons.
         cluster = missile and "streak" not in (s.get("name") or name).lower()
         if missile:
+            # Average damage from the Cluster Hits Table: average hits for the
+            # rack size (all 36 2D6 results) x damage per missile. Streaks
+            # always hit with the full rack.
             avg = av if isinstance(av, (int, float)) else 0
+            rack = s.get("rackSize")
+            nm0 = (s.get("name") or name).upper()
+            if isinstance(rack, int) and rack > 0:
+                pm = 2 if any(k in nm0 for k in ("SRM", "ATM", "SRT")) else 1
+                art = rules.get("artemis_mod", 0) if (artemis and any(
+                    k in nm0 for k in ("LRM", "SRM", "MML"))) else 0
+                hits = rack if not cluster else average_cluster_hits(rack, art)
+                avg = hits * pm
             per = 5
         else:
             avg = av if isinstance(av, (int, float)) and av > d else d
@@ -177,10 +196,11 @@ CLUSTER_TABLE = {
 _P2D6 = [n / 36 for n in (1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1)]
 
 
-def average_cluster_hits(size: int) -> float:
-    """Average hits on the Cluster Hits Table for a weapon of this size."""
+def average_cluster_hits(size: int, mod: int = 0) -> float:
+    """Average hits on the Cluster Hits Table for a weapon of this size, over
+    all 36 2D6 results; `mod` shifts the roll (Artemis IV +2), capped at 2-12."""
     col = CLUSTER_TABLE.get(size) or CLUSTER_TABLE[min(CLUSTER_TABLE, key=lambda k: abs(k - size))]
-    return sum(p * h for p, h in zip(_P2D6, col))
+    return sum(p * col[min(10, max(0, i + mod))] for i, p in enumerate(_P2D6))
 
 
 def _is_lbx(name: str) -> bool:
@@ -298,7 +318,7 @@ def derive_indirect(ws: list[Weapon], rules=RULES) -> int:
                for w in ws if w.indirect)
     if hits < rules["if_min_hits"]:
         return 0
-    return int(math.floor(hits / 5 + 0.5))
+    return int(math.floor(hits / 5 + rules.get("if_round", 0.5)))
 
 
 def derive_check(unit: Unit, rules=RULES) -> tuple[int, float]:
