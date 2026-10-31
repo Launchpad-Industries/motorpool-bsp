@@ -33,15 +33,15 @@ Veteran = round( unrounded Regular x 1.15 )
 
 | Part | Value | Why |
 |---|---|---|
-| Base | 7.1 points | Every asset has a floor; cheap units cost ~10–13 regardless of stats. Fitted. |
-| Offense | 10.1 × speed factor(card MP) × damage × (long range ÷ 9)^0.6 × specials × 1.1^(6 − Skill) | BV-style: damage × range × speed, as in TechManual weapon BV. Scale and range exponent fitted on 110 official vehicles. |
-| Defense | 0.5 × Check value × TMM factor | Check value: Check 7 = 75, +75 per step above, ×2/3 per step below (Will's rule). TMM factor = how many more attacks it takes to land a hit: P(hit on 5+) ÷ P(hit on 5 + TMM), so TMM 1/2/3/4/5 = ×1.15/1.43/2.0/3.0/5.0. Will: each TMM point takes a step off the 2D6 hit chance, and TMM 5 is the difference between hitting on 7s and 12s. The full model (7+ base) makes the official fast cards ~5 points too expensive; 5+ is a middle ground edging toward Catalyst (official TMM 4–5 cards come out ~2 points high). Replaced the TechManual's 1 + TMM/10. |
+| Base | 7.5 points | Every asset has a floor; cheap units cost ~10–13 regardless of stats. Fitted. |
+| Offense | 9.7 × speed factor(card MP) × damage × (long range ÷ 9)^0.6 × specials × 1.1^(6 − Skill) | BV-style: damage × range × speed, as in TechManual weapon BV. Scale and range exponent fitted on 110 official vehicles. |
+| Defense | 0.6 × Check value × TMM factor | Check value: Check 7 = 75, +75 per step above, ×2/3 per step below (Will's rule). TMM factor = how many more attacks it takes to land a hit: P(hit on 4+) ÷ P(hit on 4 + TMM), so TMM 1/2/3/4/5 = ×1.10/1.27/1.57/2.2/3.67. Will: each TMM point takes a step off the 2D6 hit chance (TMM 5 is the difference between hitting on 7s and 12s). The full model (7+ base) prices the official fast cards ~5–6 points high; Xotl's Fulcrum (41) and the official cards pull toward the TechManual's gentle 1 + TMM/10. Will split the difference at a 4+ base: official TMM 4–5 cards come out ~2 points high, Fulcrum ~51. |
 | Veteran | × 1.15 on the unrounded cost | Fits 126 of 127 official cards, Clan Skill 5 and 4 included. |
 
 Constants are fitted, then rounded to one decimal place, as the TechManual
 does (Veteran ×1.15 and ECM3 3.5 stay as they are: both are exact rules).
-Accuracy on 118 official vehicles priced from their printed stats: 2.5
-points average error, 76 within 2 points (with the hit-chance TMM factor).
+Accuracy on 119 official vehicles (Xotl's Fulcrum included) priced from
+their printed stats: 2.5 points average error, 79 within 2 points.
 
 ## Card stats
 
