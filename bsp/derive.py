@@ -148,7 +148,9 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
         missile = not isinstance(d, (int, float))
         # Streak launchers always hit with the full cluster (no table roll),
         # so they aren't discounted like other cluster weapons.
-        cluster = missile and "streak" not in (s.get("name") or name).lower()
+        # Large missiles (Thunderbolts) are one big missile: full damage, one hit.
+        large = "F_LARGE_MISSILE" in s.get("_flags", [])
+        cluster = missile and not large and "streak" not in (s.get("name") or name).lower()
         if missile:
             # Cluster weapons land cluster_ratio (0.6) of their missiles, about
             # the Cluster Hits Table average (0.63-0.71); Artemis IV x1.2 (its
@@ -156,7 +158,9 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             avg = av if isinstance(av, (int, float)) else 0
             rack = s.get("rackSize")
             nm0 = (s.get("name") or name).upper()
-            if isinstance(rack, int) and rack > 0:
+            if large and isinstance(av, (int, float)):
+                avg = av
+            elif isinstance(rack, int) and rack > 0:
                 pm = 2 if any(k in nm0 for k in ("SRM", "ATM", "SRT")) else 1
                 art = artemis and any(k in nm0 for k in ("LRM", "SRM", "MML"))
                 if "ATM" in nm0:
@@ -165,6 +169,8 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
                 hits = rack if not cluster else cluster_hits(rack, rules, art)
                 avg = hits * pm
             per = rules.get("atm_group", 5) if "ATM" in (s.get("name") or name).upper() else 5
+            if large:
+                per = avg
         else:
             avg = av if isinstance(av, (int, float)) and av > d else d
             per = d
