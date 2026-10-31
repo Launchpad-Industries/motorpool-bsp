@@ -6,6 +6,9 @@
 # this file contains no card statistics.
 
 links:
+  # Not printed by Catalyst: posted by Xotl (BattleTech developer) on the
+  # official forum, 5 Dec 2025. Treated as very close to official.
+  "Fulcrum Heavy Hovertank|Standard": "vehicles/3058Uu/Fulcrum Heavy Hovertank.blk"
   "Behemoth Heavy Tank|Kurita": "vehicles/Rec Guides ilClan/Vol 31/Behemoth Heavy Tank (Kurita).blk"
   "Condor Heavy Hover Tank|Laser": "vehicles/Rec Guides ilClan/Vol 26/Condor Heavy Hover Tank (Laser).blk"
   "Condor Heavy Hover Tank|Upgrade": "vehicles/3075/Condor Heavy Hover Tank (Upgrade).blk"
