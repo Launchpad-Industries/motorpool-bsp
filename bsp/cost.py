@@ -25,7 +25,8 @@ COST_RULES = {
     "offense_scale": 9.6,
     "range_exponent": 0.6,    # offense grows with (long range / 9) ** this
     "if_weight": 0.8,         # IF X counts as X*5 damage at 7/14/21, x this
-    "defense_scale": 0.6,     # x the Check value curve below
+    "defense_scale": 0.6,
+    "tmm_base_tn": None,        # see tmm_factor
     "skill_step": 1.1,        # offense x this per point of Skill below 6
     "veteran": 1.15,
     # Fixed points per launcher / piece. Long Tom (57) from the two Mobile
@@ -70,6 +71,23 @@ def check_value(check: int) -> float:
     return 75 + 75 * (check - 7) if check >= 7 else 75 * (2 / 3) ** (7 - check)
 
 
+def p_hit(tn: int) -> float:
+    """Chance of rolling tn or more on 2D6 (12 is the best you can need)."""
+    tn = max(2, min(12, tn))
+    return sum(1 for a in range(1, 7) for b in range(1, 7) if a + b >= tn) / 36
+
+
+def tmm_factor(tmm: int, rules=None) -> float:
+    """How much TMM multiplies defense. With tmm_base_tn set: how many more
+    attacks it takes to land a hit, P(hit at base) / P(hit at base + TMM).
+    Otherwise the TechManual's 1 + TMM/10."""
+    rules = rules or COST_RULES
+    base = rules.get("tmm_base_tn")
+    if base is None:
+        return 1 + tmm / 10
+    return p_hit(base) / p_hit(base + tmm)
+
+
 def _has(specials: list[str], key: str) -> bool:
     return any(s.split()[0].rstrip("0123456789").lower() == key.lower().split()[0]
                or s.lower().startswith(key.lower()) for s in specials)
@@ -93,7 +111,7 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
         if any(s.lower().replace("-", "").startswith(key.lower().replace("-", ""))
                for s in specials):
             off *= mult
-    de = rules["defense_scale"] * check_value(check) * (1 + tmm / 10)
+    de = rules["defense_scale"] * check_value(check) * tmm_factor(tmm, rules)
     for key, mult in rules["armor_defense_mult"].items():
         if key in (sp.strip() for sp in specials):
             de *= mult
