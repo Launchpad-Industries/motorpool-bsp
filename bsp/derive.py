@@ -46,6 +46,8 @@ RULES = {
     # figure near the Cluster Hits Table average (0.63-0.71). Artemis IV's +2
     # on the roll raises the table average by about 1.2x (Will).
     "cluster_ratio": 0.6,
+    "atm_artemis": True,    # ATMs have Artemis IV built in (Will)
+    "atm_group": 5,         # 6 = ATM damage in 6-point clusters (Core rules)
     "artemis_mult": 1.2,
     # IF X = indirect hits / 5, normal rounding (26/30 official vehicles).
     "if_round": 0.5,
@@ -154,9 +156,12 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             if isinstance(rack, int) and rack > 0:
                 pm = 2 if any(k in nm0 for k in ("SRM", "ATM", "SRT")) else 1
                 art = artemis and any(k in nm0 for k in ("LRM", "SRM", "MML"))
+                if "ATM" in nm0:
+                    # ATMs have Artemis-style fire control built in.
+                    art = rules.get("atm_artemis", False)
                 hits = rack if not cluster else cluster_hits(rack, rules, art)
                 avg = hits * pm
-            per = 5
+            per = rules.get("atm_group", 5) if "ATM" in (s.get("name") or name).upper() else 5
         else:
             avg = av if isinstance(av, (int, float)) and av > d else d
             per = d
@@ -314,7 +319,8 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         # (Clan ER medium lasers -> 7).
         tdmg = {k: sum(x.damage for x in g) for k, g in by_type.items()}
         big = [by_type[k][0].per_hit for k in by_type
-               if not by_type[k][0].cluster and tdmg[k] >= gshare * total]
+               if (not by_type[k][0].cluster or by_type[k][0].per_hit > 5)
+               and tdmg[k] >= gshare * total]
         size = max([5.0] + big)
     size = max(1, min(int(round(size)), int(round(total))))
     hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
