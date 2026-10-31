@@ -16,7 +16,7 @@ import csv
 import json
 from pathlib import Path
 
-from . import bfs
+from . import approvals, bfs
 from .cost import cost
 from .derive import derive_vehicle
 from .megamek import Unit, load_all
@@ -59,10 +59,17 @@ def main(argv=None):
     units = [u for u in load_all(a.mm_data, folders=("vehicles",))
              if u.unit_type in ("Tank", "VTOL") and a.name.lower() in u.full_name.lower()]
     a.out.mkdir(parents=True, exist_ok=True)
+    approved = approvals.load()
     rows = []
     for u in units:
         sp, skill, c = spec_for(u, weapons)
-        rec = bfs.to_bfs(u, sp, c, skill)
+        entry = approved.get(u.full_name)
+        rec = bfs.to_bfs(u, sp, c, skill, provenance="approved" if entry else "auto")
+        if entry:
+            rec["approvedBy"], rec["approvedOn"] = entry["by"], entry["on"]
+            moved = approvals.drift(entry, approvals.snapshot(sp, skill, c))
+            if moved:
+                rec["notes"].append("drift since approval: " + ", ".join(moved))
         fn = "".join(ch if ch.isalnum() or ch in " ()-_." else "_" for ch in u.full_name) + ".bfs"
         (a.out / fn).write_text(bfs.dumps(rec), encoding="utf-8")
         rows.append({"name": u.full_name, "mul_id": u.mul_id or "", "tons": u.tonnage,
