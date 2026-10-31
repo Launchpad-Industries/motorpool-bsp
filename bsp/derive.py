@@ -42,6 +42,7 @@ RULES = {
     # least this share of the attack's damage (a "significant minority"); otherwise
     # groups of 5 (Will). Same 30% as damage_main_share.
     "group_share": 0.3,
+    "small_exact": 20,      # small-weapon totals up to this keep their total
     # Cluster weapons count this share of their missiles/pellets: a round
     # figure near the Cluster Hits Table average (0.63-0.71). Artemis IV's +2
     # on the roll raises the table average by about 1.2x (Will).
@@ -328,6 +329,21 @@ def derive_damage(ws: list[Weapon], rules=RULES):
     hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
     if hits == 1 or rules.get("group_spread"):
         size = int(round(total / hits))
+    elif (size <= 5 and rules.get("small_exact") and 5 < total <= rules["small_exact"]
+          and abs(size * hits - total) > 1):
+        # Small weapons: getting the total right matters more than printing
+        # 5-point groups (Will). When 5s miss the total by more than 1, use
+        # groups of 3-6 that best keep it, closest to 5 on a tie (and 4 over
+        # 6): 12 -> 4x3, 18 -> 6x3.
+        # Only for totals up to small_exact; bigger attacks keep 5s.
+        t = int(round(total))
+        best = None
+        for sz in (3, 4, 5, 6):
+            for h in {max(1, t // sz), max(1, -(-t // sz))}:
+                key = (abs(sz * h - t), abs(sz - 5), sz > 5)
+                if best is None or key < best[0]:
+                    best = (key, sz, h)
+        _, size, hits = best
     return bracket, (size, hits), reach
 
 
