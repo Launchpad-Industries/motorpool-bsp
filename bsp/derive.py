@@ -373,7 +373,7 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     sp.indirect = derive_indirect(ws, rules)
     sp.check, armor_bv = derive_check(unit, rules)
     sp.threshold = 8 if unit.tonnage >= rules["threshold_heavy_tons"] else 5
-    if not unit.has_turret and unit.unit_type == "Tank":
+    if not unit.has_turret:          # VTOLs too: all four Warrior cards say No Turret
         sp.specials.append("No Turret")
     if sp.indirect:
         sp.specials.append(f"IF{sp.indirect}")
