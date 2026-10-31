@@ -47,7 +47,9 @@ RULES = {
     # on the roll raises the table average by about 1.2x (Will).
     "cluster_ratio": 0.6,
     "atm_artemis": True,    # ATMs have Artemis IV built in (Will)
-    "atm_group": 5,         # 6 = ATM damage in 6-point clusters (Core rules)
+    # ATM damage comes in 6-point clusters (Core rules); used for the group
+    # size only when ATMs carry the most damage, else groups of 5 (Will).
+    "atm_group": 6,
     "artemis_mult": 1.2,
     # IF X = indirect hits / 5, normal rounding (26/30 official vehicles).
     "if_round": 0.5,
@@ -319,7 +321,7 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         # (Clan ER medium lasers -> 7).
         tdmg = {k: sum(x.damage for x in g) for k, g in by_type.items()}
         big = [by_type[k][0].per_hit for k in by_type
-               if (not by_type[k][0].cluster or by_type[k][0].per_hit > 5)
+               if (not by_type[k][0].cluster or by_type[k] is main)
                and tdmg[k] >= gshare * total]
         size = max([5.0] + big)
     size = max(1, min(int(round(size)), int(round(total))))
