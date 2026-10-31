@@ -21,12 +21,12 @@ SPEED_FACTOR = [0.44, 0.54, 0.65, 0.77, 0.88, 1.0, 1.12, 1.24, 1.37, 1.5, 1.63,
                 3.29, 3.44, 3.59, 3.74]
 
 COST_RULES = {
-    "base": 8.0,              # points every asset costs
-    "offense_scale": 9.6,
+    "base": 7.1,              # points every asset costs
+    "offense_scale": 10.1,
     "range_exponent": 0.6,    # offense grows with (long range / 9) ** this
     "if_weight": 0.8,         # IF X counts as X*5 damage at 7/14/21, x this
-    "defense_scale": 0.6,
-    "tmm_base_tn": None,        # see tmm_factor
+    "defense_scale": 0.5,
+    "tmm_base_tn": 5,           # TMM by 2D6 hit chance from 5+ (see tmm_factor)
     "skill_step": 1.1,        # offense x this per point of Skill below 6
     "veteran": 1.15,
     # Fixed points per launcher / piece. Long Tom (57) from the two Mobile
