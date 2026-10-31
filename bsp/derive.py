@@ -39,8 +39,9 @@ RULES = {
     # (28% of the Gauss's BV) in the attack; damage within 15%: 68 -> 73.
     "damage_main_share": 0.3,
     # A weapon type with hits over 5 sets the group size when it carries at
-    # least this share of the attack's damage; otherwise groups of 5 (Will).
-    "group_share": 0.4,
+    # least this share of the attack's damage (a "significant minority"); otherwise
+    # groups of 5 (Will). Same 30% as damage_main_share.
+    "group_share": 0.3,
     # Cluster weapons count this share of their missiles/pellets: a round
     # figure near the Cluster Hits Table average (0.63-0.71). Artemis IV's +2
     # on the roll raises the table average by about 1.2x (Will).
