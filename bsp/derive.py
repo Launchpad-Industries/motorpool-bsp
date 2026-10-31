@@ -27,7 +27,7 @@ RULES = {
                       (128, 7), (80, 6), (0, 5)],
     "threshold_heavy_tons": 75,              # vehicles this heavy get Threshold 8
     # Damage: cluster weapons count at this share of their average damage.
-    "cluster_factor": 0.75,
+    "cluster_factor": 0.9,
     # Range bracket choice: maximise total damage x (long range ** exponent).
     "range_exponent": 1.5,
     # "top_bv": bracket from the highest-BV weapon type (91/110 official
@@ -38,6 +38,9 @@ RULES = {
     # and don't add to damage (Will). 0.3 keeps the Challenger X's LRM 10
     # (28% of the Gauss's BV) in the attack; damage within 15%: 68 -> 73.
     "damage_main_share": 0.3,
+    # A weapon type with hits over 5 sets the group size when it carries at
+    # least this share of the attack's damage; otherwise groups of 5 (Will).
+    "group_share": 0.4,
     "rapid_one_group": False,  # UAC/RAC shots as one group (Hetzer (Cell): 30)
     "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
@@ -273,6 +276,16 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         by_type.setdefault(w.name, []).append(w)
     main = max(by_type.values(), key=lambda g: sum(x.damage for x in g))
     size = main[0].per_hit if not main[0].cluster else min(10, max(5, round(total / max(1, len(reach)))))
+    gshare = rules.get("group_share")
+    if gshare is not None:
+        # Will: small weapons (5 damage or less, cluster weapons included)
+        # group in 5s; a weapon type with bigger hits that carries a
+        # significant share of the damage sets the group size instead
+        # (Clan ER medium lasers -> 7).
+        tdmg = {k: sum(x.damage for x in g) for k, g in by_type.items()}
+        big = [by_type[k][0].per_hit for k in by_type
+               if not by_type[k][0].cluster and tdmg[k] >= gshare * total]
+        size = max([5.0] + big)
     size = max(1, min(int(round(size)), int(round(total))))
     hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
     if hits == 1 or rules.get("group_spread"):
