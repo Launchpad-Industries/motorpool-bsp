@@ -19,6 +19,10 @@ official asset cards (used to fit and check values; not stored here).
 - **Official cards win ties, but not blindly.** Values are fitted to the
   official cards. Where a card looks like an early outlier, the rule follows
   the newer cards and the outlier is recorded below.
+- **Hand estimates are a sanity check, not a target.** The custom cards on
+  the sheet (Will's and Ando's) were compared with the generator; where they
+  disagree with both the rules and the official cards (e.g. 53–60 for slow
+  Check 11 heavies that Catalyst would price around 40–47), the rules win.
 
 ## The cost formula
 
