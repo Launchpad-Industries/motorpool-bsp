@@ -41,10 +41,13 @@ RULES = {
     # A weapon type with hits over 5 sets the group size when it carries at
     # least this share of the attack's damage; otherwise groups of 5 (Will).
     "group_share": 0.4,
-    "artemis_mod": 2,
-    # IF X = average indirect hits / 5, rounded up from .7 (26/30 official
-    # vehicles with exact Cluster Hits Table averages and Artemis +2).
-    "if_round": 0.3,
+    # Cluster weapons count this share of their missiles/pellets: a round
+    # figure near the Cluster Hits Table average (0.63-0.71). Artemis IV's +2
+    # on the roll raises the table average by about 1.2x (Will).
+    "cluster_ratio": 0.6,
+    "artemis_mult": 1.2,
+    # IF X = indirect hits / 5, normal rounding (26/30 official vehicles).
+    "if_round": 0.5,
     "rapid_one_group": False,  # UAC/RAC shots as one group (Hetzer (Cell): 30)
     "main_steps": 1,
     # Weapons reaching the bracket's medium range count toward damage.
@@ -141,17 +144,16 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
         # so they aren't discounted like other cluster weapons.
         cluster = missile and "streak" not in (s.get("name") or name).lower()
         if missile:
-            # Average damage from the Cluster Hits Table: average hits for the
-            # rack size (all 36 2D6 results) x damage per missile. Streaks
-            # always hit with the full rack.
+            # Cluster weapons land cluster_ratio (0.6) of their missiles, about
+            # the Cluster Hits Table average (0.63-0.71); Artemis IV x1.2 (its
+            # +2 on the roll). Streaks always hit with the full rack.
             avg = av if isinstance(av, (int, float)) else 0
             rack = s.get("rackSize")
             nm0 = (s.get("name") or name).upper()
             if isinstance(rack, int) and rack > 0:
                 pm = 2 if any(k in nm0 for k in ("SRM", "ATM", "SRT")) else 1
-                art = rules.get("artemis_mod", 0) if (artemis and any(
-                    k in nm0 for k in ("LRM", "SRM", "MML"))) else 0
-                hits = rack if not cluster else average_cluster_hits(rack, art)
+                art = artemis and any(k in nm0 for k in ("LRM", "SRM", "MML"))
+                hits = rack if not cluster else cluster_hits(rack, rules, art)
                 avg = hits * pm
             per = 5
         else:
@@ -164,8 +166,8 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
         if not missile and ("Ultra" in nm or "Rotary" in nm):
             # UACs fire 2 shots and RACs are usually fired at 5 (avoiding the
             # jam risk at 6); both roll on the Cluster Hits Table (Will). A UAC
-            # counts 1.5x (table average 1.42); a RAC averages 3.17 hits of 5.
-            hits = rules.get("uac_mult", 1.5) if "Ultra" in nm else average_cluster_hits(5)
+            # counts 1.5x (table average 1.42); a RAC 5 shots x cluster_ratio.
+            hits = rules.get("uac_mult", 1.5) if "Ultra" in nm else cluster_hits(5, rules)
             avg = d * hits
             per = avg if rules.get("rapid_one_group") else d
         if_dmg = None
@@ -173,7 +175,7 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             # MMLs fire SRMs (2 points per hit, 3/6/9) as their direct attack
             # and LRMs (1 point per hit) for indirect fire.
             m = re.search(r"(\d+)", nm)
-            hits = average_cluster_hits(int(m.group(1)) if m else 3)
+            hits = cluster_hits(int(m.group(1)) if m else 3, rules, artemis)
             avg, if_dmg, long = 2 * hits, hits, 9
         out.append(Weapon(loc, nm, float(avg), float(per), int(long), cluster,
                           indirect=("LRM" in nm or "MML" in nm) and "Streak" not in nm,
@@ -194,6 +196,13 @@ CLUSTER_TABLE = {
     20: [6, 6, 9, 12, 12, 12, 12, 16, 16, 20, 20], 30: [10, 10, 12, 18, 18, 18, 18, 24, 24, 30, 30],
     40: [12, 12, 18, 24, 24, 24, 24, 32, 32, 40, 40]}
 _P2D6 = [n / 36 for n in (1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1)]
+
+
+def cluster_hits(size: int, rules=None, artemis: bool = False) -> float:
+    """Hits counted for a cluster weapon of this size: size x cluster_ratio,
+    x artemis_mult with Artemis IV."""
+    rules = rules or RULES
+    return size * rules["cluster_ratio"] * (rules["artemis_mult"] if artemis else 1)
 
 
 def average_cluster_hits(size: int, mod: int = 0) -> float:
@@ -219,7 +228,7 @@ def _crit_seeker_damage(w: "Weapon") -> float:
     if not _crit_seeker_weapon(w.name):
         return 0.0
     if _is_lbx(w.name):
-        return average_cluster_hits(int(w.per_hit))
+        return cluster_hits(int(w.per_hit), RULES)
     return w.damage
 
 
