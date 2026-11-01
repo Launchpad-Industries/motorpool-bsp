@@ -356,7 +356,7 @@ def card_html(c: Card) -> str:
 def card_frame(inner: str, scale: float = 1.0) -> str:
     """A tiny standalone page showing one card (for the app's preview)."""
     return (f"<!doctype html><html><head><meta charset=utf-8>{FONTS}<style>{CSS}"
-            f"body{{background:transparent;margin:0}}.one{{width:3.5in;height:2.5in;"
+            f"html,body{{background:transparent;margin:0;overflow:hidden}}.one{{width:3.5in;height:2.5in;"
             f"transform:scale({scale});transform-origin:0 0}}</style></head>"
             f"<body><div class=one>{inner}</div></body></html>")
 

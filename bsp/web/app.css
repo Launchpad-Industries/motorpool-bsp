@@ -85,7 +85,7 @@ td.sp{white-space:normal;color:var(--mut);font-size:12px;max-width:220px}
 .seg button{background:none;border:0;padding:6px 12px;color:var(--mut)}
 .seg button.on{background:var(--fg);color:var(--panel)}
 .seg.small button{padding:4px 10px;font-size:12px}
-.cardframe{width:490px;height:350px;border:0;background:transparent}
+.cardframe{width:490px;height:350px;border:0;background:transparent;overflow:hidden}
 .diff{font-size:13px}
 .diff table td,.diff table th{padding:3px 6px}
 .diff .chg{color:var(--warn);font-weight:600}
@@ -99,6 +99,7 @@ td.sp{white-space:normal;color:var(--mut);font-size:12px;max-width:220px}
 .editor .wide{grid-column:1/-1}
 .costrow{display:flex;gap:10px;align-items:end;flex-wrap:wrap;font-size:13px}
 .costrow label{display:flex;flex-direction:column;font-size:11px;color:var(--mut)}
+.costrow label.check{flex-direction:row;align-items:center;font-size:12px}
 .costrow input{width:80px}
 
 dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px;width:min(560px,92vw)}

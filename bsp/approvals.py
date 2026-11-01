@@ -52,11 +52,15 @@ def _write(path: Path, entries: dict):
                                             allow_unicode=True), encoding="utf-8")
 
 
-def load(path: Path | None = None, local: Path | None = LOCAL_FILE) -> dict:
+_DEFAULT = object()
+
+
+def load(path: Path | None = None, local=_DEFAULT) -> dict:
     """All approvals by unit full name, each with ``verified`` set.
     A verified repository approval beats a local one; otherwise the local
     (more recent, this machine's) approval wins."""
     keys = signing.trusted_keys()
+    local = LOCAL_FILE if local is _DEFAULT else local
     out = {}
     for name, e in _read(path or FILE).items():
         out[name] = dict(e, verified=signing.verify(e, keys), store="repo")

@@ -40,7 +40,8 @@ def canonical(entry: dict) -> bytes:
     return json.dumps(body, sort_keys=True, separators=(",", ":"), default=str).encode()
 
 
-def load_private(path: Path = KEY_FILE) -> Ed25519PrivateKey | None:
+def load_private(path: Path | None = None) -> Ed25519PrivateKey | None:
+    path = path or KEY_FILE
     if not path.exists():
         return None
     return serialization.load_pem_private_key(path.read_bytes(), password=None)
@@ -52,7 +53,8 @@ def public_b64(key: Ed25519PrivateKey) -> str:
     return base64.b64encode(raw).decode()
 
 
-def trusted_keys(path: Path = TRUSTED) -> dict[str, str]:
+def trusted_keys(path: Path | None = None) -> dict[str, str]:
+    path = path or TRUSTED
     if not path.exists():
         return {}
     return (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("keys", {}) or {}

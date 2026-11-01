@@ -71,3 +71,30 @@ def test_signed_approvals():
     assert not verify(dict(entry, card={"cost": 20}), keys)      # edited after signing
     assert not verify(dict(entry, by="Mike"), keys)               # someone else's name
     assert not verify({k: v for k, v in entry.items() if k != "sig"}, keys)
+
+
+def test_owner_approval_is_signed_and_others_are_not(tmp_path, monkeypatch):
+    """With the trusted key, approvals go to the repo store, signed; without
+    it (a friend's machine) they are stored locally, unverified."""
+    from bsp import approvals, signing
+    monkeypatch.setattr(signing, "HOME", tmp_path / "home")
+    monkeypatch.setattr(signing, "KEY_FILE", tmp_path / "home" / "signing_key")
+    monkeypatch.setattr(signing, "TRUSTED", tmp_path / "trusted.yaml")
+    monkeypatch.setattr(approvals, "FILE", tmp_path / "approvals.yaml")
+    monkeypatch.setattr(approvals, "LOCAL_FILE", tmp_path / "home" / "approvals.yaml")
+    signing.init("Launchpad")
+    e = approvals.record("Test Tank", {"check": 7}, {"check": 7, "cost": 20}, "Launchpad")
+    assert e["verified"] and e["store"] == "repo"
+    assert approvals.load(local=approvals.LOCAL_FILE)["Test Tank"]["verified"]
+    # Someone else typing the owner's name on another machine:
+    signing.KEY_FILE.unlink()
+    e2 = approvals.record("Other Tank", {"check": 6}, {"check": 6}, "Launchpad")
+    assert not e2["verified"] and e2["store"] == "local"
+    loaded = approvals.load(local=approvals.LOCAL_FILE)
+    assert loaded["Test Tank"]["verified"] and not loaded["Other Tank"]["verified"]
+    # Tampering with a signed approval breaks verification:
+    import yaml
+    data = yaml.safe_load(approvals.FILE.read_text())
+    data["approvals"]["Test Tank"]["card"]["cost"] = 5
+    approvals.FILE.write_text(yaml.safe_dump(data))
+    assert not approvals.load(local=None)["Test Tank"]["verified"]
