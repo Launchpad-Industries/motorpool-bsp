@@ -19,6 +19,11 @@ official asset cards (used to fit and check values; not stored here).
 - **Official cards win ties, but not blindly.** Values are fitted to the
   official cards. Where a card looks like an early outlier, the rule follows
   the newer cards and the outlier is recorded below.
+- **Cost must be right for the card; the card can differ from Catalyst's.**
+  What matters most is that the cost formula prices a BSP spec correctly. A
+  generated spec may group or count TW weapons differently from Catalyst
+  (e.g. Drillson: Catalyst 9, generator 8x2 with the LRM 10 included) as long
+  as its cost matches its own stats (Will).
 - **Hand estimates are a sanity check, not a target.** The custom cards on
   the sheet (Will's and Ando's) were compared with the generator; where they
   disagree with both the rules and the official cards (e.g. 53–60 for slow
