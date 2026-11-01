@@ -353,12 +353,19 @@ def card_html(c: Card) -> str:
 </div>"""
 
 
-def card_frame(inner: str, scale: float = 1.0) -> str:
-    """A tiny standalone page showing one card (for the app's preview)."""
+def card_frame(inner: str, scale: float | None = None) -> str:
+    """A tiny standalone page showing one card (for the app's preview). By
+    default the card scales itself to fit the frame's width, so the whole
+    card shows whatever the screen size, zoom or display scaling."""
+    fit = ("" if scale else
+           "<script>function fit(){var o=document.querySelector('.one');"
+           "var s=Math.min(innerWidth/o.offsetWidth,innerHeight/o.offsetHeight);"
+           "o.style.transform='scale('+s+')';}"
+           "addEventListener('resize',fit);addEventListener('load',fit);fit();</script>")
     return (f"<!doctype html><html><head><meta charset=utf-8>{FONTS}<style>{CSS}"
-            f"html,body{{background:transparent;margin:0;overflow:hidden}}.one{{width:3.5in;height:2.5in;"
-            f"transform:scale({scale});transform-origin:0 0}}</style></head>"
-            f"<body><div class=one>{inner}</div></body></html>")
+            f"html,body{{background:transparent;margin:0;overflow:hidden;width:100%;height:100%}}.one{{width:3.5in;height:2.5in;"
+            f"transform:scale({scale or 1});transform-origin:0 0}}</style></head>"
+            f"<body><div class=one>{inner}</div>{fit}</body></html>")
 
 
 def summary_html(cards: list[Card], title: str) -> str:

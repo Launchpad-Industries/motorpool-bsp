@@ -217,8 +217,8 @@ def create_app(settings: dict | None = None) -> Flask:
         u = unit_or_404(i)
         c = cat().card(u, request.args.get("view", "official"))
         c.veteran = request.args.get("grade") == "vet"
-        scale = float(request.args.get("scale", 1))
-        return Response(card_frame(card_html(c), scale), mimetype="text/html")
+        scale = request.args.get("scale")
+        return Response(card_frame(card_html(c), float(scale) if scale else None), mimetype="text/html")
 
     @app.post("/api/preview")
     def preview():
@@ -229,7 +229,7 @@ def create_app(settings: dict | None = None) -> Flask:
         apply_values(c, d["values"])
         c.source, c.approver, c.verified = "Calculated", "", True
         c.veteran = d.get("grade") == "vet"
-        return Response(card_frame(card_html(c), float(d.get("scale", 1))), mimetype="text/html")
+        return Response(card_frame(card_html(c), d.get("scale")), mimetype="text/html")
 
     @app.post("/api/recost")
     def recost():

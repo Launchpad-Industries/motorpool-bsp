@@ -161,7 +161,7 @@ function showView() {
   frame.hidden = view === "diff";
   if (view !== "diff") {
     const apiView = view === "official" ? "official" : view === "approved" ? "calculated" : "generated";
-    frame.src = `/api/card/${cur.id}?view=${apiView}&grade=${cur.grade}&scale=1.4`;
+    frame.src = `/api/card/${cur.id}?view=${apiView}&grade=${cur.grade}`;
   }
   $("#d-diff").innerHTML = view === "diff" ? diffTable(u.official, u.calculated) : (u.drift.length && view === "approved" ? `<p class="flag">The rules have changed since this was approved (${esc(u.drift.join(", "))}). The approved values still print; re-approve to update.</p>` : "");
   const a = u.approval;
@@ -220,7 +220,7 @@ function livePreview() {
       if (!E("override").checked) { E("cost").value = c.cost; E("vcost").value = c.vet_cost ?? ""; v.cost = c.cost; v.vet_cost = c.vet_cost; }
     } catch (err) { $("#e-formula").textContent = "–"; }
     $("#d-card").hidden = false;
-    $("#d-card").srcdoc = await (await api("/api/preview", {id: cur.id, values: v, grade: cur.grade, scale: 1.4})).text();
+    $("#d-card").srcdoc = await (await api("/api/preview", {id: cur.id, values: v, grade: cur.grade})).text();
   }, 200);
 }
 $("#editor").addEventListener("input", e => { if (e.target.id === "e-override") { E("cost").disabled = E("vcost").disabled = !E("override").checked; } livePreview(); });

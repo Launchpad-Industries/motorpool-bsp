@@ -85,7 +85,7 @@ td.sp{white-space:normal;color:var(--mut);font-size:12px;max-width:220px}
 .seg button{background:none;border:0;padding:6px 12px;color:var(--mut)}
 .seg button.on{background:var(--fg);color:var(--panel)}
 .seg.small button{padding:4px 10px;font-size:12px}
-.cardframe{width:490px;height:350px;border:0;background:transparent;overflow:hidden}
+.cardframe{width:100%;max-width:520px;aspect-ratio:3.5/2.5;height:auto;border:0;background:transparent;overflow:hidden;display:block}
 .diff{font-size:13px}
 .diff table td,.diff table th{padding:3px 6px}
 .diff .chg{color:var(--warn);font-weight:600}
