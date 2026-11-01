@@ -39,6 +39,7 @@ RULES = {
     # Will: Catalyst drops secondaries with clearly different ranges; 0.7
     # keeps the Marksman's MRMs (15 of 21) and drops SRMs and short lasers.
     "reach_pct": 0.7,
+    "headcap": 12,          # limit headcapper (12+) groups to 10+ point guns
     # Weapon types with under this share of the top type's BV are secondary
     # and don't add to damage (Will: Catalyst throws secondaries away
     # aggressively). 40% keeps the Challenger X's LB 10-X (46%).
@@ -353,6 +354,16 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         size = max([5.0] + big)
     size = max(1, min(int(round(size)), int(round(total))))
     hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
+    hc = rules.get("headcap")
+    if hc and size >= hc and hits > 1:
+        # Headcapper groups (12+) only as many as there are weapons that hit
+        # for 10+ on their own: a 10-point gun can be nudged up to 12+, but
+        # 5-point missile clusters shouldn't be (Will). Otherwise use 10s.
+        big_guns = sum(max(1, int(round(w.damage / w.per_hit))) for w in reach
+                       if not w.cluster and w.per_hit >= 10)   # UAC: 2 shots
+        if hits > big_guns:
+            size = 10
+            hits = max(1, int(math.floor(total / size + rules.get("group_round", 0.5))))
     if hits == 1 or rules.get("group_spread"):
         size = int(round(total / hits))
     elif (size <= 5 and rules.get("small_exact") and 5 < total <= rules["small_exact"]
