@@ -34,10 +34,15 @@ RULES = {
     # ranges); "score": bracket maximising damage x range^exponent (87/110).
     "range_rule": "top_bv",
     "main_share": None,     # see derive_damage
+    # Weapons add to damage only if their long range is at least this share
+    # of the attack's long range (was the bracket's medium range, 2/3).
+    # Will: Catalyst drops secondaries with clearly different ranges; 0.7
+    # keeps the Marksman's MRMs (15 of 21) and drops SRMs and short lasers.
+    "reach_pct": 0.7,
     # Weapon types with under this share of the top type's BV are secondary
-    # and don't add to damage (Will). 0.3 keeps the Challenger X's LRM 10
-    # (28% of the Gauss's BV) in the attack; damage within 15%: 68 -> 73.
-    "damage_main_share": 0.3,
+    # and don't add to damage (Will: Catalyst throws secondaries away
+    # aggressively). 40% keeps the Challenger X's LB 10-X (46%).
+    "damage_main_share": 0.4,
     # A weapon type with hits over 5 sets the group size when it carries at
     # least this share of the attack's damage (a "significant minority"); otherwise
     # groups of 5 (Will). Same 30% as damage_main_share.
@@ -301,6 +306,10 @@ def derive_damage(ws: list[Weapon], rules=RULES):
             # steps (3 hexes each) of the attack's long range (Will: Catalyst
             # drops secondaries with clearly different ranges).
             cut = b[2] - 3 * rules["reach_steps"]
+        if rules.get("reach_pct") is not None:
+            # Weapons count if their long range is at least this share of the
+            # attack's long range (a relative gap instead of fixed 3-hex steps).
+            cut = rules["reach_pct"] * b[2]
         reach = [w for w in front if w.long >= cut]
         dshare = rules.get("damage_main_share")
         if dshare and reach:
