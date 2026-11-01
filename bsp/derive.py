@@ -152,6 +152,11 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             continue
         d = s.get("damage")
         av = s.get("shortAV")
+        if d == "DAMAGE_VARIABLE":
+            # Range-dependent direct-fire weapons (Heavy Gauss 25/20/10, snub-
+            # nosed PPC 10/8, variable-speed lasers): use the medium-range
+            # value, one hit (Alacorn Mk VII card: Heavy Gauss = 20).
+            d = av = s.get("medAV") or av
         missile = not isinstance(d, (int, float))
         # Streak launchers always hit with the full cluster (no table roll),
         # so they aren't discounted like other cluster weapons.
