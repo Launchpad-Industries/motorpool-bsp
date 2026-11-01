@@ -33,6 +33,9 @@ RULES = {
     # "top_bv": bracket from the highest-BV weapon type (91/110 official
     # ranges); "score": bracket maximising damage x range^exponent (87/110).
     "range_rule": "top_bv",
+    # Bracket from the weapon's medium range (Will): MRMs (3/8/15) -> 4/8/12,
+    # ER large laser (7/14/19) -> 7/14/21. Ranges 98 -> 100, no losses.
+    "range_basis": "medium",
     "main_share": None,     # see derive_damage
     # Weapons add to damage only if their long range is at least this share
     # of the attack's long range (was the bracket's medium range, 2/3).
@@ -114,6 +117,7 @@ class Weapon:
     bv: float
     anti_infantry: bool = False
     if_damage: float | None = None   # damage counted for IF, if not `damage`
+    medium: int = 0                  # TW medium range (0 = unknown)
 
 
 @dataclass
@@ -197,6 +201,7 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
         if not avg:
             continue
         long = s.get("longRange") or 0
+        medium = s.get("mediumRange") if isinstance(s.get("mediumRange"), int) else 0
         nm = (s.get("name") or name)
         if not missile and ("Ultra" in nm or "Rotary" in nm):
             # UACs fire 2 shots and RACs are usually fired at 5 (avoiding the
@@ -211,14 +216,14 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
             # and LRMs (1 point per hit) for indirect fire.
             m = re.search(r"(\d+)", nm)
             hits = cluster_hits(int(m.group(1)) if m else 3, rules, artemis)
-            avg, if_dmg, long = 2 * hits, hits, 9
+            avg, if_dmg, long, medium = 2 * hits, hits, 9, 6
         out.append(Weapon(loc, nm, float(avg), float(per), int(long), cluster,
                           # Thunderbolts can fire indirectly too, at full damage (Will).
                           indirect=(("LRM" in nm or "MML" in nm) and "Streak" not in nm) or large,
                           bv=float(s.get("bv") or 0),
                           anti_infantry=("F_BURST_FIRE" in s.get("_flags", [])
                                          or "plasma" in nm.lower()),
-                          if_damage=if_dmg))
+                          if_damage=if_dmg, medium=int(medium)))
     return out
 
 
@@ -268,6 +273,20 @@ def _crit_seeker_damage(w: "Weapon") -> float:
     return w.damage
 
 
+def _bracket_of(w: "Weapon", rules=None) -> tuple:
+    """Standard bracket for a weapon: from its long range, or (range_basis
+    "medium") the largest bracket whose medium range it reaches; weapons
+    like MRMs (3/8/15) and the Gauss (7/15/22) aren't split in thirds."""
+    rules = rules or RULES
+    if rules.get("range_basis") == "medium" and w.medium:
+        best = STANDARD_BRACKETS[0]
+        for b in STANDARD_BRACKETS:
+            if b[1] <= w.medium:
+                best = b
+        return best
+    return _bracket_for(w.long)
+
+
 def _bracket_for(long: int) -> tuple:
     best = STANDARD_BRACKETS[0]
     for b in STANDARD_BRACKETS:
@@ -302,7 +321,7 @@ def derive_damage(ws: list[Weapon], rules=RULES):
                 rf = rules.get("direct_range_frac", 0)
                 if gbv(d_top) >= ds * gbv(top) and d_top[0].long >= rf * top[0].long:
                     top = d_top
-        b = _bracket_for(top[0].long)
+        b = _bracket_of(top[0], rules)
         # Other main weapons (BV at least main_share of the top type's) with a
         # similar bracket (one step away at most) pull the range down to the
         # shorter bracket: Will picks the shorter of two close main weapons
@@ -311,7 +330,7 @@ def derive_damage(ws: list[Weapon], rules=RULES):
         if share:
             i = STANDARD_BRACKETS.index(b)
             for g in groups.values():
-                gb = _bracket_for(g[0].long)
+                gb = _bracket_of(g[0], rules)
                 j = STANDARD_BRACKETS.index(gb)
                 if gbv(g) >= share * gbv(top) and i - rules.get("main_steps", 1) <= j < i:
                     b, i = gb, j
