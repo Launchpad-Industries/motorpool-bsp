@@ -292,6 +292,11 @@ def derive_damage(ws: list[Weapon], rules=RULES):
     for b in cands:
         # Weapons count toward the attack if they reach this far.
         cut = b[2] if rules.get("reach_bracket", "long") == "long" else b[1]
+        if rules.get("reach_steps") is not None:
+            # Weapons count if their long range is within this many bracket
+            # steps (3 hexes each) of the attack's long range (Will: Catalyst
+            # drops secondaries with clearly different ranges).
+            cut = b[2] - 3 * rules["reach_steps"]
         reach = [w for w in front if w.long >= cut]
         dshare = rules.get("damage_main_share")
         if dshare and reach:
