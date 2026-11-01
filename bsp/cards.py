@@ -161,7 +161,7 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
 .cost .alt { color:#bdbdbd; font-weight:400; font-size:9pt; }
 
 .bd { display:flex; gap:5px; padding:3px 6px 0 6px; flex:1; position:relative; z-index:1; min-height:0; }
-.stats { flex:0 0 2.2in; display:flex; flex-direction:column; justify-content:space-between; gap:3px; padding-bottom:3px; }
+.stats { flex:0 0 2.2in; display:flex; flex-direction:column; justify-content:flex-start; gap:3px; padding-bottom:3px; }
 .stats.wide { flex:1; }
 .box { border:1.2px solid var(--ink); border-radius:6px; padding:1px 6px; background:var(--soft); }
 .row { display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
@@ -184,7 +184,7 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
 .grade.vet { background:var(--ink); color:#fff; }
 .art { flex:1; display:flex; align-items:center; justify-content:center; position:relative; min-width:0; }
 .art img { max-width:100%; max-height:1.35in; object-fit:contain; }
-.art img.sprite { width:0.95in; height:auto; max-height:1.25in; object-fit:contain; height:auto; image-rendering:auto; filter:grayscale(1) contrast(1.15); }
+.art img.sprite { width:0.8in; height:0.9in; object-fit:contain; image-rendering:auto; filter:grayscale(1) contrast(1.15); }
 .art .credit { position:absolute; right:-2px; top:50%; transform:translateY(-50%) rotate(-90deg);
         transform-origin:center; font-size:4pt; color:#888; white-space:nowrap; width:0; }
 .art .credit span{ position:absolute; left:-0.6in; width:1.2in; text-align:center; }
@@ -214,12 +214,17 @@ def _e(x) -> str:
 
 
 def card_html(c: Card) -> str:
-    # The version in play (Regular or Veteran) is large; the other is shown
-    # small and grey, so the regular values are always on the card.
-    alt_cost = c.cost if c.is_vet else c.vet_cost
-    alt_skill = c.skill if c.is_vet else c.vet_skill
-    cost_alt = f' <span class="alt">({alt_cost})</span>' if alt_cost is not None else ""
-    skill_alt = f' <span class="g">({alt_skill})</span>' if alt_skill is not None else ""
+    # Regular always on the left, Veteran (in parentheses) on the right; the
+    # grade in play is emphasised, the other shown small and grey.
+    def pair(reg, vet, small_cls):
+        if vet is None:
+            return f"{reg}"
+        if c.is_vet:
+            return f'<span class="{small_cls}">{reg}</span> ({vet})'.replace(
+                f" ({vet})", f' <span class="{small_cls}">(</span>{vet}<span class="{small_cls}">)</span>')
+        return f'{reg} <span class="{small_cls}">({vet})</span>'
+    cost_txt = pair(c.cost, c.vet_cost, "alt")
+    skill_txt = pair(c.skill, c.vet_skill, "g")
     grade = ('<span class="grade vet">VETERAN</span>' if c.is_vet
              else '<span class="grade">REGULAR</span>')
     if isinstance(c.range, tuple):
@@ -228,7 +233,9 @@ def card_html(c: Card) -> str:
     else:
         rng = f'<div style="grid-column:span 3"><span class="lbl">Attack</span><span class="val">{_e(c.range)}</span></div>'
     rng += f'<div class="dm"><span class="lbl">Dmg</span><span class="val">{_e(c.damage)}</span></div>'
-    track = "".join(f"<span>{n}</span>" for n in range(c.check - 1, 1, -1))
+    # Degradation pips from full strength down: mark one off each time the
+    # Asset survives a Destroy Check.
+    track = "".join(f"<span>{n}</span>" for n in range(c.check, 1, -1))
     prov = {"Official": ("official", "Source: Official Catalyst BSP"),
             "Approved": ("approved", f"Source: Approved-{c.approver}"),
             "Calculated": ("calculated", "Source: Calculated")}[c.source]
@@ -243,11 +250,11 @@ def card_html(c: Card) -> str:
     return f"""<div class="card"><div class="stripe"></div>
 <div class="hd"><div class="names"><div class="variant">{_e('' if c.variant == 'Standard' else c.variant) or '&nbsp;'}</div>
 <div class="chassis{long_name}">{_e(c.chassis)}</div></div>
-<div class="cost"><small>COST</small>{c.current_cost}{cost_alt}</div></div>
+<div class="cost"><small>COST</small>{cost_txt}</div></div>
 <div class="bd"><div class="stats">
 <div class="box row"><span><span class="lbl">MP </span><span class="val">{c.mp}{_e(MODE_NAMES.get(c.mode, c.mode))}</span></span>
 <span><span class="lbl">TMM </span><span class="val">+{c.tmm}</span></span>
-<span><span class="lbl">Skill </span><span class="val">{c.current_skill}{skill_alt}</span></span></div>
+<span><span class="lbl">Skill </span><span class="val">{skill_txt}</span></span></div>
 <div class="box rng">{rng}</div>
 <div class="box chk"><div class="top"><span><span class="lbl">Check </span><span class="val">{c.check}+</span></span>
 <span><span class="lbl">Threshold </span><span class="val">{c.threshold}</span></span></div>
