@@ -299,7 +299,8 @@ def derive_damage(ws: list[Weapon], rules=RULES):
             direct = [g for g in groups.values() if not g[0].indirect]
             if direct:
                 d_top = max(direct, key=gbv)
-                if gbv(d_top) >= ds * gbv(top):
+                rf = rules.get("direct_range_frac", 0)
+                if gbv(d_top) >= ds * gbv(top) and d_top[0].long >= rf * top[0].long:
                     top = d_top
         b = _bracket_for(top[0].long)
         # Other main weapons (BV at least main_share of the top type's) with a
