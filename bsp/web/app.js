@@ -29,7 +29,7 @@ async function init() {
   BYID = Object.fromEntries(ROWS.map(r => [r.id, r]));
   force = force.filter(f => BYID[f.id]);
   renderTable(); renderForce(); renderProposals();
-  if (!INFO.official) toast("No official card export set: everything shows as calculated. See Settings.");
+  if (!INFO.official) toast(INFO.official_status + " Everything shows as approved or calculated.");
 }
 
 // ---------------------------------------------------------------- search
@@ -294,9 +294,9 @@ const fmtV = v => Array.isArray(v) ? (v.every(x => typeof x === "number") ? v.jo
 async function openSettings() {
   const s = await (await api("/api/settings")).json(), f = $("#dlg-settings form");
   for (const [k, v] of Object.entries(s)) if (f.elements[k]) f.elements[k].value = v;
-  $("#owner-note").textContent = INFO.owner
+  $("#owner-note").textContent = INFO.official_status + " — " + (INFO.owner
     ? `This computer holds the signing key for “${INFO.owner}”: approvals made here as ${INFO.owner} are signed and verified.`
-    : "This computer has no trusted signing key, so approvals made here are saved under your name as unverified.";
+    : "This computer has no trusted signing key, so approvals made here are saved under your name as unverified.");
   $("#dlg-settings").showModal();
 }
 $("#btn-settings").addEventListener("click", openSettings);
@@ -304,7 +304,7 @@ $("#dlg-settings").addEventListener("close", async () => {
   if ($("#dlg-settings").returnValue !== "save") return;
   const f = $("#dlg-settings form"), body = {};
   for (const k of ["name", "approval_email", "mm_data", "official_tsv", "fluff_dir"]) body[k] = f.elements[k].value.trim();
-  try { await api("/api/settings", body); INFO = await (await api("/api/info")).json(); await refreshRows(); toast("Settings saved."); }
+  try { await api("/api/settings", body); INFO = await (await api("/api/info")).json(); await refreshRows(); toast("Settings saved. " + INFO.official_status); }
   catch (err) { toast(err.message); }
 });
 

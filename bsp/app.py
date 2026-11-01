@@ -53,11 +53,31 @@ COMPARE = ("mp", "mode", "tmm", "range", "skill", "damage", "check", "threshold"
            "cost", "vet_cost", "specials")
 
 
+PATH_KEYS = ("mm_data", "official_tsv", "fluff_dir")
+
+
+def clean_path(p: str) -> str:
+    """Accept paths pasted from Windows "Copy as path" (wrapped in quotes)."""
+    return (p or "").strip().strip('"').strip("'").strip()
+
+
 def load_settings() -> dict:
     s = dict(DEFAULTS)
     if SETTINGS.exists():
         s.update(json.loads(SETTINGS.read_text(encoding="utf-8")))
+    for k in PATH_KEYS:
+        s[k] = clean_path(s.get(k, ""))
     return s
+
+
+def official_path(settings: dict) -> Path | None:
+    """The official cards export: the Settings path, else official.tsv in the
+    repository folder (git ignores it, so it never gets pushed)."""
+    p = clean_path(settings.get("official_tsv", ""))
+    if p:
+        return Path(p)
+    default = ROOT / "official.tsv"
+    return default if default.exists() else None
 
 
 def save_settings(s: dict):
@@ -86,8 +106,16 @@ class Catalog:
         combat = [u for u in every if u.unit_type in ("Tank", "VTOL")]
         fluff = Path(settings["fluff_dir"]) if settings.get("fluff_dir") else None
         self.art = Art(mm.parent / "images" / "units", fluff)
-        tsv = settings.get("official_tsv")
-        self.official = official_index(Path(tsv), mm, combat) if tsv and Path(tsv).exists() else {}
+        tsv = official_path(settings)
+        if tsv is None:
+            self.official_status = "No official cards export set (Settings), and no official.tsv in the app folder."
+            self.official = {}
+        elif not tsv.exists():
+            self.official_status = f"Official cards export not found: {tsv}"
+            self.official = {}
+        else:
+            self.official = official_index(tsv, mm, combat)
+            self.official_status = f"{len(self.official)} official cards from {tsv}"
         # Support vehicles are only listed when they have an official card
         # (the generator's rules are fitted to combat vehicles).
         self.units = combat + [u for u in every if u.unit_type.startswith("Support")
@@ -161,6 +189,7 @@ def create_app(settings: dict | None = None) -> Flask:
     def info():
         s = state["settings"]
         return jsonify(app=APP_NAME, units=len(cat().units), official=len(cat().official),
+                       official_status=cat().official_status,
                        approved=len(cat().approved), owner=signing.owner_name(),
                        name=s.get("name") or "", settings=s, bv_per_point=BV_PER_POINT)
 
@@ -271,7 +300,8 @@ def create_app(settings: dict | None = None) -> Flask:
     @app.post("/api/settings")
     def set_settings():
         s = dict(state["settings"])
-        s.update({k: v for k, v in request.get_json().items() if k in DEFAULTS})
+        s.update({k: (clean_path(v) if k in PATH_KEYS else v)
+                  for k, v in request.get_json().items() if k in DEFAULTS})
         save_settings(s)
         reload = any(s[k] != state["settings"].get(k) for k in ("mm_data", "official_tsv", "fluff_dir"))
         state["settings"] = s
