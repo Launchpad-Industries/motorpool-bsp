@@ -105,6 +105,8 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         dmg = f"{n}d×{h or 1}"
     path, src = art.find(unit) if unit else (None, "")
     cv = row.get("costV", "").strip()
+    if not cv.isdigit() or cv == row["costR"].strip():
+        cv = ""          # no Veteran version (e.g. artillery: no Skill upgrades)
     return Card(
         chassis=row["name"], variant=row["variant"], unit_type=row["type"],
         tons=unit.tonnage if unit else 0, mp=int(row["mp"]), mode=row["mtype"],
@@ -114,6 +116,36 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         vet_cost=int(cv) if cv else None,
         specials=[s.strip() for s in row["specials"].split(",") if s.strip() and s.strip() != "-"],
         source="Official", image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
+
+
+def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit]) -> dict:
+    """MegaMek unit path -> official card row (from the owner's private
+    spreadsheet export), using the same links as the CSV listing."""
+    import csv
+    import yaml
+    from .match import best_match
+    from .megamek import load_unit
+    links = yaml.safe_load((ROOT / "data" / "card_links.yaml").read_text())
+    out = {}
+    for r in csv.DictReader(open(official_tsv, encoding="utf-8"), delimiter="\t"):
+        key = f"{r['name']}|{r['variant']}"
+        if key in links.get("generic", []) or r["type"] != "Vehicle":
+            continue
+        path = links["links"].get(key) or links["review"].get(key)
+        unit = load_unit(mm_root / path) if path else best_match(r, vehicles).unit
+        if unit is not None:
+            out[unit.path] = r
+    return out
+
+
+def card_for(unit: Unit, weapons: dict, art: Art, approved: dict,
+             official: dict, view: str = "official") -> Card:
+    """The card to print for a unit. view="official" uses the printed card
+    when one exists (the default); view="calculated" always calculates."""
+    row = official.get(unit.path)
+    if row and view == "official":
+        return card_from_official(row, unit, art)
+    return card_from_unit(unit, weapons, art, approved)
 
 
 # --------------------------------------------------------------------------
