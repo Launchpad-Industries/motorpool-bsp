@@ -82,7 +82,7 @@ function renderForce() {
   $("#force-list").innerHTML = force.map((f, i) => {
     const r = BYID[f.id];
     const vetOk = r.vet_cost != null;
-    return `<div class="fitem" data-i="${i}">
+    return `<div class="fitem${cur && cur.id === f.id ? " sel" : ""}" data-i="${i}">
       <div class="nm" data-open="${f.id}">${esc(r.name)}</div><button class="rm" data-rm="${i}" title="Remove">×</button>
       <div class="meta">${srcBadge(r)}
         <span class="pill"><button data-g="reg" class="${f.grade !== "vet" ? "on" : ""}">Reg</button><button data-g="vet" class="${f.grade === "vet" ? "on" : ""}" ${vetOk ? "" : "disabled title='No Veteran version'"}>Vet</button></span>
@@ -108,12 +108,18 @@ async function saveForce() {
 $("#force-list").addEventListener("click", e => {
   const it = e.target.closest(".fitem"); if (!it) return;
   const f = force[+it.dataset.i];
-  if (e.target.dataset.rm !== undefined) force.splice(+e.target.dataset.rm, 1);
-  else if (e.target.dataset.g) { if (!e.target.disabled) f.grade = e.target.dataset.g; }
-  else if (e.target.dataset.v) f.view = e.target.dataset.v;
-  else if (e.target.dataset.q) { f.qty = Math.max(1, f.qty + +e.target.dataset.q); }
-  else if (e.target.dataset.open) { openDetail(e.target.dataset.open); return; }
+  const t = e.target;
+  if (t.dataset.rm !== undefined) force.splice(+t.dataset.rm, 1);
+  else if (t.dataset.g) { if (!t.disabled) f.grade = t.dataset.g; }
+  else if (t.dataset.v) f.view = t.dataset.v;
+  else if (t.dataset.q) { f.qty = Math.max(1, f.qty + +t.dataset.q); }
+  else if (!t.closest("button")) {
+    // Anywhere else on the entry: preview this card as it will print.
+    openDetail(f.id, {grade: f.grade, view: f.view}); return;
+  }
   saveForce();
+  // Keep an open preview in step with the entry's grade / view.
+  if (cur && cur.id === f.id && force.includes(f)) openDetail(f.id, {grade: f.grade, view: f.view});
 });
 $("#force-title").addEventListener("input", e => store.set("title", e.target.value));
 $("#opt-summary").addEventListener("change", e => store.set("summary", e.target.checked));
@@ -138,10 +144,14 @@ $("#btn-print").addEventListener("click", async () => {
 });
 
 // ---------------------------------------------------------------- detail
-async function openDetail(id) {
+async function openDetail(id, opts = {}) {
   const u = await (await api("/api/unit/" + id)).json();
   const r = BYID[id];
-  cur = {id, u, r, view: r.has_official ? "official" : (r.source === "Approved" ? "approved" : "generated"), grade: "reg"};
+  // opts.view is a force-list view ("official" / "calculated"): map it to a
+  // preview tab showing the card that will print.
+  let view = r.has_official ? "official" : (r.source === "Approved" ? "approved" : "generated");
+  if (opts.view === "calculated") view = u.approval ? "approved" : "generated";
+  cur = {id, u, r, view, grade: opts.grade || "reg"};
   $("#detail").hidden = false; $("#editor").hidden = true;
   $("#d-name").textContent = u.name;
   $("#d-sub").textContent = `${r.type} · ${u.tons} t · ${r.tech}${r.year ? " · " + r.year : ""}`;
@@ -151,7 +161,7 @@ async function openDetail(id) {
   views.push(["generated", "Calculated"]);
   if (u.official) views.push(["diff", "Differences"]);
   $("#d-views").innerHTML = views.map(([k, l]) => `<button data-view="${k}" class="${k === cur.view ? "on" : ""}">${l}</button>`).join("");
-  renderTable(); showView();
+  renderTable(); renderForce(); showView();
 }
 function showView() {
   const {u, view} = cur;
@@ -180,7 +190,7 @@ function diffTable(off, calc) {
 }
 $("#d-views").addEventListener("click", e => { if (e.target.dataset.view) { cur.view = e.target.dataset.view; showView(); } });
 $("#d-grade").addEventListener("click", e => { if (e.target.dataset.g) { cur.grade = e.target.dataset.g; if ($("#editor").hidden) showView(); else livePreview(); } });
-$("#d-close").addEventListener("click", () => { $("#detail").hidden = true; cur = null; renderTable(); });
+$("#d-close").addEventListener("click", () => { $("#detail").hidden = true; cur = null; renderTable(); renderForce(); });
 $("#d-add").addEventListener("click", () => addToForce(cur.id, cur.grade, cur.view === "generated" && cur.r.has_official ? "calculated" : "official"));
 $("#d-approve").addEventListener("click", () => approve(cur.view === "approved" ? cur.u.calculated : cur.u.generated, false, ""));
 $("#d-tweak").addEventListener("click", () => openEditor(cur.view === "approved" ? cur.u.calculated : cur.u.generated));
