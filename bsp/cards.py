@@ -53,6 +53,8 @@ class Card:
     image: str = ""               # data URI
     image_source: str = ""        # fluff | sprite | ""
     veteran: bool = False         # print as the improved-Skill (Veteran) version
+    verified: bool = True         # approvals: signed by a trusted key
+    drift: list[str] = field(default_factory=list)   # approvals: rules changed since
 
     @property
     def bv(self) -> int:
@@ -77,13 +79,59 @@ def dmg_text(dmg) -> str:
     return f"{dmg[0]}d×{dmg[1]}"
 
 
-def card_from_unit(unit: Unit, weapons: dict, art: Art, approved: dict) -> Card:
+EDITABLE = ("mp", "mode", "tmm", "range", "skill", "vet_skill", "damage", "check",
+            "threshold", "cost", "vet_cost", "specials")
+
+
+def card_values(c: Card) -> dict:
+    """The editable card stats as plain data (for approvals and the app)."""
+    d = {k: getattr(c, k) for k in EDITABLE}
+    d["range"] = list(d["range"]) if isinstance(d["range"], tuple) else d["range"]
+    return d
+
+
+def apply_values(c: Card, d: dict) -> Card:
+    for k in EDITABLE:
+        if k in d:
+            v = d[k]
+            setattr(c, k, tuple(v) if k == "range" and isinstance(v, list) else v)
+    return c
+
+
+def _legacy_values(v: dict) -> dict:
+    """Card values from an old-style approval that only stored the snapshot."""
+    out = {}
+    cost = str(v.get("cost", ""))
+    if "(" in cost:
+        r, vv = cost.replace(")", "").split("(")
+        out["cost"], out["vet_cost"] = int(r), int(vv)
+    elif cost.isdigit():
+        out["cost"], out["vet_cost"] = int(cost), None
+    rng = str(v.get("range", ""))
+    if "/" in rng:
+        out["range"] = [int(x) for x in rng.split("/")]
+    dmg = str(v.get("damage", ""))
+    if dmg and dmg[0].isdigit():
+        n, _, h = dmg.partition("x")
+        out["damage"] = f"{n}d×{h or 1}"
+    for k in ("check", "threshold", "tmm", "skill"):
+        if k in v:
+            out[k] = int(v[k])
+    sp = str(v.get("specials", "-"))
+    out["specials"] = [] if sp == "-" else [s.strip() for s in sp.split(",")]
+    return out
+
+
+def card_from_unit(unit: Unit, weapons: dict, art: Art | None, approved: dict,
+                   use_approval: bool = True) -> Card:
+    """The calculated card for a MegaMek unit. If the unit is approved (and
+    use_approval), the card carries the approved values, including tweaks."""
     sp, skill, c = spec_for(unit, weapons)
-    entry = approved.get(unit.full_name)
+    entry = approved.get(unit.full_name) if use_approval else None
     rng = sp.range or ("Arrow" if sp.arrow else "Artillery" if sp.artillery else "-")
-    path, src = art.find(unit)
+    path, src = art.find(unit) if art else (None, "")
     from .listing import split_variant
-    return Card(
+    card = Card(
         chassis=unit.name, variant=split_variant(unit),
         unit_type=TYPE_NAMES.get(unit.unit_type, unit.unit_type), tons=unit.tonnage,
         mp=sp.mp, mode=sp.mode, tmm=sp.tmm, range=rng, skill=skill,
@@ -91,9 +139,14 @@ def card_from_unit(unit: Unit, weapons: dict, art: Art, approved: dict) -> Card:
         damage=dmg_text(sp.damage), check=sp.check, threshold=sp.threshold,
         cost=c["regular"], vet_cost=c["veteran"],
         specials=sorted(set(sp.specials)),
-        source="Approved" if entry else "Calculated",
-        approver=entry["by"] if entry else "",
         image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
+    if entry:
+        from . import approvals
+        apply_values(card, entry.get("card") or _legacy_values(entry.get("values", {})))
+        card.source, card.approver = "Approved", entry["by"]
+        card.verified = bool(entry.get("verified"))
+        card.drift = approvals.drift(entry, approvals.snapshot(sp, skill, c))
+    return card
 
 
 def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
@@ -103,7 +156,7 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
     if dmg and dmg[0].isdigit():
         n, _, h = dmg.partition("x")
         dmg = f"{n}d×{h or 1}"
-    path, src = art.find(unit) if unit else (None, "")
+    path, src = art.find(unit) if (unit and art) else (None, "")
     cv = row.get("costV", "").strip()
     if not cv.isdigit() or cv == row["costR"].strip():
         cv = ""          # no Veteran version (e.g. artillery: no Skill upgrades)
@@ -230,6 +283,7 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%); }
 .prov.official { background:var(--ink); color:#fff; }
 .prov.approved { background:#5a5a5a; color:#fff; }
+.prov.approved.unverified { background:#fff; color:#5a5a5a; outline:1.2px dotted #5a5a5a; outline-offset:-3px; }
 .prov.calculated { background:#fff; color:var(--ink); outline:1.2px dashed var(--ink); outline-offset:-3px; }
 .screen-only { font-family:'Barlow',Arial,sans-serif; max-width:8in; margin:12px auto 0; font-size:10pt; color:#333; }
 """
@@ -269,7 +323,9 @@ def card_html(c: Card) -> str:
     # Asset survives a Destroy Check.
     track = "".join(f"<span>{n}</span>" for n in range(c.check, 1, -1))
     prov = {"Official": ("official", "Source: Official Catalyst BSP"),
-            "Approved": ("approved", f"Source: Approved-{c.approver}"),
+            "Approved": ("approved" if c.verified else "approved unverified",
+                         f"Source: Approved-{c.approver}" if c.verified
+                         else f"Source: Unverified-{c.approver}"),
             "Calculated": ("calculated", "Source: Calculated")}[c.source]
     long_name = " xlong" if len(c.chassis) > 24 else " long" if len(c.chassis) > 17 else ""
     img = ""
@@ -297,6 +353,14 @@ def card_html(c: Card) -> str:
 </div>"""
 
 
+def card_frame(inner: str, scale: float = 1.0) -> str:
+    """A tiny standalone page showing one card (for the app's preview)."""
+    return (f"<!doctype html><html><head><meta charset=utf-8>{FONTS}<style>{CSS}"
+            f"body{{background:transparent;margin:0}}.one{{width:3.5in;height:2.5in;"
+            f"transform:scale({scale});transform-origin:0 0}}</style></head>"
+            f"<body><div class=one>{inner}</div></body></html>")
+
+
 def summary_html(cards: list[Card], title: str) -> str:
     rows = "".join(
         f"<tr><td>{_e(c.chassis)}{'' if c.variant == 'Standard' else ' ' + _e(c.variant)}</td><td>{_e(c.unit_type)}</td>"
@@ -312,7 +376,8 @@ def summary_html(cards: list[Card], title: str) -> str:
 <div class="note">BV equivalent = BSP cost × {BV_PER_POINT} (Battle Value Integration). Unofficial fan-made cards; calculated specs derived from MegaMek Data (CC BY-NC-SA 4.0).</div></div>"""
 
 
-def document(cards: list[Card], title="Battlefield Support - Forces", summary=True, note="") -> str:
+def document(cards: list[Card], title="Battlefield Support - Forces", summary=True, note="",
+             app_name="Motor Pool") -> str:
     pages = [summary_html(cards, title)] if summary else []
     for i in range(0, len(cards), 8):
         cells = "".join(f'<div class="cell">{card_html(c)}</div>' for c in cards[i:i + 8])
@@ -320,7 +385,7 @@ def document(cards: list[Card], title="Battlefield Support - Forces", summary=Tr
     banner = f'<div class="screen-only">{note}</div>' if note else ""
     return (f"<!doctype html><html lang=en><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
-            f"<title>BSP Cards</title>{FONTS}<style>{CSS}</style></head><body>{banner}{''.join(pages)}</body></html>")
+            f"<title>{_e(app_name)} – {_e(title)}</title>{FONTS}<style>{CSS}</style></head><body>{banner}{''.join(pages)}</body></html>")
 
 
 def main(argv=None):

@@ -1,0 +1,9 @@
+# Motor Pool / BSP Card Generator
+pyyaml
+numpy
+scipy
+flask
+cryptography
+pillow
+playwright      # then once: python -m playwright install chromium   (for Make PDF)
+pytest

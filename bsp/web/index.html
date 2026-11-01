@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Motor Pool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/web/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">MOTOR<span>POOL</span></div>
+  <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
+  <div class="filters">
+    <select id="f-mode" title="Movement">
+      <option value="">Any move</option><option value="t">Tracked</option><option value="w">Wheeled</option>
+      <option value="h">Hover</option><option value="v">VTOL</option><option value="g">WiGE</option>
+    </select>
+    <select id="f-source" title="Source">
+      <option value="">Any source</option><option>Official</option><option>Approved</option><option>Calculated</option>
+    </select>
+    <select id="f-tech" title="Tech base">
+      <option value="">IS + Clan</option><option>IS</option><option>Clan</option>
+    </select>
+    <select id="f-sort" title="Sort">
+      <option value="name">Sort: name</option><option value="cost">Sort: cost</option>
+      <option value="tons">Sort: tons</option><option value="year">Sort: year</option>
+    </select>
+  </div>
+  <div class="tools">
+    <button id="btn-import" class="ghost" title="Review tweaks someone sent you">Import proposals</button>
+    <button id="btn-settings" class="ghost" title="Settings">Settings</button>
+  </div>
+</header>
+
+<main>
+  <aside class="force">
+    <input id="force-title" class="force-title" value="Battlefield Support - Forces" aria-label="Force name">
+    <div id="force-list" class="force-list"></div>
+    <div class="force-empty" id="force-empty">Add assets from the list to build a force.</div>
+    <div class="totals">
+      <div><span>BSP</span><b id="tot-bsp">0</b></div>
+      <div><span>BV equiv.</span><b id="tot-bv">0</b></div>
+      <div><span>Assets</span><b id="tot-n">0</b></div>
+    </div>
+    <label class="check"><input type="checkbox" id="opt-summary" checked> Summary page</label>
+    <div class="force-actions">
+      <button id="btn-pdf" class="primary">Make PDF</button>
+      <button id="btn-print" class="ghost" title="Open the printable page in a new tab">Print view</button>
+      <button id="btn-clear" class="ghost">Clear</button>
+    </div>
+    <div class="proposals" id="proposals" hidden>
+      <div class="ph"><b>Tweaks to send</b> <span id="prop-n"></span></div>
+      <div id="prop-list"></div>
+      <button id="btn-send" class="primary">Send tweaks for approval</button>
+    </div>
+  </aside>
+
+  <section class="results">
+    <div class="rhead"><span id="count"></span><span class="hint">Click a row for its card. <b>+</b> adds it to the force.</span></div>
+    <div class="table-wrap">
+      <table id="tbl">
+        <thead><tr><th></th><th>Asset</th><th>Src</th><th class=n>Cost</th><th class=n>Tons</th><th>MP</th><th class=n>TMM</th><th>Range</th><th>Dmg</th><th class=n>Chk</th><th>Specials</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="detail" id="detail" hidden>
+    <div class="dhead">
+      <div><div class="dname" id="d-name"></div><div class="dsub" id="d-sub"></div></div>
+      <button class="x" id="d-close" aria-label="Close">×</button>
+    </div>
+    <div class="seg" id="d-views"></div>
+    <div class="seg small" id="d-grade">
+      <button data-g="reg" class="on">Regular</button><button data-g="vet">Veteran</button>
+    </div>
+    <iframe id="d-card" class="cardframe" title="Card preview"></iframe>
+    <div id="d-diff" class="diff"></div>
+    <div id="d-approval" class="approval"></div>
+    <div class="dactions">
+      <button id="d-add" class="primary">Add to force</button>
+      <button id="d-tweak" class="ghost">Tweak…</button>
+      <button id="d-approve" class="ghost">Approve as shown</button>
+    </div>
+
+    <div class="editor" id="editor" hidden>
+      <h3>Tweak card</h3>
+      <div class="grid">
+        <label>MP <input id="e-mp" type="number" min="0"></label>
+        <label>Move <select id="e-mode"><option>t</option><option>w</option><option>h</option><option>v</option><option>g</option><option>n</option></select></label>
+        <label>TMM <input id="e-tmm" type="number" min="0"></label>
+        <label>Skill <input id="e-skill" type="number" min="1"></label>
+        <label>Short <input id="e-s" type="number" min="0"></label>
+        <label>Medium <input id="e-m" type="number" min="0"></label>
+        <label>Long <input id="e-l" type="number" min="0"></label>
+        <label>Damage <input id="e-dmg" placeholder="5d×4"></label>
+        <label>Check <input id="e-check" type="number" min="2" max="12"></label>
+        <label>Threshold <input id="e-thr" type="number" min="1"></label>
+        <label class="wide">Specials <input id="e-spec" placeholder="IF2, No Turret"></label>
+      </div>
+      <div class="costrow">
+        <div>Formula cost: <b id="e-formula">–</b></div>
+        <label class="check"><input type="checkbox" id="e-override"> Override cost</label>
+        <label>Regular <input id="e-cost" type="number" min="0" disabled></label>
+        <label>Veteran <input id="e-vcost" type="number" min="0" disabled></label>
+      </div>
+      <label class="wide">Note <input id="e-note" placeholder="Why (optional)"></label>
+      <div class="dactions">
+        <button id="e-approve" class="primary">Approve tweaked card</button>
+        <button id="e-propose" class="ghost">Add to tweaks to send</button>
+        <button id="e-reset" class="ghost">Reset to generated</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg-settings">
+  <form method="dialog">
+    <h3>Settings</h3>
+    <label>Your name (shown on approvals) <input name="name"></label>
+    <label>Send tweaks to (email) <input name="approval_email" type="email"></label>
+    <label>MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
+    <label>Official cards export (private TSV, optional) <input name="official_tsv"></label>
+    <label>Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
+    <p class="muted" id="owner-note"></p>
+    <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-import">
+  <h3>Import proposals</h3>
+  <p class="muted">Paste the email (or just its MOTORPOOL: code).</p>
+  <textarea id="imp-code" rows="5"></textarea>
+  <div class="dactions"><button id="imp-read" class="primary">Read</button><button id="imp-close" class="ghost">Close</button></div>
+  <div id="imp-list"></div>
+</dialog>
+
+<dialog id="dlg-send">
+  <h3>Send tweaks for approval</h3>
+  <p id="send-msg" class="muted"></p>
+  <textarea id="send-body" rows="10" readonly></textarea>
+  <div class="dactions">
+    <a id="send-mail" class="btn primary" href="#">Open in email</a>
+    <button id="send-copy" class="ghost">Copy text</button>
+    <button id="send-file" class="ghost">Save as file</button>
+    <button id="send-close" class="ghost">Close</button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+<script src="/web/app.js"></script>
+</body>
+</html>
