@@ -72,20 +72,6 @@ approvals:
       specials: IF4, No Turret
       threshold: 5
       tmm: 1
-  Marksman MBT M1J:
-    by: Launchpad
-    note: Reviewed with Claude against the hand-made Custom BSP card
-    'on': '2026-10-31'
-    values:
-      check: 11
-      cost: 48 (55)
-      damage: 15x3
-      mp: 3t
-      range: 7/14/21
-      skill: 6
-      specials: '-'
-      threshold: 8
-      tmm: 1
   Peregrine Attack VTOL:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
