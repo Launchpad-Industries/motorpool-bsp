@@ -52,10 +52,23 @@ class Card:
     approver: str = ""
     image: str = ""               # data URI
     image_source: str = ""        # fluff | sprite | ""
+    veteran: bool = False         # print as the improved-Skill (Veteran) version
 
     @property
     def bv(self) -> int:
-        return self.cost * BV_PER_POINT
+        return self.current_cost * BV_PER_POINT
+
+    @property
+    def is_vet(self) -> bool:
+        return self.veteran and self.vet_cost is not None
+
+    @property
+    def current_cost(self) -> int:
+        return self.vet_cost if self.is_vet else self.cost
+
+    @property
+    def current_skill(self) -> int:
+        return self.vet_skill if self.is_vet else self.skill
 
 
 def dmg_text(dmg) -> str:
@@ -80,7 +93,7 @@ def card_from_unit(unit: Unit, weapons: dict, art: Art, approved: dict) -> Card:
         specials=sorted(set(sp.specials)),
         source="Approved" if entry else "Calculated",
         approver=entry["by"] if entry else "",
-        image=Art.data_uri(path) if path else "", image_source=src)
+        image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
 
 
 def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
@@ -100,7 +113,7 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         check=int(row["check"]), threshold=int(row["thr"]), cost=int(row["costR"]),
         vet_cost=int(cv) if cv else None,
         specials=[s.strip() for s in row["specials"].split(",") if s.strip() and s.strip() != "-"],
-        source="Official", image=Art.data_uri(path) if path else "", image_source=src)
+        source="Official", image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
 
 
 # --------------------------------------------------------------------------
@@ -145,38 +158,43 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
         clip-path:polygon(10px 0,100% 0,100% 100%,0 100%); font-family:'Oswald',sans-serif;
         font-size:12pt; font-weight:600; white-space:nowrap; line-height:1.1; text-align:right; }
 .cost small { display:block; font-size:6pt; font-weight:400; letter-spacing:.08em; opacity:.8; }
-.cost .vet { color:#bdbdbd; font-weight:400; }
+.cost .alt { color:#bdbdbd; font-weight:400; font-size:9pt; }
 
 .bd { display:flex; gap:5px; padding:3px 6px 0 6px; flex:1; position:relative; z-index:1; min-height:0; }
-.stats { flex:0 0 2.1in; display:flex; flex-direction:column; gap:4px; padding-bottom:4px; }
+.stats { flex:0 0 2.2in; display:flex; flex-direction:column; justify-content:space-between; gap:3px; padding-bottom:3px; }
 .stats.wide { flex:1; }
 .box { border:1.2px solid var(--ink); border-radius:6px; padding:1px 6px; background:var(--soft); }
 .row { display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
-.lbl { font-size:6.5pt; font-weight:600; letter-spacing:.06em; color:var(--mid); text-transform:uppercase; }
-.val { font-family:'Oswald',sans-serif; font-weight:600; font-size:12pt; line-height:1.15; }
-.val .g { color:#8a8a8a; font-weight:400; font-size:9pt; }
+.lbl { font-size:7.5pt; font-weight:600; letter-spacing:.06em; color:var(--mid); text-transform:uppercase; }
+.val { font-family:'Oswald',sans-serif; font-weight:600; font-size:13pt; line-height:1.15; }
+.val .g { color:#8a8a8a; font-weight:400; font-size:9.5pt; }
 .rng { display:grid; grid-template-columns:repeat(3,1fr) 1.15fr; text-align:center; }
 .rng .lbl { display:block; }
 .rng .dm { border-left:1px solid var(--line); }
-.chk { display:flex; align-items:center; gap:6px; white-space:nowrap; }
-.track { display:flex; gap:1px; margin-left:auto; flex-wrap:nowrap; }
-.track span { width:10px; height:10px; border:1px solid var(--ink); border-radius:2px; font-size:6pt;
+.chk { white-space:nowrap; }
+.chk .top { display:flex; gap:10px; align-items:baseline; }
+.track { display:flex; gap:2px; flex-wrap:nowrap; padding:1px 0 2px; }
+.track span { width:15px; height:15px; border:1.2px solid var(--ink); border-radius:3px; font-size:8pt; font-weight:600;
         display:flex; align-items:center; justify-content:center; background:#fff; color:var(--mid); }
-.spec { background:#fff; font-size:8pt; line-height:1.15; padding:2px 6px; flex:1; min-height:0.3in; }
-.spec b { font-weight:700; letter-spacing:.04em; font-size:6.5pt; color:var(--mid); }
+.spec { background:#fff; font-size:10pt; line-height:1.15; padding:2px 6px; }
+.spec b { font-weight:700; letter-spacing:.04em; font-size:7.5pt; color:var(--mid); }
+.side { flex:1; display:flex; flex-direction:column; align-items:stretch; min-width:0; gap:3px; }
+.grade { align-self:flex-end; font-family:'Oswald',sans-serif; font-weight:600; font-size:8pt; letter-spacing:.08em;
+        padding:1px 7px; border-radius:9px; border:1.2px solid var(--ink); }
+.grade.vet { background:var(--ink); color:#fff; }
 .art { flex:1; display:flex; align-items:center; justify-content:center; position:relative; min-width:0; }
 .art img { max-width:100%; max-height:1.35in; object-fit:contain; }
-.art img.sprite { width:1.05in; height:auto; image-rendering:auto; filter:grayscale(1) contrast(1.15); }
+.art img.sprite { width:0.95in; height:auto; max-height:1.25in; object-fit:contain; height:auto; image-rendering:auto; filter:grayscale(1) contrast(1.15); }
 .art .credit { position:absolute; right:-2px; top:50%; transform:translateY(-50%) rotate(-90deg);
         transform-origin:center; font-size:4pt; color:#888; white-space:nowrap; width:0; }
 .art .credit span{ position:absolute; left:-0.6in; width:1.2in; text-align:center; }
 
 .ft { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center;
       height:0.24in; padding:0 0 0 6px; }
-.ft .kind { font-family:'Oswald',sans-serif; font-weight:600; font-size:7.5pt; letter-spacing:.03em; white-space:nowrap;
+.ft .kind { font-family:'Oswald',sans-serif; font-weight:600; font-size:6.5pt; overflow:hidden; min-width:0; letter-spacing:.03em; white-space:nowrap;
       background:#fff; padding:1px 14px 1px 0; clip-path:polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%); }
 .prov { height:100%; display:flex; align-items:center; padding:0 7px 0 12px; font-family:'Oswald',sans-serif;
-      font-size:7pt; font-weight:600; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap;
+      font-size:6.8pt; font-weight:600; letter-spacing:.02em; text-transform:uppercase; white-space:nowrap; flex:none;
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%); }
 .prov.official { background:var(--ink); color:#fff; }
 .prov.approved { background:#5a5a5a; color:#fff; }
@@ -196,8 +214,14 @@ def _e(x) -> str:
 
 
 def card_html(c: Card) -> str:
-    vet_cost = f' <span class="vet">({c.vet_cost})</span>' if c.vet_cost is not None else ""
-    vet_skill = f' <span class="g">({c.vet_skill})</span>' if c.vet_skill is not None else ""
+    # The version in play (Regular or Veteran) is large; the other is shown
+    # small and grey, so the regular values are always on the card.
+    alt_cost = c.cost if c.is_vet else c.vet_cost
+    alt_skill = c.skill if c.is_vet else c.vet_skill
+    cost_alt = f' <span class="alt">({alt_cost})</span>' if alt_cost is not None else ""
+    skill_alt = f' <span class="g">({alt_skill})</span>' if alt_skill is not None else ""
+    grade = ('<span class="grade vet">VETERAN</span>' if c.is_vet
+             else '<span class="grade">REGULAR</span>')
     if isinstance(c.range, tuple):
         rng = "".join(f'<div><span class="lbl">{l}</span><span class="val">{v}</span></div>'
                       for l, v in zip(("Short", "Med", "Long"), c.range))
@@ -205,9 +229,9 @@ def card_html(c: Card) -> str:
         rng = f'<div style="grid-column:span 3"><span class="lbl">Attack</span><span class="val">{_e(c.range)}</span></div>'
     rng += f'<div class="dm"><span class="lbl">Dmg</span><span class="val">{_e(c.damage)}</span></div>'
     track = "".join(f"<span>{n}</span>" for n in range(c.check - 1, 1, -1))
-    prov = {"Official": ("official", "Official"),
-            "Approved": ("approved", f"Approved: {c.approver}"),
-            "Calculated": ("calculated", "Calculated")}[c.source]
+    prov = {"Official": ("official", "Source: Official Catalyst BSP"),
+            "Approved": ("approved", f"Source: Approved-{c.approver}"),
+            "Calculated": ("calculated", "Source: Calculated")}[c.source]
     long_name = " xlong" if len(c.chassis) > 24 else " long" if len(c.chassis) > 17 else ""
     img = ""
     if c.image:
@@ -219,32 +243,32 @@ def card_html(c: Card) -> str:
     return f"""<div class="card"><div class="stripe"></div>
 <div class="hd"><div class="names"><div class="variant">{_e('' if c.variant == 'Standard' else c.variant) or '&nbsp;'}</div>
 <div class="chassis{long_name}">{_e(c.chassis)}</div></div>
-<div class="cost"><small>COST</small>{c.cost}{vet_cost}</div></div>
-<div class="bd"><div class="stats{'' if img else ' wide'}">
+<div class="cost"><small>COST</small>{c.current_cost}{cost_alt}</div></div>
+<div class="bd"><div class="stats">
 <div class="box row"><span><span class="lbl">MP </span><span class="val">{c.mp}{_e(MODE_NAMES.get(c.mode, c.mode))}</span></span>
 <span><span class="lbl">TMM </span><span class="val">+{c.tmm}</span></span>
-<span><span class="lbl">Skill </span><span class="val">{c.skill}{vet_skill}</span></span></div>
+<span><span class="lbl">Skill </span><span class="val">{c.current_skill}{skill_alt}</span></span></div>
 <div class="box rng">{rng}</div>
-<div class="box chk"><span><span class="lbl">Check </span><span class="val">{c.check}+</span></span>
-<span><span class="lbl">Thr </span><span class="val">{c.threshold}</span></span>
-<span class="track" title="Degradation">{track}</span></div>
+<div class="box chk"><div class="top"><span><span class="lbl">Check </span><span class="val">{c.check}+</span></span>
+<span><span class="lbl">Threshold </span><span class="val">{c.threshold}</span></span></div>
+<div class="track" title="Degradation">{track}</div></div>
 <div class="box spec"><b>SPECIALS </b>{_e(specials)}</div>
-</div>{img}</div>
-<div class="ft"><span class="kind">BATTLEFIELD SUPPORT ASSET</span><span class="prov {prov[0]}">{_e(prov[1])}</span></div>
+</div><div class="side">{grade}{img}</div></div>
+<div class="ft"><span class="kind">BATTLEFIELD SUPPORT</span><span class="prov {prov[0]}">{_e(prov[1])}</span></div>
 </div>"""
 
 
 def summary_html(cards: list[Card], title: str) -> str:
     rows = "".join(
         f"<tr><td>{_e(c.chassis)}{'' if c.variant == 'Standard' else ' ' + _e(c.variant)}</td><td>{_e(c.unit_type)}</td>"
-        f"<td class=n>{c.skill}</td><td class=n>{c.cost}</td><td class=n>{c.bv:,}</td>"
+        f"<td>{'Veteran' if c.is_vet else 'Regular'}</td><td class=n>{c.current_skill}</td><td class=n>{c.current_cost}</td><td class=n>{c.bv:,}</td>"
         f"<td class=n>{c.tons:g}</td><td>{_e(c.source + (': ' + c.approver if c.approver else ''))}</td></tr>"
         for c in cards)
-    tot = (f"<tr class=total><td>{len(cards)} Assets</td><td></td><td></td>"
-           f"<td class=n>{sum(c.cost for c in cards)}</td><td class=n>{sum(c.bv for c in cards):,}</td>"
+    tot = (f"<tr class=total><td>{len(cards)} Assets</td><td></td><td></td><td></td>"
+           f"<td class=n>{sum(c.current_cost for c in cards)}</td><td class=n>{sum(c.bv for c in cards):,}</td>"
            f"<td class=n>{sum(c.tons for c in cards):g}</td><td></td></tr>")
     return f"""<div class="page summary"><h1>{_e(title)}</h1>
-<table><thead><tr><th>Asset</th><th>Type</th><th>Skill</th><th>BSP Cost</th><th>BV Equivalent</th><th>Tonnage</th><th>Source</th></tr></thead>
+<table><thead><tr><th>Asset</th><th>Type</th><th>Grade</th><th>Skill</th><th>BSP Cost</th><th>BV Equivalent</th><th>Tonnage</th><th>Source</th></tr></thead>
 <tbody>{rows}{tot}</tbody></table>
 <div class="note">BV equivalent = BSP cost × {BV_PER_POINT} (Battle Value Integration). Unofficial fan-made cards; calculated specs derived from MegaMek Data (CC BY-NC-SA 4.0).</div></div>"""
 

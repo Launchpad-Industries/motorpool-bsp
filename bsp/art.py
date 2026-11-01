@@ -71,6 +71,21 @@ class Art:
         return None, ""
 
     @staticmethod
-    def data_uri(path: Path) -> str:
+    def data_uri(path: Path, trim: bool = False) -> str:
+        """Embed an image. trim=True crops transparent margins (MegaMek
+        sprites sit in an 84x72 hex with lots of empty space)."""
         mime = MIME.get(path.suffix.lower(), "image/png")
-        return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
+        data = path.read_bytes()
+        if trim:
+            try:
+                import io
+                from PIL import Image
+                im = Image.open(io.BytesIO(data)).convert("RGBA")
+                box = im.getchannel("A").getbbox()
+                if box:
+                    buf = io.BytesIO()
+                    im.crop(box).save(buf, "PNG")
+                    data, mime = buf.getvalue(), "image/png"
+            except ImportError:
+                pass
+        return f"data:{mime};base64," + base64.b64encode(data).decode()
