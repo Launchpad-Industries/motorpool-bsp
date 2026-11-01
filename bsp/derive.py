@@ -299,7 +299,8 @@ def derive_damage(ws: list[Weapon], rules=RULES):
             # to the attack (Will's hand method).
             tbv: dict[str, float] = {}
             for w in reach:
-                tbv[w.name] = tbv.get(w.name, 0) + w.bv
+                tbv[w.name] = tbv.get(w.name, 0) + (
+                    w.damage if rules.get("main_by") == "damage" else w.bv)
             top_bv = max(tbv.values())
             reach = [w for w in reach if tbv[w.name] >= dshare * top_bv]
         if not reach:
