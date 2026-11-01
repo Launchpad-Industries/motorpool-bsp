@@ -406,7 +406,8 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     for code, n in sorted(sp.artillery.items()):
         sp.specials.append(f"Artillery ({code})" + (str(n) if n > 1 else ""))
     total = sum(w.damage for w in reach)
-    crit = sum(_crit_seeker_damage(w) for w in reach if w.location != "Rear")
+    crit_pool = ws if rules.get("crit_all_weapons") else reach
+    crit = sum(_crit_seeker_damage(w) for w in crit_pool if w.location != "Rear")
     if total and crit >= rules["crit_share"] * total and crit >= rules["crit_min_damage"]:
         sp.specials.append("Crit-Seeker")
     if total and sum(w.damage for w in reach if w.anti_infantry) >= rules["ai_share"] * total:
