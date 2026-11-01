@@ -287,6 +287,15 @@ def derive_damage(ws: list[Weapon], rules=RULES):
             groups.setdefault(w.name, []).append(w)
         gbv = lambda g: sum(x.bv for x in g)
         top = max(groups.values(), key=gbv)
+        ds = rules.get("direct_range_share")
+        if ds is not None and top[0].indirect:
+            # The top weapon fires indirectly (LRMs): its reach already shows
+            # in IF, so a significant direct-fire weapon may set the bracket.
+            direct = [g for g in groups.values() if not g[0].indirect]
+            if direct:
+                d_top = max(direct, key=gbv)
+                if gbv(d_top) >= ds * gbv(top):
+                    top = d_top
         b = _bracket_for(top[0].long)
         # Other main weapons (BV at least main_share of the top type's) with a
         # similar bracket (one step away at most) pull the range down to the
