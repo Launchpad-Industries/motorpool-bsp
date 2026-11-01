@@ -329,7 +329,9 @@ def derive_damage(ws: list[Weapon], rules=RULES):
             reach = [w for w in reach if tbv[w.name] >= dshare * top_bv]
         if not reach:
             continue
-        if rules.get("if_separate") and any(not w.indirect for w in reach):
+        ind = sum(w.damage for w in reach if w.indirect)
+        if rules.get("if_separate") and any(not w.indirect for w in reach) and \
+                ind < rules.get("if_separate_below", 1.0) * sum(w.damage for w in reach):
             # Indirect-capable launchers feed the IF special, not the main attack,
             # when the unit has other weapons at this range.
             reach = [w for w in reach if not w.indirect] or reach
