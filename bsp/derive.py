@@ -52,6 +52,7 @@ RULES = {
     # size only when ATMs carry the most damage, else groups of 5 (Will).
     "atm_group": 6,
     "artemis_mult": 1.2,
+    "mrm_mult": 0.9,        # MRM -1 on the Cluster Hits Table
     # IF X = indirect hits / 5, normal rounding (26/30 official vehicles).
     "if_round": 0.5,
     "rapid_one_group": False,  # UAC/RAC shots as one group (Hetzer (Cell): 30)
@@ -167,6 +168,9 @@ def weapons(unit: Unit, table: dict, rules=None) -> list[Weapon]:
                     # ATMs have Artemis-style fire control built in.
                     art = rules.get("atm_artemis", False)
                 hits = rack if not cluster else cluster_hits(rack, rules, art)
+                if cluster and "MRM" in nm0:
+                    # MRMs take -1 on the Cluster Hits Table: ~0.9x the average.
+                    hits *= rules.get("mrm_mult", 0.9)
                 avg = hits * pm
             per = rules.get("atm_group", 5) if "ATM" in (s.get("name") or name).upper() else 5
             if large:
