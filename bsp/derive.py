@@ -39,6 +39,11 @@ RULES = {
     # Will: Catalyst drops secondaries with clearly different ranges; 0.7
     # keeps the Marksman's MRMs (15 of 21) and drops SRMs and short lasers.
     "reach_pct": 0.7,
+    # When the top-BV weapon fires indirectly (LRMs), a direct-fire weapon type
+    # with at least this share of its BV sets the range bracket instead: the
+    # LRMs' reach already shows as IF (Epona A: ER medium lasers -> 5/10/15).
+    # 45% keeps the Warrior H-7C (SRM 4 at 43% of its LRM 10) at 7/14/21.
+    "direct_range_share": 0.45,
     "headcap": 12,          # limit headcapper (12+) groups to 10+ point guns
     # Weapon types with under this share of the top type's BV are secondary
     # and don't add to damage (Will: Catalyst throws secondaries away
