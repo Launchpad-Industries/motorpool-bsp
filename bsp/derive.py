@@ -52,6 +52,7 @@ RULES = {
     # and don't add to damage (Will: Catalyst throws secondaries away
     # aggressively). 40% keeps the Challenger X's LB 10-X (46%).
     "damage_main_share": 0.4,
+    "main_by": "either",    # main if BV share OR damage share >= the cutoff
     # A weapon type with hits over 5 sets the group size when it carries at
     # least this share of the attack's damage (a "significant minority"); otherwise
     # groups of 5 (Will). Same 30% as damage_main_share.
@@ -360,7 +361,18 @@ def derive_damage(ws: list[Weapon], rules=RULES):
                 tbv[w.name] = tbv.get(w.name, 0) + (
                     w.damage if rules.get("main_by") == "damage" else w.bv)
             top_bv = max(tbv.values())
-            reach = [w for w in reach if tbv[w.name] >= dshare * top_bv]
+            if rules.get("main_by") == "either":
+                # Main if its BV share OR its damage share reaches the cutoff
+                # (Tokugawa (MRM): the Artemis SRM 6 has 35% of the MRM 30's BV
+                # but 53% of its damage, so it counts).
+                tdm: dict[str, float] = {}
+                for w in reach:
+                    tdm[w.name] = tdm.get(w.name, 0) + w.damage
+                top_dm = max(tdm.values())
+                reach = [w for w in reach if tbv[w.name] >= dshare * top_bv
+                         or tdm[w.name] >= dshare * top_dm]
+            else:
+                reach = [w for w in reach if tbv[w.name] >= dshare * top_bv]
         if not reach:
             continue
         ind = sum(w.damage for w in reach if w.indirect)
