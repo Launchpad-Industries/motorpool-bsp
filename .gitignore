@@ -5,8 +5,11 @@ mm-data/
 cache/
 # Official card specs live in the Google Sheet, not here.
 *.tsv
+*.tsv.bak
+*.tsv.tmp
 credentials*.json
 token*.json
 mm-data/
 megamek-src/
 specs/
+auto-specs-all-vehicles.csv

@@ -65,6 +65,12 @@ files. The app picks it up automatically when Settings leaves the path blank.
   variant override `drillson-streak.png`), then MegaMek top-down sprites
   (CC BY-NC-SA, credited), else none. Don't use MekBay/MUL fluff art
   (unclear licensing).
+- Google Sheet: **not part of the app**. Motor Pool reads only local files
+  and has no Sheet buttons, settings or routes. `python -m bsp.sheet
+  pull|push` (`bsp/sheet.py`, own config in `~/.motorpool/sheet.json`, via
+  the Apps Script `bsp/sheet_sync.gs`) runs separately: pull writes the
+  official tab to `official.tsv`, push sends all calculated vehicles to a new
+  tab. The Sheet stays master for official cards.
 - Approvals are **signed** (Ed25519, `bsp/signing.py`): Will's private key
   stays in `~/.motorpool`; trusted public keys in `data/trusted_keys.yaml`.
   Others' approvals are saved locally under their own name, unverified.
@@ -82,7 +88,6 @@ files. The app picks it up automatically when Settings leaves the path blank.
 - Bundle the fonts (Oswald, Barlow, Barlow Condensed — OFL) so PDFs look
   right offline.
 - A double-click `Motor Pool.bat` launcher (git pull + start).
-- Google Sheets sync (the Sheet stays master for official cards).
 - Infantry, battle armor and emplacement cards once the model supports them.
 
 ## Licensing
