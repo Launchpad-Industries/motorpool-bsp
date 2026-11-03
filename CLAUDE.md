@@ -57,6 +57,10 @@ files. The app picks it up automatically when Settings leaves the path blank.
   REGULAR/VETERAN chip; degradation pips from the full Check down to 2;
   footer "Source: Official Catalyst BSP" (solid) / "Approved-<name>" (grey) /
   "Unverified-<name>" (dotted) / "Calculated" (dashed).
+- Generic official cards (official.tsv rows of type Infantry, Battle Armor,
+  Emplacement, or listed under `generic:` in card_links.yaml) are listed as
+  official-only entries (ids start with "g"): no calculated card, tweak or
+  Differences until the model covers them.
 - Official card always used when one exists; Official/Calculated switch per
   force entry; Differences view in the detail panel.
 - Optional summary page: asset, type, grade, skill, BSP cost, BV equivalent
@@ -83,11 +87,22 @@ files. The app picks it up automatically when Settings leaves the path blank.
   "Import proposals" reads it back.
 - Working title **Motor Pool** (may change once infantry/battle armor arrive).
 
+- **Tester build** (`python tools/build.py` → `dist/MotorPool-vX.Y.Z.zip`):
+  PyInstaller one-folder exe, waitress on a free 127.0.0.1 port, console
+  window = quit switch. Distribution mode (`bsp/dist.py`; frozen or
+  `MOTORPOOL_DIST=1`) reads only the bundled snapshot, inlines local fonts,
+  prints PDFs with the installed Edge, locks the data paths in Settings and
+  never writes into the bundle. The zip includes the private official cards,
+  so it's shared privately only: no public GitHub Release. Dev mode
+  (`python -m bsp.app`) is unchanged.
+
 ## App to-do / ideas
 
 - Bundle the fonts (Oswald, Barlow, Barlow Condensed — OFL) so PDFs look
   right offline.
 - A double-click `Motor Pool.bat` launcher (git pull + start).
+- Tester build: include infantry/BA/emplacement data once the app shows them;
+  a dedicated feedback email address; maybe a calculated-only public build.
 - Infantry, battle armor and emplacement cards once the model supports them.
 
 ## Licensing

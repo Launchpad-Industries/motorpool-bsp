@@ -27,7 +27,7 @@ from pathlib import Path
 
 import yaml
 
-from . import signing
+from . import dist, signing
 from .megamek import Unit, load_all
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -111,7 +111,8 @@ def record(unit_name: str, values: dict, card: dict, by: str, changes: dict | No
     key = signing.load_private()
     if key is not None and signing.owner_name(key) == by:
         entry["sig"] = signing.sign(entry, key)
-        path = FILE
+        # The packaged app never writes into its own bundle.
+        path = LOCAL_FILE if dist.DIST else FILE
     else:
         path = LOCAL_FILE
     entries = _read(path)

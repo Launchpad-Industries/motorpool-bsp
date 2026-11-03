@@ -31,10 +31,11 @@ from urllib.parse import quote
 
 from flask import Flask, Response, abort, jsonify, request, send_from_directory
 
-from . import approvals, signing
+from . import approvals, dist, signing
 from .art import Art
-from .cards import (BV_PER_POINT, Card, apply_values, card_from_official, card_from_unit,
-                    card_frame, card_html, card_values, document, official_index)
+from .cards import (BV_PER_POINT, Card, apply_values, card_from_generic, card_from_official,
+                    card_from_unit, card_frame, card_html, card_values, document,
+                    generic_official, official_index)
 from .cost import cost as bsp_cost
 from .megamek import Unit, load_all
 
@@ -67,6 +68,9 @@ def load_settings() -> dict:
         s.update(json.loads(SETTINGS.read_text(encoding="utf-8")))
     for k in PATH_KEYS:
         s[k] = clean_path(s.get(k, ""))
+    if dist.DIST:
+        # The packaged app reads only its bundled data.
+        s["mm_data"], s["official_tsv"] = str(dist.long_path(Path(DEFAULTS["mm_data"]))), ""
     return s
 
 
@@ -89,13 +93,18 @@ def uid(unit: Unit) -> str:
     return hashlib.sha1(unit.full_name.encode()).hexdigest()[:10]
 
 
+def generic_id(row: dict) -> str:
+    return "g" + hashlib.sha1(f"generic|{row['name']}|{row['variant']}".encode()).hexdigest()[:9]
+
+
 def diff(a: Card, b: Card) -> list[str]:
     va, vb = card_values(a), card_values(b)
     return [k for k in COMPARE if str(va.get(k)) != str(vb.get(k))]
 
 
 class Catalog:
-    """Every vehicle with its official card (if any) and calculated card."""
+    """Every vehicle with its official card (if any) and calculated card,
+    plus generic official cards (infantry, battle armor, emplacements)."""
 
     def __init__(self, settings: dict):
         self.settings = settings
@@ -107,6 +116,7 @@ class Catalog:
         fluff = Path(settings["fluff_dir"]) if settings.get("fluff_dir") else None
         self.art = Art(mm.parent / "images" / "units", fluff)
         tsv = official_path(settings)
+        self.generic = {}
         if tsv is None:
             self.official_status = "No official cards export set (Settings), and no official.tsv in the app folder."
             self.official = {}
@@ -115,7 +125,9 @@ class Catalog:
             self.official = {}
         else:
             self.official = official_index(tsv, mm, combat)
-            self.official_status = f"{len(self.official)} official cards from {tsv}"
+            self.generic = {generic_id(r): r for r in generic_official(tsv)}
+            self.official_status = (f"{len(self.official)} official vehicle cards and {len(self.generic)} "
+                                    f"infantry, battle armor and emplacement cards from {tsv}")
         # Support vehicles are only listed when they have an official card
         # (the generator's rules are fitted to combat vehicles).
         self.units = combat + [u for u in every if u.unit_type.startswith("Support")
@@ -125,7 +137,7 @@ class Catalog:
 
     def reload_approvals(self):
         self.approved = approvals.load()
-        self.rows = [self.row(u) for u in self.units]
+        self.rows = [self.row(u) for u in self.units] + [self.generic_row(i) for i in self.generic]
         self.rows.sort(key=lambda r: r["name"].lower())
 
     # --- cards ---------------------------------------------------------
@@ -136,6 +148,15 @@ class Catalog:
     def official_card(self, unit: Unit, image=False) -> Card | None:
         row = self.official.get(unit.path)
         return card_from_official(row, unit, self.art if image else None) if row else None
+
+    def generic_card(self, i: str, image=True) -> Card:
+        return card_from_generic(self.generic[i], self.art if image else None)
+
+    def card_for_id(self, i: str, view: str = "official", image=True) -> Card | None:
+        if i in self.generic:
+            return self.generic_card(i, image)
+        u = self.by_id.get(i)
+        return self.card(u, view, image) if u else None
 
     def card(self, unit: Unit, view: str = "official", image=True) -> Card:
         off = self.official_card(unit, image) if view == "official" else None
@@ -162,6 +183,20 @@ class Catalog:
             "drift": calc.drift,
         }
 
+    def generic_row(self, i: str) -> dict:
+        c, name = self.generic_card(i, image=False), self.generic[i]["name"]
+        return {
+            "id": i, "name": name if c.variant == "Standard" else f"{name} {c.variant}",
+            "chassis": c.chassis, "variant": c.variant, "type": c.unit_type, "tons": None,
+            "tech": "Clan" if any(w in name for w in ("Clan", "Elemental")) else "IS", "year": None,
+            "mp": c.mp, "mode": c.mode, "tmm": c.tmm,
+            "range": list(c.range) if isinstance(c.range, tuple) else c.range,
+            "damage": c.damage, "skill": c.skill, "check": c.check, "threshold": c.threshold,
+            "cost": c.cost, "vet_cost": c.vet_cost, "specials": c.specials,
+            "source": c.source, "approver": c.approver, "verified": c.verified,
+            "has_official": True, "generic": True, "differs": [], "drift": [],
+        }
+
 
 def create_app(settings: dict | None = None) -> Flask:
     settings = settings or load_settings()
@@ -179,7 +214,15 @@ def create_app(settings: dict | None = None) -> Flask:
 
     @app.get("/")
     def index():
+        if dist.local_fonts():
+            page = (WEB / "index.html").read_text(encoding="utf-8")
+            start, end = page.index('<link rel="preconnect"'), page.index('<link rel="stylesheet" href="/web/app.css">')
+            return Response(page[:start] + dist.FONTS_LINK + "\n" + page[end:], mimetype="text/html")
         return send_from_directory(WEB, "index.html")
+
+    @app.get("/fonts/<path:p>")
+    def fonts(p):
+        return send_from_directory(dist.ROOT / "fonts", p)
 
     @app.get("/web/<path:p>")
     def web(p):
@@ -191,7 +234,8 @@ def create_app(settings: dict | None = None) -> Flask:
         return jsonify(app=APP_NAME, units=len(cat().units), official=len(cat().official),
                        official_status=cat().official_status,
                        approved=len(cat().approved), owner=signing.owner_name(),
-                       name=s.get("name") or "", settings=s, bv_per_point=BV_PER_POINT)
+                       name=s.get("name") or "", settings=s, bv_per_point=BV_PER_POINT,
+                       about=dist.about())
 
     @app.get("/api/units")
     def units():
@@ -199,6 +243,12 @@ def create_app(settings: dict | None = None) -> Flask:
 
     @app.get("/api/unit/<i>")
     def unit(i):
+        if i in cat().generic:
+            # Official-only card for a type of unit: nothing to calculate or tweak.
+            return jsonify(id=i, name=cat().generic_row(i)["name"], tons=None, generic=True,
+                           official=card_values(cat().generic_card(i, image=False)),
+                           calculated=None, generated=None, approval=None,
+                           differs=[], drift=[], weapons=[])
         u = unit_or_404(i)
         off = cat().official_card(u)
         calc = cat().calculated(u)
@@ -214,8 +264,9 @@ def create_app(settings: dict | None = None) -> Flask:
 
     @app.get("/api/card/<i>")
     def card(i):
-        u = unit_or_404(i)
-        c = cat().card(u, request.args.get("view", "official"))
+        c = cat().card_for_id(i, request.args.get("view", "official"))
+        if c is None:
+            abort(404)
         c.veteran = request.args.get("grade") == "vet"
         scale = request.args.get("scale")
         return Response(card_frame(card_html(c), float(scale) if scale else None), mimetype="text/html")
@@ -268,8 +319,9 @@ def create_app(settings: dict | None = None) -> Flask:
         html_doc = force_document(cat(), d)
         try:
             data = html_to_pdf(html_doc)
-        except Exception as e:     # Playwright/Chromium missing
-            return jsonify(error=f"PDF engine unavailable: {e}. Run: python -m playwright install chromium"), 500
+        except Exception as e:     # Playwright/Chromium (or Edge, packaged) missing
+            hint = "" if dist.DIST else ". Run: python -m playwright install chromium"
+            return jsonify(error=f"PDF engine unavailable: {e}{hint}"), 500
         name = (d.get("title") or "motor-pool").strip().replace(" ", "-").lower()
         return Response(data, mimetype="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="{name}.pdf"'})
@@ -302,6 +354,8 @@ def create_app(settings: dict | None = None) -> Flask:
         s = dict(state["settings"])
         s.update({k: (clean_path(v) if k in PATH_KEYS else v)
                   for k, v in request.get_json().items() if k in DEFAULTS})
+        if dist.DIST:
+            s["mm_data"], s["official_tsv"] = str(dist.long_path(Path(DEFAULTS["mm_data"]))), ""
         save_settings(s)
         reload = any(s[k] != state["settings"].get(k) for k in ("mm_data", "official_tsv", "fluff_dir"))
         state["settings"] = s
@@ -342,11 +396,10 @@ def recost_values(v: dict) -> dict:
 def force_document(cat: Catalog, d: dict) -> str:
     cards = []
     for it in d.get("items", []):
-        u = cat.by_id.get(it["id"])
-        if u is None:
+        if cat.card_for_id(it["id"], image=False) is None:
             continue
         for _ in range(max(1, int(it.get("qty", 1)))):
-            c = cat.card(u, it.get("view", "official"))
+            c = cat.card_for_id(it["id"], it.get("view", "official"))
             c.veteran = it.get("grade") == "vet"
             cards.append(c)
     return document(cards, title=d.get("title") or "Battlefield Support - Forces",
@@ -357,6 +410,8 @@ _PDF_LOCK = threading.Lock()
 
 
 def html_to_pdf(html_doc: str) -> bytes:
+    if dist.DIST:
+        return dist.html_to_pdf_edge(html_doc)
     from playwright.sync_api import sync_playwright
     with _PDF_LOCK, sync_playwright() as p:
         b = p.chromium.launch()

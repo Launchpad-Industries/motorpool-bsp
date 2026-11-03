@@ -20,7 +20,7 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import approvals
+from . import approvals, dist
 from .art import Art, SPRITE_CREDIT
 from .generate import spec_for
 from .megamek import Unit, load_all
@@ -171,6 +171,32 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         source="Official", image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
 
 
+# Official cards of these types stand for a kind of unit, not one MegaMek design.
+GENERIC_TYPES = ("Infantry", "Battle Armor", "Emplacement")
+
+
+def generic_official(official_tsv: Path) -> list[dict]:
+    """Generic official card rows (conventional infantry, battle armor,
+    emplacements, and any row listed under generic: in card_links.yaml)."""
+    import csv
+    import yaml
+    links = yaml.safe_load((ROOT / "data" / "card_links.yaml").read_text())
+    generic = set(links.get("generic", []))
+    return [r for r in csv.DictReader(open(official_tsv, encoding="utf-8"), delimiter="\t")
+            if f"{r['name']}|{r['variant']}" in generic or r["type"] in GENERIC_TYPES]
+
+
+def card_from_generic(row: dict, art: Art | None) -> Card:
+    c = card_from_official(row, None, None)
+    if c.variant.strip("()").lower() in c.chassis.lower():
+        c.variant = "Standard"     # "Heavy Emplacement / Heavy": don't say it twice
+    if art:
+        path, src = art.find_generic(row["name"], row["type"])
+        if path:
+            c.image, c.image_source = Art.data_uri(path, trim=src == "sprite"), src
+    return c
+
+
 def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit]) -> dict:
     """MegaMek unit path -> official card row (from the owner's private
     spreadsheet export), using the same links as the CSV listing."""
@@ -292,7 +318,12 @@ FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&'
          'family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">')
 
-MODE_NAMES = {"t": "t", "w": "w", "h": "h", "v": "v", "g": "g", "n": "n", "f": "f", "j": "j"}
+
+def fonts() -> str:
+    """Font links: the bundled copies in distribution mode, else Google Fonts."""
+    return dist.FONTS_LINK if dist.local_fonts() else FONTS
+
+MODE_NAMES = {"t": "t", "w": "w", "h": "h", "v": "v", "g": "g", "n": "n", "f": "f", "j": "j", "na": ""}
 
 
 def _e(x) -> str:
@@ -362,7 +393,7 @@ def card_frame(inner: str, scale: float | None = None) -> str:
            "var s=Math.min(innerWidth/o.offsetWidth,innerHeight/o.offsetHeight);"
            "o.style.transform='scale('+s+')';}"
            "addEventListener('resize',fit);addEventListener('load',fit);fit();</script>")
-    return (f"<!doctype html><html><head><meta charset=utf-8>{FONTS}<style>{CSS}"
+    return (f"<!doctype html><html><head><meta charset=utf-8>{fonts()}<style>{CSS}"
             f"html,body{{background:transparent;margin:0;overflow:hidden;width:100%;height:100%}}.one{{width:3.5in;height:2.5in;"
             f"transform:scale({scale or 1});transform-origin:0 0}}</style></head>"
             f"<body><div class=one>{inner}</div>{fit}</body></html>")
@@ -372,7 +403,7 @@ def summary_html(cards: list[Card], title: str) -> str:
     rows = "".join(
         f"<tr><td>{_e(c.chassis)}{'' if c.variant == 'Standard' else ' ' + _e(c.variant)}</td><td>{_e(c.unit_type)}</td>"
         f"<td>{'Veteran' if c.is_vet else 'Regular'}</td><td class=n>{c.current_skill}</td><td class=n>{c.current_cost}</td><td class=n>{c.bv:,}</td>"
-        f"<td class=n>{c.tons:g}</td><td>{_e(c.source + (': ' + c.approver if c.approver else ''))}</td></tr>"
+        f"<td class=n>{format(c.tons, 'g') if c.tons else '—'}</td><td>{_e(c.source + (': ' + c.approver if c.approver else ''))}</td></tr>"
         for c in cards)
     tot = (f"<tr class=total><td>{len(cards)} Assets</td><td></td><td></td><td></td>"
            f"<td class=n>{sum(c.current_cost for c in cards)}</td><td class=n>{sum(c.bv for c in cards):,}</td>"
@@ -392,7 +423,7 @@ def document(cards: list[Card], title="Battlefield Support - Forces", summary=Tr
     banner = f'<div class="screen-only">{note}</div>' if note else ""
     return (f"<!doctype html><html lang=en><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
-            f"<title>{_e(app_name)} – {_e(title)}</title>{FONTS}<style>{CSS}</style></head><body>{banner}{''.join(pages)}</body></html>")
+            f"<title>{_e(app_name)} – {_e(title)}</title>{fonts()}<style>{CSS}</style></head><body>{banner}{''.join(pages)}</body></html>")
 
 
 def main(argv=None):

@@ -24,6 +24,10 @@ EXTS = (".png", ".jpg", ".jpeg", ".webp")
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
         ".webp": "image/webp"}
 SPRITE_CREDIT = "Unit sprite: MegaMek Data (CC BY-NC-SA 4.0)"
+# MegaMek's generic sprites, for official cards that stand for a type of unit.
+DEFAULT_SPRITES = {"Infantry": "defaults/default_infantry.png",
+                   "Battle Armor": "defaults/default_ba.png",
+                   "Emplacement": "defaults/default_gun_emplacement.png"}
 
 
 def _slug(text: str) -> str:
@@ -66,6 +70,20 @@ class Art:
         if best:
             return best[1], "fluff"
         rel = self.exact.get(unit.full_name) or self.chassis.get(unit.name)
+        if rel and self.units_dir and (self.units_dir / rel).exists():
+            return self.units_dir / rel, "sprite"
+        return None, ""
+
+    def find_generic(self, name: str, card_type: str) -> tuple[Path | None, str]:
+        """Image for a generic card (e.g. "Elemental Battle Armor"): the
+        fluff folder by name, else MegaMek's default sprite for the type."""
+        slug, best = _slug(name), None
+        for key, path in self.fluff.items():
+            if (slug == key or slug.startswith(key + " ")) and (best is None or len(key) > len(best[0])):
+                best = (key, path)
+        if best:
+            return best[1], "fluff"
+        rel = DEFAULT_SPRITES.get(card_type)
         if rel and self.units_dir and (self.units_dir / rel).exists():
             return self.units_dir / rel, "sprite"
         return None, ""

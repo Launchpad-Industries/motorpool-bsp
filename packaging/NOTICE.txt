@@ -1,0 +1,38 @@
+Motor Pool - third-party notices
+================================
+
+Motor Pool (BSP Card Generator)
+  Copyright (C) 2026 William Becker. Free software under the GNU General
+  Public License v3 or later (LICENSE.txt). Source:
+  https://github.com/williamtbecker/bsp-card-generator
+
+MegaMek Data (unit files and unit sprites)
+  MegaMek Data (C) The MegaMek Team, https://github.com/MegaMek/mm-data
+  Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  International (licenses\MegaMek-Data-LICENSE.txt,
+  https://creativecommons.org/licenses/by-nc-sa/4.0/). Included unchanged:
+  the vehicle unit files, vehicle sprites and mekset.txt. Non-commercial
+  use only; adaptations must be shared under the same licence. The exact
+  MegaMek Data commit is recorded in _internal\snapshot.json.
+
+MegaMek (weapon and ammunition tables)
+  Weapon and ammunition statistics in _internal\cache were extracted from
+  MegaMek's source code, (C) The MegaMek Team, GPL v3 or later,
+  https://github.com/MegaMek/megamek. Commit in _internal\snapshot.json.
+
+Fonts
+  Barlow, Barlow Condensed (C) The Barlow Project Authors; Oswald (C) The
+  Oswald Project Authors. SIL Open Font License 1.1 (licenses\Font-*.txt).
+
+Python and libraries
+  Python (PSF License), Flask, Werkzeug, Jinja2, MarkupSafe, itsdangerous,
+  click and blinker (BSD), Waitress (ZPL 2.1), PyYAML (MIT), cryptography
+  (Apache 2.0 / BSD), Pillow (MIT-CMU), packaged with PyInstaller (GPL with
+  bootloader exception).
+
+Trademarks
+  BattleTech, BattleMech, 'Mech and MechWarrior are trademarks of The Topps
+  Company, Inc. Battlefield Support is a Catalyst Game Labs game system.
+  This is unofficial, non-commercial fan content, not affiliated with or
+  endorsed by Topps, Catalyst Game Labs or the MegaMek Team. No Catalyst
+  logos or artwork are included.

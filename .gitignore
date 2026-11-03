@@ -13,3 +13,15 @@ mm-data/
 megamek-src/
 specs/
 auto-specs-all-vehicles.csv
+# Packaged app: snapshot holds private official cards; build output.
+snapshot/
+build/
+dist/
+*.spec.bak
+# Secrets must never be committed or bundled.
+.env
+.env.*
+*.pem
+*.key
+sheet.json
+signing_key*

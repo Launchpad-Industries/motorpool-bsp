@@ -23,6 +23,9 @@ const srcBadge = r => `<span class="src ${r.source}${r.source === "Approved" && 
 
 async function init() {
   INFO = await (await api("/api/info")).json();
+  const ab = INFO.about || {};
+  $("#ver").textContent = `v${ab.version}` + (ab.data_date ? ` · data ${ab.data_date}` : " · dev");
+  $("#ver").title = ab.megamek_data_commit ? `MegaMek data ${ab.megamek_data_commit.slice(0, 7)}, source ${ab.megamek_source_commit.slice(0, 7)}` : "";
   $("#force-title").value = store.get("title", $("#force-title").value);
   $("#opt-summary").checked = store.get("summary", true);
   ROWS = await (await api("/api/units")).json();
@@ -35,16 +38,17 @@ async function init() {
 // ---------------------------------------------------------------- search
 function filtered() {
   const q = $("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const mode = $("#f-mode").value, src = $("#f-source").value, tech = $("#f-tech").value, sort = $("#f-sort").value;
+  const mode = $("#f-mode").value, typ = $("#f-type").value, src = $("#f-source").value, tech = $("#f-tech").value, sort = $("#f-sort").value;
   let rs = ROWS.filter(r => {
     if (mode && r.mode !== mode) return false;
+    if (typ && (typ === "veh" ? r.generic : r.type !== typ)) return false;
     if (src && r.source !== src) return false;
     if (tech && r.tech !== tech) return false;
     if (!q.length) return true;
     const hay = (r.name + " " + r.specials.join(" ") + " " + r.type + " " + r.tech).toLowerCase();
     return q.every(w => hay.includes(w));
   });
-  const key = {name: r => r.name.toLowerCase(), cost: r => r.cost, tons: r => r.tons, year: r => r.year || 9999}[sort];
+  const key = {name: r => r.name.toLowerCase(), cost: r => r.cost, tons: r => r.tons ?? 0, year: r => r.year || 9999}[sort];
   rs.sort((a, b) => key(a) < key(b) ? -1 : key(a) > key(b) ? 1 : 0);
   return rs;
 }
@@ -54,11 +58,11 @@ function renderTable() {
   $("#tbl tbody").innerHTML = shown.map(r => `<tr data-id="${r.id}" class="${cur && cur.id === r.id ? "sel" : ""}">
     <td><button class="add" data-add="${r.id}" title="Add to force">+</button></td>
     <td class="nm">${esc(r.chassis)}<small>${esc(r.variant === "Standard" ? "" : r.variant)}</small>${r.differs.length ? `<span class="flag" title="Calculated differs: ${esc(r.differs.join(", "))}">≠</span>` : ""}${r.drift.length ? `<span class="flag" title="Rules changed since approval: ${esc(r.drift.join(", "))}">drift</span>` : ""}</td>
-    <td>${srcBadge(r)}</td><td class="n">${r.cost}${r.vet_cost != null ? ` <small>(${r.vet_cost})</small>` : ""}</td><td class="n">${r.tons}</td>
-    <td>${r.mp}${r.mode}</td><td class="n">+${r.tmm}</td><td>${esc(rangeTxt(r.range))}</td><td>${esc(r.damage)}</td><td class="n">${r.check}</td>
+    <td>${srcBadge(r)}</td><td class="n">${r.cost}${r.vet_cost != null ? ` <small>(${r.vet_cost})</small>` : ""}</td><td class="n">${r.tons ?? "—"}</td>
+    <td>${r.mp}${r.mode === "na" ? "" : r.mode}</td><td class="n">+${r.tmm}</td><td>${esc(rangeTxt(r.range))}</td><td>${esc(r.damage)}</td><td class="n">${r.check}</td>
     <td class="sp">${esc(r.specials.join(", "))}</td></tr>`).join("");
 }
-["#q", "#f-mode", "#f-source", "#f-tech", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
+["#q", "#f-mode", "#f-type", "#f-source", "#f-tech", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
 $("#tbl tbody").addEventListener("click", e => {
   const add = e.target.closest("[data-add]");
   if (add) { addToForce(add.dataset.add); e.stopPropagation(); return; }
@@ -86,7 +90,7 @@ function renderForce() {
       <div class="nm" data-open="${f.id}">${esc(r.name)}</div><button class="rm" data-rm="${i}" title="Remove">×</button>
       <div class="meta">${srcBadge(r)}
         <span class="pill"><button data-g="reg" class="${f.grade !== "vet" ? "on" : ""}">Reg</button><button data-g="vet" class="${f.grade === "vet" ? "on" : ""}" ${vetOk ? "" : "disabled title='No Veteran version'"}>Vet</button></span>
-        ${r.has_official ? `<span class="pill"><button data-v="official" class="${f.view !== "calculated" ? "on" : ""}">Official</button><button data-v="calculated" class="${f.view === "calculated" ? "on" : ""}">Calc</button></span>` : ""}
+        ${r.has_official && !r.generic ? `<span class="pill"><button data-v="official" class="${f.view !== "calculated" ? "on" : ""}">Official</button><button data-v="calculated" class="${f.view === "calculated" ? "on" : ""}">Calc</button></span>` : ""}
         <span class="qty"><button data-q="-1">−</button>${f.qty}<button data-q="1">+</button></span>
         <span class="cost">${cardCost(f) * f.qty} BSP</span></div></div>`;
   }).join("");
@@ -154,12 +158,14 @@ async function openDetail(id, opts = {}) {
   cur = {id, u, r, view, grade: opts.grade || "reg"};
   $("#detail").hidden = false; $("#editor").hidden = true;
   $("#d-name").textContent = u.name;
-  $("#d-sub").textContent = `${r.type} · ${u.tons} t · ${r.tech}${r.year ? " · " + r.year : ""}`;
+  $("#d-sub").textContent = u.generic ? `${r.type} · generic official card`
+    : `${r.type} · ${u.tons} t · ${r.tech}${r.year ? " · " + r.year : ""}`;
   const views = [];
   if (u.official) views.push(["official", "Official"]);
   if (u.approval) views.push(["approved", "Approved"]);
-  views.push(["generated", "Calculated"]);
-  if (u.official) views.push(["diff", "Differences"]);
+  // Generic cards (infantry, battle armor, emplacements) are official only.
+  if (!u.generic) views.push(["generated", "Calculated"]);
+  if (u.official && !u.generic) views.push(["diff", "Differences"]);
   $("#d-views").innerHTML = views.map(([k, l]) => `<button data-view="${k}" class="${k === cur.view ? "on" : ""}">${l}</button>`).join("");
   renderTable(); renderForce(); showView();
 }
@@ -304,6 +310,7 @@ const fmtV = v => Array.isArray(v) ? (v.every(x => typeof x === "number") ? v.jo
 async function openSettings() {
   const s = await (await api("/api/settings")).json(), f = $("#dlg-settings form");
   for (const [k, v] of Object.entries(s)) if (f.elements[k]) f.elements[k].value = v;
+  for (const el of f.querySelectorAll(".dev-only")) el.hidden = !!(INFO.about && INFO.about.dist);
   $("#owner-note").textContent = INFO.official_status + " — " + (INFO.owner
     ? `This computer holds the signing key for “${INFO.owner}”: approvals made here as ${INFO.owner} are signed and verified.`
     : "This computer has no trusted signing key, so approvals made here are saved under your name as unverified.");

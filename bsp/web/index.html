@@ -10,12 +10,16 @@
 </head>
 <body>
 <header class="top">
-  <div class="brand">MOTOR<span>POOL</span></div>
+  <div class="brand">MOTOR<span>POOL</span><small id="ver"></small></div>
   <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
   <div class="filters">
     <select id="f-mode" title="Movement">
       <option value="">Any move</option><option value="t">Tracked</option><option value="w">Wheeled</option>
       <option value="h">Hover</option><option value="v">VTOL</option><option value="g">WiGE</option>
+    </select>
+    <select id="f-type" title="Type">
+      <option value="">Any type</option><option value="veh">Vehicles</option><option>Infantry</option>
+      <option>Battle Armor</option><option>Emplacement</option>
     </select>
     <select id="f-source" title="Source">
       <option value="">Any source</option><option>Official</option><option>Approved</option><option>Calculated</option>
@@ -121,8 +125,8 @@
     <h3>Settings</h3>
     <label>Your name (shown on approvals) <input name="name"></label>
     <label>Send tweaks to (email) <input name="approval_email" type="email"></label>
-    <label>MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
-    <label>Official cards export (private TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
+    <label class="dev-only">MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
+    <label class="dev-only">Official cards export (private TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
     <label>Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
     <p class="muted" id="owner-note"></p>
     <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>

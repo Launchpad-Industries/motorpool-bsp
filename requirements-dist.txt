@@ -1,0 +1,7 @@
+# What the packaged Motor Pool needs (installed into build\venv by tools/build.py)
+flask
+waitress
+pyyaml
+cryptography
+pillow
+pyinstaller>=6.10
