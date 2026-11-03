@@ -47,7 +47,7 @@ DEFAULTS = {
     "name": "",                                   # your approver name
     "approval_email": "williamtbecker@gmail.com",  # where "Send tweaks for approval" goes
     "mm_data": str(ROOT / "mm-data" / "data" / "mekfiles"),
-    "official_tsv": "",                           # private export of the official cards
+    "official_tsv": "",                           # export of the official cards (from the Sheet)
     "fluff_dir": "",                              # your own unit images
 }
 COMPARE = ("mp", "mode", "tmm", "range", "skill", "damage", "check", "threshold",

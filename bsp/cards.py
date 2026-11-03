@@ -150,7 +150,7 @@ def card_from_unit(unit: Unit, weapons: dict, art: Art | None, approved: dict,
 
 
 def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
-    """An official card from the owner's spreadsheet export (private)."""
+    """An official card from the owner's spreadsheet export."""
     rng = tuple(int(x) for x in row["range"].split("/")) if "/" in row["range"] else row["range"]
     dmg = row["dmg"].strip()
     if dmg and dmg[0].isdigit():
@@ -198,7 +198,7 @@ def card_from_generic(row: dict, art: Art | None) -> Card:
 
 
 def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit]) -> dict:
-    """MegaMek unit path -> official card row (from the owner's private
+    """MegaMek unit path -> official card row (from the owner's
     spreadsheet export), using the same links as the CSV listing."""
     import csv
     import yaml

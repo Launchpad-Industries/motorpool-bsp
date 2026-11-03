@@ -8,15 +8,15 @@
     python tools/build_snapshot.py --offline     # fetch nothing at all (needs an earlier snapshot's fonts)
 
 Run before each release. It may use the network and your Sheet link
-(~/.motorpool/sheet.json); the built app uses neither. The snapshot holds
-private official card data and is git-ignored: never commit or publish it.
+(~/.motorpool/sheet.json); the built app uses neither. The snapshot is
+build input and is git-ignored (the Sheet stays the master for official cards).
 
 Contents (laid out as the app expects them inside the bundle):
   mm-data/data/mekfiles/vehicles     MegaMek vehicle units (CC BY-NC-SA 4.0)
   mm-data/data/images/units/...      MegaMek vehicle sprites + mekset.txt
   cache/                             weapon and ammo tables from MegaMek source
   data/                              card links and approvals
-  official.tsv                       official cards (private)
+  official.tsv                       official card stats (from the Sheet)
   fonts/fonts.css                    Barlow, Barlow Condensed, Oswald (OFL), inlined
   licenses/                          MegaMek data licence, font licences
   snapshot.json                      date, MegaMek commits, counts

@@ -9,7 +9,8 @@
 Builds in its own virtual environment (build/venv, pip packages from
 requirements-dist.txt) so Anaconda's large libraries stay out of the exe,
 then checks the result for anything that looks like a secret. The zip holds
-private official card data: share it privately, never publish it."""
+the official card stats (game statistics, fine to share as fan tools do) but
+no Catalyst artwork or logos."""
 
 from __future__ import annotations
 
@@ -105,7 +106,6 @@ def main(argv=None):
     zip_path.unlink(missing_ok=True)
     shutil.make_archive(str(DIST / name), "zip", root_dir=DIST, base_dir=name)
     print(f"\nBuilt {zip_path} ({zip_path.stat().st_size / 1e6:.1f} MB). No secrets found.")
-    print("It contains the private official cards: share it privately only.")
 
 
 if __name__ == "__main__":

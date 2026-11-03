@@ -43,9 +43,12 @@ python -m bsp.app                         # Motor Pool on http://127.0.0.1:8640
 python -m pytest tests
 ```
 
-`official.tsv` (the private export of Catalyst's official cards) sits in this
-folder and is git-ignored; never commit it or print its contents into public
-files. The app picks it up automatically when Settings leaves the path blank.
+`official.tsv` (the export of the official cards from Will's Sheet, which
+stays the master copy) sits in this folder and is git-ignored. Distributing
+the card stats in builds is fine: they're game statistics, shared the way
+MegaMek, MekBay and other fan tools do. Never include Catalyst artwork, logos
+or rules text. The app picks it up automatically when Settings leaves the path
+blank.
 
 ## Motor Pool design decisions (agreed with Will)
 
@@ -92,8 +95,9 @@ files. The app picks it up automatically when Settings leaves the path blank.
   window = quit switch. Distribution mode (`bsp/dist.py`; frozen or
   `MOTORPOOL_DIST=1`) reads only the bundled snapshot, inlines local fonts,
   prints PDFs with the installed Edge, locks the data paths in Settings and
-  never writes into the bundle. The zip includes the private official cards,
-  so it's shared privately only: no public GitHub Release. Dev mode
+  never writes into the bundle. The zip includes the official card stats
+  (fine to distribute; no Catalyst art or logos). No GitHub Release workflow
+  yet: it would need official.tsv on GitHub. Dev mode
   (`python -m bsp.app`) is unchanged.
 
 ## App to-do / ideas

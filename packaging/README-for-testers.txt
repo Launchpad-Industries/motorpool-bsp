@@ -2,10 +2,11 @@ MOTOR POOL - beta test build
 ============================
 
 Motor Pool builds BattleTech Battlefield Support (BSP) asset cards from
-MegaMek's vehicle data: search units, build a force, preview the cards and
+MegaMek's vehicle data, plus the official infantry, battle armor and
+emplacement cards: search units, build a force, preview the cards and
 print them (8 per US Letter page). This is unofficial fan content.
 
-Please don't share this build: it is for invited testers only.
+This is a beta: expect rough edges, and please send feedback.
 
 
 STARTING IT

@@ -136,9 +136,8 @@ licences, refuses to finish if anything looks like a secret, and zips it.
 Bump `__version__` in `bsp/__init__.py` for each release; the app shows it
 and the data date under the title.
 
-**The zip contains the private official cards: share it privately, never as
-a public download or GitHub Release.** `snapshot/`, `build/` and `dist/` are
-git-ignored. To try distribution mode from source, set `MOTORPOOL_DIST=1`.
+The zip includes the official card stats. Official card values are game statistics, shared the way MegaMek, MekBay and other fan tools do; never include Catalyst artwork, logos or rules text.
+`snapshot/`, `build/` and `dist/` are git-ignored. To try distribution mode from source, set `MOTORPOOL_DIST=1`.
 
 ## Command-line tools
 

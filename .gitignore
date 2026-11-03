@@ -13,7 +13,7 @@ mm-data/
 megamek-src/
 specs/
 auto-specs-all-vehicles.csv
-# Packaged app: snapshot holds private official cards; build output.
+# Packaged app: snapshot (build input) and build output.
 snapshot/
 build/
 dist/

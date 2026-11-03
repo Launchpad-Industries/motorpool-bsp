@@ -34,5 +34,6 @@ Trademarks
   BattleTech, BattleMech, 'Mech and MechWarrior are trademarks of The Topps
   Company, Inc. Battlefield Support is a Catalyst Game Labs game system.
   This is unofficial, non-commercial fan content, not affiliated with or
-  endorsed by Topps, Catalyst Game Labs or the MegaMek Team. No Catalyst
-  logos or artwork are included.
+  endorsed by Topps, Catalyst Game Labs or the MegaMek Team. Official card
+  values are reproduced as game statistics only; no Catalyst logos, artwork
+  or rules text are included.
