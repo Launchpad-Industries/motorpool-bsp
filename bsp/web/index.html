@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Motor Pool</title>
+<script>/* Theme before first paint: dark unless chosen otherwise in Settings. */
+try { document.documentElement.dataset.theme = JSON.parse(localStorage.getItem("mp.theme")) || "dark"; }
+catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/web/app.css">
@@ -128,6 +131,7 @@
     <label class="dev-only">MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
     <label class="dev-only">Official cards export (TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
     <label>Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
+    <label>Theme (this browser) <select id="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="auto">Match Windows</option></select></label>
     <p class="muted" id="owner-note"></p>
     <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>
   </form>

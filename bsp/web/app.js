@@ -317,6 +317,9 @@ async function openSettings() {
   $("#dlg-settings").showModal();
 }
 $("#btn-settings").addEventListener("click", openSettings);
+// Theme is a per-browser choice, applied at once (index.html sets it before first paint).
+$("#theme").value = document.documentElement.dataset.theme;
+$("#theme").addEventListener("change", e => { document.documentElement.dataset.theme = e.target.value; store.set("theme", e.target.value); });
 $("#dlg-settings").addEventListener("close", async () => {
   if ($("#dlg-settings").returnValue !== "save") return;
   const f = $("#dlg-settings form"), body = {};
