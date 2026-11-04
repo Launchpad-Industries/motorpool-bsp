@@ -124,10 +124,14 @@ class Catalog:
             self.official_status = f"Official cards export not found: {tsv}"
             self.official = {}
         else:
-            self.official = official_index(tsv, mm, combat)
+            self.missing = []
+            self.official = official_index(tsv, mm, combat, self.missing)
             self.generic = {generic_id(r): r for r in generic_official(tsv)}
             self.official_status = (f"{len(self.official)} official vehicle cards and {len(self.generic)} "
                                     f"infantry, battle armor and emplacement cards from {tsv}")
+            if self.missing:
+                self.official_status += (f". {len(self.missing)} skipped because their MegaMek unit file "
+                                         f"is missing: {', '.join(self.missing)}")
         # Support vehicles are only listed when they have an official card
         # (the generator's rules are fitted to combat vehicles).
         self.units = combat + [u for u in every if u.unit_type.startswith("Support")

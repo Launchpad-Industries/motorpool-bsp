@@ -24,6 +24,17 @@ def main():
         from .app import APP_NAME, create_app
         ab = dist.about()
         print(f"{APP_NAME} v{ab['version']}" + (f"  (data {ab['data_date']})" if ab["data_date"] else ""))
+        problems = dist.check_bundle()
+        if problems:
+            print()
+            print("WARNING: some of Motor Pool's files are missing:")
+            for p in problems:
+                print("  - " + p)
+            print("The zip was probably not fully extracted, or antivirus removed files.")
+            print("Close this window, delete the Motor Pool folder, right-click the zip,")
+            print("choose Extract All, wait until it finishes, then start MotorPool.exe again.")
+            print("Starting anyway; some units may be missing.")
+            print()
         print("Loading units, this takes a few seconds...")
         app = create_app()
         server = create_server(app, host="127.0.0.1", port=0, threads=6)

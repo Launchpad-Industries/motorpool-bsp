@@ -45,6 +45,22 @@ def about() -> dict:
             "megamek_source_commit": m.get("megamek_source_commit", "")}
 
 
+def check_bundle() -> list[str]:
+    """Problems with the unzipped bundle (files missing after an unfinished
+    extraction or an antivirus scan), as plain sentences; empty when fine."""
+    m = manifest()
+    problems = []
+    for rel in ("official.tsv", "cache/weapons.json", "data/card_links.yaml", "fonts/fonts.css"):
+        if not (ROOT / rel).exists():
+            problems.append(f"{rel} is missing.")
+    units = long_path(ROOT / "mm-data" / "data" / "mekfiles" / "vehicles")
+    expected = m.get("vehicle_files")
+    found = sum(1 for _ in units.rglob("*.blk")) if units.exists() else 0
+    if expected and found < expected:
+        problems.append(f"Only {found} of {expected} unit files are present.")
+    return problems
+
+
 def local_fonts() -> bool:
     return DIST and FONTS_CSS.exists()
 

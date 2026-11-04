@@ -51,6 +51,18 @@ def test_generic_card_uses_megamek_default_sprite(tsv):
     assert ba.image.startswith("data:image") and ba.image_source == "sprite"
 
 
+def test_missing_linked_unit_file_is_skipped_not_fatal(tmp_path):
+    # A card linked in card_links.yaml whose MegaMek file is absent (e.g. a
+    # tester's unzip didn't finish) is skipped and reported.
+    from bsp.cards import official_index
+    p = tmp_path / "official.tsv"
+    p.write_text(HEADER + "\nCondor Heavy Hover Tank\tLaser\tVehicle\t30\t35\t5\t8\th\t3\t6/12/18\t6x2\t9\t6\t-\n",
+                 encoding="utf-8")
+    missing = []
+    assert official_index(p, tmp_path / "empty-mekfiles", [], missing) == {}
+    assert missing == ["Condor Heavy Hover Tank Laser"]
+
+
 @pytest.mark.skipif(not (MM.exists() and (ROOT / "cache" / "weapons.json").exists()),
                     reason="MegaMek data not downloaded")
 def test_app_lists_previews_and_prints_generic_cards(tsv):

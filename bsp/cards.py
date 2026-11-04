@@ -197,9 +197,12 @@ def card_from_generic(row: dict, art: Art | None) -> Card:
     return c
 
 
-def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit]) -> dict:
+def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit],
+                   missing: list | None = None) -> dict:
     """MegaMek unit path -> official card row (from the owner's
-    spreadsheet export), using the same links as the CSV listing."""
+    spreadsheet export), using the same links as the CSV listing. A linked
+    unit file that can't be read is skipped and its card name added to
+    `missing`, so one absent file doesn't stop the app."""
     import csv
     import yaml
     from .match import best_match
@@ -211,7 +214,12 @@ def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit]) -> d
         if key in links.get("generic", []) or r["type"] != "Vehicle":
             continue
         path = links["links"].get(key) or links["review"].get(key)
-        unit = load_unit(mm_root / path) if path else best_match(r, vehicles).unit
+        try:
+            unit = load_unit(mm_root / path) if path else best_match(r, vehicles).unit
+        except OSError:
+            if missing is not None:
+                missing.append(f"{r['name']} {r['variant']}".strip())
+            continue
         if unit is not None:
             out[unit.path] = r
     return out
