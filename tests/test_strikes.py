@@ -5,6 +5,7 @@
 shows, and their place in the app's search, force total and printout."""
 
 import os
+import re
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,7 @@ import pytest
 from bsp import app as app_module
 from bsp.cards import card_html, document
 from bsp.sheet import OPTIONS_COLUMNS
-from bsp.strikes import card_from_row, load, parse_stats
+from bsp.strikes import card_from_row, load, parse_stats, radius_svg, scatter_svg
 
 ROOT = Path(__file__).resolve().parent.parent
 MM = Path(os.environ.get("MM_DATA", ROOT / "mm-data" / "data" / "mekfiles"))
@@ -76,6 +77,29 @@ def test_radius_diagram_has_the_groups_in_each_ring():
     h = html(LONG_TOM)
     assert h.count("<path") == 19 + 7 and "Damage radius 2" in h and "Scatter (1D6)" in h
     assert h.count(">5</text>") == 1 + 1 and h.count(">3</text>") == 6 + 1 and h.count(">1</text>") == 12 + 1
+
+
+def text_positions(svg):
+    return {m[2]: (float(m[0]), float(m[1]))
+            for m in re.findall(r'<text x="([-\d.]+)" y="([-\d.]+)"[^>]*>([^<]+)</text>', svg)}
+
+
+def test_scatter_has_1_directly_above_the_target_then_goes_clockwise():
+    pos = text_positions(scatter_svg())
+    tx, ty = pos["T"]
+    assert pos["1"][0] == tx and pos["1"][1] < ty      # straight up
+    assert pos["2"][0] > tx and pos["2"][1] < ty       # upper right
+    assert pos["3"][0] > tx and pos["3"][1] > ty       # lower right
+    assert pos["4"][0] == tx and pos["4"][1] > ty      # straight down
+    assert pos["5"][0] < tx and pos["5"][1] > ty       # lower left
+    assert pos["6"][0] < tx and pos["6"][1] < ty       # upper left
+
+
+def test_radius_diagram_has_a_hex_directly_above_the_target():
+    svg = radius_svg(["5", "3"], 1)
+    x = {float(m) for m in re.findall(r'<text x="([-\d.]+)"', svg)}
+    assert x == {-15.0, 0.0, 15.0}                     # three columns: flat-topped hexes
+    assert len(re.findall(r'<text x="0.00"', svg)) == 3   # above, target, below
 
 
 def test_smoke_is_hatched_with_no_group_numbers():

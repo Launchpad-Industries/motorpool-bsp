@@ -25,13 +25,14 @@ COVER_KEYS = ("Light Air Strike", "Light Bombing", "Heavy Air Strike", "Strafing
 DARK = "#141414"
 # Fill and text colour by distance from the target hex.
 RING_FILL = {0: (DARK, "#fff"), 1: ("#7a7a7a", "#fff"), 2: ("#d2d2cf", DARK)}
-RADIUS_WIDTH = {0: 0.42, 1: 0.74, 2: 0.82}     # inches
+RADIUS_WIDTH = {0: 0.42, 1: 0.70, 2: 0.70}     # inches; radius 2 is as much as the card has height for
 HATCH = ('<defs><pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" '
          'patternTransform="rotate(45)"><rect width="4" height="4" fill="#fff"/>'
          '<line x1="0" y1="0" x2="0" y2="4" stroke="#8a8a8a" stroke-width="1.6"/></pattern></defs>')
 HEX_SIZE = 10
-# Around the target, the direction each 1D6 result scatters.
-SCATTER = {(1, -1): 1, (1, 0): 2, (0, 1): 3, (-1, 1): 4, (-1, 0): 5, (0, -1): 6}
+# Around the target, the direction each 1D6 result scatters: 1 straight up,
+# then clockwise.
+SCATTER = {(0, -1): 1, (1, -1): 2, (1, 0): 3, (0, 1): 4, (-1, 1): 5, (-1, 0): 6}
 
 
 def strike_id(name: str) -> str:
@@ -51,24 +52,30 @@ def parse_stats(text: str) -> dict:
 
 
 # --------------------------------------------------------------------------
-# hex diagrams (pointy-top axial coordinates)
+# hex diagrams (axial coordinates). Flat-topped, like a mapsheet, so one hex
+# sits directly above the target; only the strafing row stands on its points.
 
-def _hex_path(cx: float, cy: float, s: float) -> str:
-    pts = [(cx + s * math.cos(math.radians(60 * i - 30)), cy + s * math.sin(math.radians(60 * i - 30)))
+def _hex_path(cx: float, cy: float, s: float, flat: bool = True) -> str:
+    turn = 0 if flat else -30
+    pts = [(cx + s * math.cos(math.radians(60 * i + turn)), cy + s * math.sin(math.radians(60 * i + turn)))
            for i in range(6)]
     return "M" + " L".join(f"{x:.2f},{y:.2f}" for x, y in pts) + "Z"
 
 
-def _svg(cells: list[tuple], width_in: float, defs: str = "") -> str:
+def _svg(cells: list[tuple], width_in: float, defs: str = "", flat: bool = True) -> str:
     """cells: (q, r, fill, text, text colour)."""
-    s, pad = HEX_SIZE, 1.5
-    xy = [(s * math.sqrt(3) * (c[0] + c[1] / 2), s * 1.5 * c[1]) for c in cells]
-    half = s * math.sqrt(3) / 2
-    minx, maxx = min(x for x, _ in xy) - half - pad, max(x for x, _ in xy) + half + pad
-    miny, maxy = min(y for _, y in xy) - s - pad, max(y for _, y in xy) + s + pad
+    s, pad, root3 = HEX_SIZE, 1.5, math.sqrt(3)
+    if flat:
+        xy = [(s * 1.5 * c[0], s * root3 * (c[1] + c[0] / 2)) for c in cells]
+        half_w, half_h = s, s * root3 / 2
+    else:
+        xy = [(s * root3 * (c[0] + c[1] / 2), s * 1.5 * c[1]) for c in cells]
+        half_w, half_h = s * root3 / 2, s
+    minx, maxx = min(x for x, _ in xy) - half_w - pad, max(x for x, _ in xy) + half_w + pad
+    miny, maxy = min(y for _, y in xy) - half_h - pad, max(y for _, y in xy) + half_h + pad
     body = []
     for (x, y), (_, _, fill, text, colour) in zip(xy, cells):
-        body.append(f'<path d="{_hex_path(x, y, s)}" fill="{fill}" stroke="{DARK}" stroke-width="1"/>')
+        body.append(f'<path d="{_hex_path(x, y, s, flat)}" fill="{fill}" stroke="{DARK}" stroke-width="1"/>')
         if text != "":
             fs = s * (1.05 if len(str(text)) == 1 else .8)
             body.append(f'<text x="{x:.2f}" y="{y + fs * .36:.2f}" text-anchor="middle" font-family="Oswald" '
@@ -98,11 +105,11 @@ def radius_svg(groups: list[str], radius: int, smoke: bool = False) -> str:
 
 def scatter_svg() -> str:
     cells = [(0, 0, DARK, "T", "#fff")] + [(q, r, "#fff", n, DARK) for (q, r), n in SCATTER.items()]
-    return _svg(cells, 0.42)
+    return _svg(cells, 0.40)
 
 
 def line_svg(groups: str, n: int = 5) -> str:
-    return _svg([(q, 0, DARK, groups, "#fff") for q in range(n)], 0.96)
+    return _svg([(q, 0, DARK, groups, "#fff") for q in range(n)], 0.96, flat=False)
 
 
 def single_svg(groups: str) -> str:
