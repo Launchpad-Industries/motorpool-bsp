@@ -1,0 +1,133 @@
+name	variant	type	costR	costV	skill	mp	mtype	tmm	range	dmg	check	thr	specials
+Elemental Battle Armor	Standard	Battle Armor	17	20	5	3	j	2	1/2/3	6x2	9	5	Mechanized, Nimble, Spotter, Swarm
+Elemental Battle Armor (AP Gauss)	(AP Gauss)	Battle Armor	19	22	5	3	j	2	2/4/6	6x2	9	5	Mechanized, Nimble, Spotter, Swarm
+Elemental III Battle Armor	Standard	Battle Armor	26	30	5	3	j	3	3/6/9	6x2	9	5	Mechanized, Nimble, Spotter, Swarm
+Inner Sphere Battle Armor	Standard	Battle Armor	13	15	6	3	j	2	1/2/3	5x2	8	5	Mechanized, Nimble, Spotter, Swarm
+Heavy Emplacement	Heavy	Emplacement	13	15	5	0	na	0	3/6/9	15	10	8	Immobile, No Turret, Spotter
+Light Emplacement	Light	Emplacement	13	15	5	0	na	0	7/14/21	10	10	8	Immobile, No Turret, Spotter
+Medium Emplacement	Medium	Emplacement	13	15	5	0	na	0	5/10/15	12	10	8	Immobile, No Turret, Spotter
+MG Nest	Standard	Emplacement	8	9	5	0	na	0	2/4/6	4	9	5	AI, Immobile, No Turret, Spotter
+Clan Foot Point	Standard	Infantry	7	8	6	1	f	0	1/2/3	5x2	8	1	Nimble, Spotter, Swarm
+Foot Conv. Infantry	Standard	Infantry	7	8	6	1	f	0	1/2/3	5x2	8	1	Nimble, Spotter, Swarm
+Jump Con. Infantry	Standard	Infantry	12	14	6	3	j	2	1/2/3	5x2	8	1	Nimble, Spotter, Swarm
+Mechanized/Motorized Conv. Infantry	Standard	Infantry	12	14	6	4	t	1	1/2/3	5x2	8	1	Nimble, Spotter, Swarm
+Condor Heavy Hover Tank	Standard	Vehicle	20	23	6	8	h	3	3/6/9	5x3	7	5	-
+Condor Heavy Hover Tank	Laser	Vehicle	24	28	6	8	h	3	4/8/12	7x3	7	5	-
+Condor Heavy Hover Tank	Ultra	Vehicle	30	35	6	9	h	3	5/10/15	10x2	7	5	AMS, TAG
+Condor Heavy Hover Tank	Upgrade	Vehicle	24	28	6	9	h	3	7/14/21	5x3	7	5	IF2
+Coolant Truck	Hover	Vehicle	14	16	6	8	h	3	1/2/3	4	7	5	-
+Drillson Heavy Hover Tank	Standard	Vehicle	18	21	6	9	h	3	5/10/15	9	7	5	IF1
+Drillson Heavy Hover Tank	MML	Vehicle	22	26	6	8	h	3	5/10/15	9	7	5	Crit-Seeker, IF1
+Drillson Heavy Hover Tank	Streak	Vehicle	19	22	6	9	h	3	3/6/9	9x2	7	5	Crit-Seeker
+Drillson Heavy Hover Tank	C	Vehicle	22	26	6	9	h	3	5/10/15	8x2	7	5	IF1
+Epona Pursuit Vehicle	A	Vehicle	46	53	5	9	h	3	5/10/15	7x5	7	5	IF5, TAG
+Epona Pursuit Vehicle	Prime	Vehicle	43	50	4	9	h	3	4/8/12	9x4	7	5	TC
+Hephaestus Scout Tank	Prime	Vehicle	38	44	5	8	h	3	4/8/12	7x2	7	5	APC2, ECM, PRB, TAG, TC
+Hover APC	Standard	Vehicle	13	15	6	10	h	4	1/2/3	4	5	5	AI, APC1
+Hover APC	Heavy	Vehicle	16	19	6	8	h	3	1/2/3	4	6	5	AI, APC1
+J. Edgar Light Hover Tank	Standard	Vehicle	17	20	6	11	h	3	3/6/9	5x2	7	5	-
+J. Edgar Light Hover Tank	Light PPC	Vehicle	19	22	5	11	h	3	6/12/18	5	7	5	TC
+J. Edgar Light Hover Tank	TAG	Vehicle	23	27	6	11	h	3	3/6/9	5x2	7	5	PRB, TAG
+J. Edgar Light Hover Tank	X-Pulse	Vehicle	17	20	6	11	h	3	3/6/9	5x2	7	5	-
+Maxim Hover Transport	Standard	Vehicle	23	27	6	8	h	3	3/6/9	5x4	7	5	APC1, IF2
+Maxim Hover Transport	BA Factory	Vehicle	19	22	6	8	h	3	3/6/9	5x3	7	5	APC2, IF1
+Pegasus Scout Hover Tank	Standard	Vehicle	23	27	6	8	h	3	3/6/9	7x3	7	5	Crit-Seeker
+Pegasus Scout Hover Tank	3058 Upgrade	Vehicle	28	32	6	9	h	3	3/6/9	7x3	6	5	Crit-Seeker, PRB, TAG
+Pegasus Scout Hover Tank	C3	Vehicle	27	31	6	9	h	3	3/6/9	7x4	7	5	Crit-Seeker
+Pegasus Scout Hover Tank	Upgrade	Vehicle	26	30	6	11	h	4	3/6/9	7x3	7	5	Crit-Seeker, IF1, PRB
+Savannah Master Hovercraft	Standard	Vehicle	13	15	6	13	h	4	3/6/9	5	5	5	No Turret
+Savannah Master Hovercraft	Interdictor	Vehicle	17		6	13	h	4	-	-	5	5	ECM6
+Savannah Master Hovercraft	Reflective	Vehicle	14	16	6	13	h	4	4/8/12	5	5	5	No Turret, RFA
+Savannah Master Hovercraft	SL	Vehicle	13	15	6	13	h	4	1/2/3	6	5	5	No Turret
+Behemoth Heavy Tank	Standard	Vehicle	32	37	6	2	t	0	5/10/15	10x3	10	8	Crit-Seeker, IF3
+Behemoth Heavy Tank	Davion	Vehicle	34	39	6	2	t	0	7/14/21	15x2	10	8	-
+Behemoth Heavy Tank	Kurita Upgrade	Vehicle	40	46	6	2	t	0	6/12/18	10x4	10	8	Crit-Seeker
+Behemoth Heavy Tank	Kurita	Vehicle	33	38	6	2	t	0	6/12/18	10x3	10	8	IF1
+Bulldog Medium Tank	Standard	Vehicle	16	19	6	4	t	1	5/10/15	9	8	5	-
+Bulldog Medium Tank	Chemical	Vehicle	21	24	6	5	t	2	5/10/15	9	10	5	-
+Bulldog Medium Tank	ERLL	Vehicle	20	23	6	4	t	1	7/14/21	9	10	5	-
+Bulldog Medium Tank	Plasma	Vehicle	18	21	6	4	t	1	5/10/15	11	10	5	AI
+Demolisher Heavy Tank	Standard	Vehicle	33	38	6	3	t	1	3/6/9	20x2	9	8	-
+Demolisher Heavy Tank	Cell	Vehicle	46	53	6	4	t	1	3/6/9	20x3	10	8	-
+Demolisher Heavy Tank	Clan	Vehicle	37	43	6	3	t	1	4/8/12	9x4	10	8	Crit-Seeker
+Demolisher Heavy Tank	Gauss	Vehicle	36	42	6	3	t	1	7/14/21	15x2	9	8	-
+Enyo Strike Tank	Standard	Vehicle	49	57	5	6	t	2	4/8/12	9x5	9	5	Crit-Seeker
+Enyo Strike Tank	ER Pulse	Vehicle	39	45	5	5	t	2	4/8/12	7x4	10	5	Crit-Seeker
+Eurus MBT	A	Vehicle	57	66	4	6	t	2	4/8/12	20x2	11	5	TC
+Eurus MBT	Prime	Vehicle	44	51	5	5	t	2	7/14/21	12x2	11	5	AMS
+Galleon Light Tank	GAL-100	Vehicle	13	15	6	6	t	2	3/6/9	5	7	5	-
+Galleon Light Tank	GAL-102	Vehicle	21	24	6	6	t	2	3/6/9	5x3	8	5	PRB
+Galleon Light Tank	GAL-106	Vehicle	29	34	6	8	t	3	4/8/12	5x3	8	5	PRB, TAG
+LRM Carrier	Standard	Vehicle	28	32	6	3	t	1	7/14/21	9x3	7	5	IF7, No Turret
+LRM Carrier	3055 Upgrade	Vehicle	27	32	6	2	t	0	7/14/21	10x3	7	5	IF9, No Turret
+LRM Carrier	Arrow IV Carrier	Vehicle	58		6	3	t	1	Arrow	-	7	5	Arrow2
+LRM Carrier	Clan	Vehicle	31	36	6	4	t	1	7/14/21	9x3	8	5	IF7, No Turret
+Manticore Heavy Tank	Standard	Vehicle	21	24	6	4	t	1	6/12/18	11	10	5	IF1
+Manticore Heavy Tank	C3S	Vehicle	28	32	6	4	t	1	6/12/18	10x2	10	5	IF1
+Manticore Heavy Tank	HPPC	Vehicle	28	32	5	4	t	1	6/12/18	15	10	5	AMS, IF1, TC
+Manticore Heavy Tank	XL	Vehicle	26	30	5	4	t	1	7/14/21	11	10	5	IF1, TC
+Mobile Long Tom	LT-MOB-25	Vehicle	66	66	8	2	t	0	Artillery	-	7	5	Artillery (LT), No Turret
+Mobile Long Tom	LT-MOB-25F	Vehicle	70	70	8	3	t	1	Artillery	-	7	5	Artillery (LT), No Turret
+Ontos Heavy Tank	Standard	Vehicle	32	37	6	3	t	1	3/6/9	9x4	9	8	IF1
+Ontos Heavy Tank	3053 Upgrade	Vehicle	39	45	6	3	t	1	3/6/9	9x5	10	8	IF2
+Ontos Heavy Tank	Chemical Lasers	Vehicle	58	67	6	3	t	1	5/10/15	8x8	10	8	IF1
+Ontos Heavy Tank	Light Gauss	Vehicle	35	41	6	3	t	1	8/16/24	8x3	10	8	-
+Patton Tank	Standard	Vehicle	20	23	6	4	t	1	5/10/15	10	11	5	-
+Patton Tank	Taurian	Vehicle	24	28	6	5	t	2	6/12/18	11	11	5	-
+Patton Tank	Ultra	Vehicle	29	34	6	4	t	1	6/12/18	10x2	11	5	-
+Patton Tank	XL	Vehicle	34	39	5	4	t	1	6/12/18	10x2	11	5	TC
+Pike Support Vehicle	Standard	Vehicle	17	20	6	3	t	1	8/16/24	6	9	5	-
+Pike Support Vehicle	Clan	Vehicle	27	31	6	3	t	1	9/18/27	5x3	10	5	-
+Pike Support Vehicle	LB-X	Vehicle	25	29	6	3	t	1	7/14/21	5x3	10	5	-
+Pike Support Vehicle	Missile	Vehicle	32	37	6	3	t	1	7/14/21	5x5	9	5	IF5
+Schrek AC Carrier	Standard	Vehicle	23	27	6	3	t	1	6/12/18	5x3	9	8	-
+Schrek Gauss Carrier	Standard	Vehicle	43	50	6	3	t	2	8/16/24	8x3	9	8	ECM6
+Schrek PPC Carrier	Standard	Vehicle	31	36	6	3	t	1	6/12/18	10x3	8	8	-
+Schrek PPC Carrier	XL	Vehicle	34	39	6	4	t	1	6/12/18	10x3	9	8	-
+SRM Carrier	Standard	Vehicle	31	36	6	3	t	1	3/6/9	10x5	7	5	Crit-Seeker, No Turret
+SRM Carrier	3054 Upgrade	Vehicle	31	36	6	3	t	1	3/6/9	10x5	7	5	Crit-Seeker, No Turret
+SRM Carrier	C3	Vehicle	37	43	6	3	t	1	3/6/9	10x5	7	5	Crit-Seeker, ECM6, No Turret
+SRM Carrier	C	Vehicle	34	39	6	4	t	1	3/6/9	10x5	8	5	Crit-Seeker, No Turret
+SturmFeur Heavy Tank	Standard	Vehicle	37	43	6	3	t	1	7/14/21	8x3	12	8	IF5
+SturmFeur Heavy Tank	Assault	Vehicle	40	46	6	3	t	1	6/12/18	22	12	8	ECM6, IF5
+SturmFeur Heavy Tank	Cell	Vehicle	40	46	6	4	t	1	7/14/21	9x3	12	8	IF6
+SturmFeur Heavy Tank	SRM	Vehicle	35	41	6	3	t	1	3/6/9	8x4	12	8	Crit-Seeker, IF2
+Tracked APC	Standard	Vehicle	13	15	6	6	t	3	1/2/3	2	6	5	APC1
+Vedette Medium Tank	Standard	Vehicle	16	19	6	5	t	2	6/12/18	5	8	5	-
+Vedette Medium Tank	Armor	Vehicle	22	26	6	5	t	2	6/12/18	11	9	5	-
+Vedette Medium Tank	Cell	Vehicle	20	23	6	5	t	2	6/12/18	10	8	5	AMS
+Vedette Medium Tank	Ultra	Vehicle	18	21	6	5	t	2	6/12/18	8	8	5	-
+Von Luckner	VNL-K65N	Vehicle	31	36	6	3	t	1	3/6/9	30	10	8	Crit-Seeker, IF1
+Von Luckner	VNL-K70	Vehicle	30	35	6	3	t	1	6/12/18	11x2	10	8	IF1
+Von Luckner	VNL-K75N	Vehicle	35	41	6	3	t	1	3/6/9	20x2	10	8	-
+Von Luckner	VNL-K85N	Vehicle	37	43	6	3	t	1	4/8/12	8x4	12	8	Crit-Seeker
+Warrior Attack Helicopter	H-7	Vehicle	12	14	6	9	v	4	8/16/24	2	5	5	No Turret
+Warrior Attack Helicopter	H-7C	Vehicle	15	17	6	9	v	4	7/14/21	6	5	5	IF1, No Turret
+Warrior Attack Helicopter	H-7F	Vehicle	18	21	6	10	v	5	5/10/15	3	5	5	No Turret, TAG
+Warrior Attack Helicopter	H-8	Vehicle	14	16	6	10	v	5	7/14/21	3	6	5	No Turret
+Coolant Truck	135-K	Vehicle	10	12	6	4	w	1	1/2/3	4	7	5	-
+Hetzer Wheeled Assault Gun	Standard	Vehicle	19	22	6	4	w	1	3/6/9	20	8	5	No Turret
+Hetzer Wheeled Assault Gun	Cell	Vehicle	26	30	6	5	w	2	3/6/9	30	8	5	No Turret
+Hetzer Wheeled Assault Gun	SRM	Vehicle	29	34	6	4	w	1	3/6/9	8x5	8	5	Crit-Seeker, No Turret
+Hetzer Wheeled Assault Gun	C	Vehicle	23	27	6	4	w	1	8/16/24	6x3	8	5	No Turret
+M.A.S.H. Truck	Standard	Vehicle	13	15	6	5	w	2	1/2/3	5	7	5	MASH
+M.A.S.H. Truck	AMS	Vehicle	11	13	6	5	w	2	-	-	7	5	AMS, MASH
+Mobile HQ	Standard	Vehicle	29	34	6	6	w	2	3/6/9	5	7	5	Commander
+Mobile HQ	Browning	Vehicle	18	21	6	7	w	3	-	-	7	5	AMS, ECM6
+Skulker Wheeled Scout Tank	Standard	Vehicle	14	16	6	7	w	3	3/6/9	5	7	5	No Turret
+Skulker Wheeled Scout Tank	C3M	Vehicle	28	32	6	7	w	3	-	-	7	5	Commander
+Skulker Wheeled Scout Tank	SRM	Vehicle	14	15	6	7	w	3	3/6/9	5	7	5	No Turret
+Skulker Wheeled Scout Tank	C	Vehicle	18	21	6	9	w	3	3/6/9	5	7	5	ECM3, PRB, No Turret
+Savior Repair Vehicle	Standard	Vehicle	13	15	6	4	t	1	1/2/3	3	7	5	APC2, MFB
+Pilum Heavy Tank	Arrow IV	Vehicle	60	70	6	4	w	1	-	-	10	5	Arrow
+Saracen Mk II	HCV	Vehicle	29	34	6	10	h	4	2/4/6	7x3	7	5	ECM
+Striker Light Tank	Standard	Vehicle	18	21	6	5	w	2	3/6/9	8	8	5	IF1
+Striker Light Tank	Stealth	Vehicle	32	37	6	5	w	3	3/6/9	7x3	8	5	Crit-Seeker, ECM, IF2
+Tokugawa Heavy Tank	MRM	Vehicle	38	44	6	4	w	1	4/8/12	7x5	10	5	TAG
+Alacorn Heavy Tank	Mk VII	Vehicle	31	36	6	3	t	1	6/12/18	20x2	12	8	No Turret
+Flatbed Truck	SRM	Vehicle	10	12	6	5	w	2	3/6/9	3	5	5	No Turret
+Fox Armored Car	Standard	Vehicle	18	21	6	11	h	4	2/4/6	5x2	7	5	-
+Hawk Moth II Gunship	Standard	Vehicle	25	29	6	11	v	5	3/6/9	6x4	4	5	Crit-Seeker
+Narukami	NK-1C	Vehicle	39	45	6	3	t	0	6/12/18	12x3	11	8	AMS
+Pandion Combat WiGE	Standard	Vehicle	23	27	6	10	g	5	4/8/12	5x3	5	5	PRB
+Fulcrum Heavy Hovertank	Standard	Vehicle	41	48	6	10	h	4	5/10/15	6x3	9	5	ECM, IF1, TAG

@@ -3,8 +3,11 @@ __pycache__/
 # MegaMek data is downloaded at run time, never committed.
 mm-data/
 cache/
-# Official card specs live in the Google Sheet, not here.
+# TSVs stay out of git, except the two card data files. The Google Sheet stays
+# their master copy: `python -m bsp.sheet pull` refreshes them.
 *.tsv
+!/official.tsv
+!/bsp-options.tsv
 *.tsv.bak
 *.tsv.tmp
 credentials*.json

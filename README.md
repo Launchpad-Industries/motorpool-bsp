@@ -122,7 +122,7 @@ The Battlefield Support options that aren't units (air strikes, bombing, air
 cover, artillery, smoke, minefields) have their own **Strikes** section in the
 search results and the force list, and their BSP counts toward the force total.
 They print after the units. The data is `bsp-options.tsv` in this folder, from
-the Sheet's "BSP Options" tab; like `official.tsv`, git ignores it. Columns:
+the Sheet's "BSP Options" tab; like `official.tsv`, it's committed here. Columns:
 `name, category, costR, costV, per, stats, effect, source, notes`. `stats`
 holds `Label=Value` pairs separated by semicolons (TN, Groups, Type, Radius,
 Scatter, Area, Needs, Support) and picks what the card draws; `notes` shows
@@ -214,8 +214,8 @@ It is not stored in this repository. Asset specs and cards this tool
 generates are derived from that data, so if you share them they fall under
 the same license: credit MegaMek, non-commercial use only, share alike.
 
-**Official asset specs** are not stored here either. They are read at run
-time from the owner's own spreadsheet.
+**Official asset specs** are game statistics, kept here as `official.tsv` and
+`bsp-options.tsv`, exported from the owner's own spreadsheet.
 
 ## Unofficial fan content
 

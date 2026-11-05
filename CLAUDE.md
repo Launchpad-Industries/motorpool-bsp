@@ -44,7 +44,8 @@ python -m pytest tests
 ```
 
 `official.tsv` (the export of the official cards from Will's Sheet, which
-stays the master copy) sits in this folder and is git-ignored. Distributing
+stays the master copy) sits in this folder and is committed to git, as is
+`bsp-options.tsv`; after a pull, commit them to share the new values. Distributing
 the card stats in builds is fine: they're game statistics, shared the way
 MegaMek, MekBay and other fan tools do. Never include Catalyst artwork, logos
 or rules text. The app picks it up automatically when Settings leaves the path
@@ -65,7 +66,7 @@ blank.
   official-only entries (ids start with "g"): no calculated card, tweak or
   Differences until the model covers them.
 - Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
-  minefield options from `bsp-options.tsv` (git-ignored, Sheet's "BSP Options"
+  minefield options from `bsp-options.tsv` (from the Sheet's "BSP Options"
   tab). Minefield titles get "Minefield" added in the app. Same frame as unit cards, no Veteran grade: the chip says STRIKE /
   MINEFIELD / NOT AN ATTACK, the side shows a radius, scatter, line or single
   hex diagram, and the card has write-on boxes. Footer "Source: BattleTech Core
@@ -104,7 +105,7 @@ blank.
   prints PDFs with the installed Edge, locks the data paths in Settings and
   never writes into the bundle. The zip includes the official card stats
   (fine to distribute; no Catalyst art or logos). No GitHub Release workflow
-  yet: it would need official.tsv on GitHub. Dev mode
+  yet. Dev mode
   (`python -m bsp.app`) is unchanged.
 
 ## App to-do / ideas

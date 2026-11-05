@@ -75,13 +75,13 @@ def load_settings() -> dict:
 
 
 def options_path() -> Path:
-    """The strike cards data, next to official.tsv (git ignores it too)."""
+    """The strike cards data, next to official.tsv."""
     return ROOT / "bsp-options.tsv"
 
 
 def official_path(settings: dict) -> Path | None:
     """The official cards export: the Settings path, else official.tsv in the
-    repository folder (git ignores it, so it never gets pushed)."""
+    repository folder."""
     p = clean_path(settings.get("official_tsv", ""))
     if p:
         return Path(p)
