@@ -216,7 +216,6 @@ class StrikeCard:
         s = self.stats
         title = self.title
         long_name = " xlong" if len(title) > 24 else " long" if len(title) > 17 else ""
-        per = f'<small class="per">/{_e(self.per.replace("per ", ""))}</small>' if self.per else ""
         blocks = []
         if "TN" in s:
             groups = self.groups if self.groups not in ("", "none") else "—"
@@ -239,7 +238,7 @@ class StrikeCard:
         return (f'<div class="card strike"><div class="stripe"></div>'
                 f'<div class="hd"><div class="names"><div class="variant">{_e(self.support) or "&nbsp;"}</div>'
                 f'<div class="chassis{long_name}">{_e(title)}</div></div>'
-                f'<div class="cost"><small>COST</small>{self.cost}{per}</div></div>'
+                f'<div class="cost"><small>COST</small>{self.cost}</div></div>'
                 f'<div class="bd"><div class="stats">{"".join(blocks)}</div>'
                 f'<div class="side">{self.chip()}<div class="diag">{self.diagrams()}</div>{used}</div></div>'
                 '<div class="ft"><span class="kind">BATTLEFIELD SUPPORT</span>'

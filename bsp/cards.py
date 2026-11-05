@@ -326,7 +326,6 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
 .screen-only { font-family:'Barlow',Arial,sans-serif; max-width:8in; margin:12px auto 0; font-size:10pt; color:#333; }
 
 /* strike cards (bsp/strikes.py) */
-.cost .per { display:inline; margin-left:3px; }
 .big3 { display:grid; grid-template-columns:1fr 1.2fr 1fr; text-align:center; }
 .big3 > div + div { border-left:1px solid var(--line); }
 .big3 .lbl { display:block; }
@@ -336,7 +335,7 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
 .rules { background:#fff; font-family:'Barlow',Arial,sans-serif; font-size:7.2pt; line-height:1.18; padding:2px 6px; }
 .rules b { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.04em; font-size:7pt; color:var(--mid); }
 .rules .ref { white-space:nowrap; }
-.write { background:#fff; display:flex; gap:8px; align-items:flex-end; padding:2px 6px 3px; }
+.write { background:#fff; display:flex; gap:8px; align-items:flex-end; padding:16px 6px 3px; }  /* room to write above the lines */
 .write.col { flex-direction:column; align-items:stretch; gap:1px; }
 .write > span { flex:1; display:flex; align-items:flex-end; gap:3px; }
 .write i { flex:1; border-bottom:1px solid var(--ink); height:11px; }

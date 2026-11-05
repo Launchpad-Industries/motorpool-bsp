@@ -47,11 +47,10 @@ def test_stats_are_pairs_and_flags():
 def test_header_shows_support_type_and_cost():
     h = html(LONG_TOM)
     assert "Artillery Support" in h and ">Long Tom<" in h and "<small>COST</small>24<" in h
-    assert 'class="per"' not in h
 
 
-def test_cost_box_says_per_hex():
-    assert '<small class="per">/hex</small>' in html(MINES)
+def test_cost_box_is_just_the_number_even_per_hex():
+    assert "<small>COST</small>5</div>" in html(MINES) and "/hex" not in html(MINES)
 
 
 def test_stat_box_and_rules_page_reference():
