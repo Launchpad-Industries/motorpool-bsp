@@ -102,3 +102,56 @@ Official cards the rules don't reproduce, kept as printed:
 - Savior Repair Vehicle: APC2 with 3 t of troop space.
 - Check misses: Pandion, SRM Carrier (C3), Coolant Truck 135-K, Tokugawa (MRM),
   Demolisher (standard and Gauss).
+
+## Battle armor (in progress, started 4 Nov with the Elemental)
+
+Only 4 official BA cards exist, all generic (Elemental, Elemental (AP Gauss),
+Elemental III, Inner Sphere BA), so rules are kept few and anchored to them.
+MegaMek links the generic Elemental card to Elemental BA [MG] (Sqd5).
+
+| Stat | Rule | Why |
+|---|---|---|
+| MP / mode | Jump MP if it has jump jets (j), else walk MP | Elemental 3j |
+| TMM | Vehicle MP table, +1 if it jumps, +1 for BA stealth or mimetic armor (as vehicle stealth) | Elemental 2 (MP 3 = 1, jump +1); jump infantry also 2 and the book's example says "jump infantry (TMM +2)"; Elemental III 3 (stealth). Will, 4 Nov. |
+| Attacker movement | No cost for it | The book never applies attacker movement to any Asset's attacks; "not moved" only matters when spotting, which the Spotter special covers |
+| Ignored weapons | Weapons with 2 shots or fewer (one-shot SRM packs etc.) | Elemental's SRM-2 (2 shots) doesn't set range or damage; Elemental III's one-shot Advanced SRM-2 neither |
+| Damage | Main weapon damage x average Cluster Hits for the trooper count (5 troopers 3.17, 4 troopers 2.64), rounded, in 2 groups | Elemental [MG]: 2 x 3.17 = 6 -> 6x2; IS squad of 4 with a 2-point weapon -> 5x2. Will chose this over a fixed Clan 6x2 / IS 5x2 template, 4 Nov, so heavier suits hit harder. Laser Elemental comes out 10x2 (card 6x2: the generic card is the MG suit). |
+| Check | Vehicle armor score (2.5 x armor + 1.5 x troopers) x 2.8 instead of the motive multiplier, then the vehicle Check cutoffs | IS Standard BA 4 x (9+1) -> 269 -> Check 8; Elemental 5 x (10+1) -> 371 -> Check 9; Elemental III 9. Any multiplier 2.66-2.97 fits all three; each suit soaks hits separately and overkill is lost. Will chose this, 4 Nov. |
+| Skill | Same rule as vehicles (`default_skill`): Inner Sphere 6, Clan 5, targeting computer -1 | Elemental 5, Elemental III 5, IS Standard BA 6: no new rule needed |
+| Threshold | 5 | All BA cards |
+| Cost | Vehicle formula unchanged (first pass; Will will revisit) | On the official cards' stats: Elemental 19 (card 17), AP Gauss 20 (19), Elemental III 23 (26), IS BA 15 (13), mean miss ~2 as for vehicles. Generated Elemental III [AP Gauss] (10x2, 3/6/9, TMM 3) costs exactly 26 (30), as printed. Swarm, Mechanized etc. are on every BA, so they're inside the fit. Will, 4 Nov. |
+
+
+Built into the model 4 Nov (`derive_battle_armor` in bsp/derive.py; run with
+`python -m bsp.generate --battle-armor ...`). Details settled while building,
+for Will to review:
+
+- Equipment: Clan "Point Equipment" / IS "Squad Equipment" is one suit's kit;
+  per-trooper lists are added when every trooper has the same. Anti-personnel
+  mount weapons (assault rifles etc.) are left out.
+- Limited shots: one-shot (OS) launchers, and launchers with under 3 shots per
+  launcher, don't count. If that leaves no attack at all (IS Standard [SRM]:
+  one-shot SRM-2 only), they're counted anyway rather than printing no attack.
+- Several weapons per suit: the vehicle main-weapon rules pick which count,
+  their damage is added per suit, then x squad hits.
+- Big squads: groups of 12+ only from guns hitting 10+ on their own, as for
+  vehicles; otherwise the squad's damage is regrouped in 10s (Tortoise II
+  (SRM) Sqd6: 57x2 -> 10x11).
+- Movement: jump (j), VTOL (v, +1 TMM like VTOL vehicles) and UMU (n) use the
+  jump MP line; walking suits use walk MP (f). Written to .bfs as INF_JUMP /
+  INF_LEG / VTOL / INF_UMU, as MegaMek's own Elemental .bfs does.
+- Stealth: armor types 31-34 and 36 (mimetic), or stealth/mimetic/camo
+  equipment, +1 TMM.
+- Mechanized / Swarm: MegaMek's rules (canDoMechanizedBA, canMakeAntiMekAttacks):
+  Mechanized needs a non-quad suit with a claw or basic manipulator (light
+  suits: 2 armored gloves also do; magnetic clamps always; assault never);
+  Swarm also needs light/medium weight and not UMU.
+- IF: indirect-fire launchers (BA LRMs) give IF from their damage x squad hits.
+- TAG, NARC, ECM6, PRB specials from equipment names.
+- AP Gauss Elemental's printed 2/4/6: Will checked his card, it does say
+  2/4/6; treated as a Catalyst oddity (rule keeps 3/6/9).
+
+Open: 188 of 1,188 BA have no attack (exoskeletons, PA(L)s and scouts with
+only anti-personnel weapons or TAG); BA mortars, tube artillery, micro bombs
+and mine dispensers aren't in the weapon table yet; special BA armor
+(reactive, reflective, fire-resistant) gets no Check bonus yet.

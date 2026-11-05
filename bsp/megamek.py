@@ -103,6 +103,16 @@ class Unit:
                     pass
         return total
 
+    @property
+    def troopers(self) -> int:
+        """Battle armor: suits in the squad/Point (1 for other units)."""
+        v = (self.raw.get("Trooper Count") or ["1"])[0]
+        return int(v) if v.isdigit() else 1
+
+    @property
+    def jump_mp(self) -> int:
+        return int(float((self.raw.get("jumpingMP") or ["0"])[0] or 0))
+
     def weapons(self) -> list[tuple[str, str]]:
         """(location, item) pairs, excluding ammo."""
         return [(loc, it) for loc, items in self.equipment.items()
@@ -111,6 +121,28 @@ class Unit:
     def ammo(self) -> list[str]:
         return [it for items in self.equipment.values()
                 for it in items if "ammo" in it.lower()]
+
+
+def ba_suit_equipment(d: dict) -> list[str]:
+    """One battle armor suit's equipment, item names only (mount tags such
+    as ':RA', ':APM:LA' or ':Body:Shots2#' dropped; ammo keeps its shots as
+    'Name|shots'). Clan files list it under 'Point Equipment', Inner Sphere
+    under 'Squad Equipment'; per-trooper lists are added when every trooper
+    carries the same thing. Anti-personnel mount weapons are left out."""
+    raw = list(d.get("Squad Equipment") or d.get("Point Equipment") or [])
+    troopers = [tuple(d.get(f"Trooper {i} Equipment", [])) for i in range(1, 7)
+                if f"Trooper {i} Equipment" in d]
+    if troopers and len(set(troopers)) == 1:
+        raw += list(troopers[0])
+    out = []
+    for it in raw:
+        parts = it.split(":")
+        if "APM" in parts[1:]:
+            continue
+        name = parts[0].strip()
+        m = re.search(r"Shots(\d+)#", it)
+        out.append(f"{name}|{m.group(1)}" if m and "ammo" in name.lower() else name)
+    return out
 
 
 def load_unit(path: Path) -> Unit:
@@ -136,6 +168,9 @@ def load_unit(path: Path) -> Unit:
         armor = {"Total": sum(armor_vals)}
 
     equipment = {l: d[f"{l} Equipment"] for l in locs}
+    if utype == "BattleArmor":
+        equipment = {"Squad": ba_suit_equipment(d)}
+        motion = {"jump": "j", "vtol": "v", "umu": "n"}.get(one("motion_type").lower(), "f")
     mul = one("mul id:")
     return Unit(
         path=str(path), uuid=one("UUID"), mul_id=int(mul) if mul.isdigit() else None,

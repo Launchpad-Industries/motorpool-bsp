@@ -455,6 +455,152 @@ def derive_check(unit: Unit, rules=RULES) -> tuple[int, float]:
     return 5, v
 
 
+# --------------------------------------------------------------------------
+# Battle armor (rules agreed with Will 4 Nov 2026; see docs/cost-rationale.md)
+
+BA_STEALTH_ARMOR = {31, 32, 33, 34, 36}      # basic/standard/improved/prototype stealth, mimetic
+BA_RULES = {
+    "check_mult": 2.8,      # replaces the vehicle motive multiplier (fits all 4 BA cards: 2.66-2.97)
+    "groups": 2,            # every official BA card has 2 groups
+    "min_shots": 3,         # weapons with fewer shots (one-shot packs, SRM-2 x2) are ignored
+    "threshold": 5,
+}
+
+
+def _launcher_key(text: str):
+    t = text.upper().replace("-", " ")
+    m = re.search(r"(ADVANCED SRM|SRM|LRM|MRM)\s*(\d+)", t)
+    return (m.group(1), int(m.group(2))) if m else None
+
+
+def ba_kept_weapons(unit: Unit, table: dict, ba_rules=None) -> tuple[list, list]:
+    """Split a suit's weapons into (kept, ignored): one-shot launchers and
+    ammo weapons with fewer than min_shots shots don't count (the Elemental's
+    SRM-2 pack with 2 shots)."""
+    ba_rules = ba_rules or BA_RULES
+    shots: dict = {}
+    for it in unit.ammo():
+        name, _, n = it.partition("|")
+        k = _launcher_key(name)
+        if k and n.isdigit():
+            shots[k] = shots.get(k, 0) + int(n)
+    launchers: dict = {}
+    for _, it in unit.weapons():
+        s = table.get(_clean(it)) or {}
+        k = _launcher_key(s.get("name") or it)
+        if k:
+            launchers[k] = launchers.get(k, 0) + 1
+    kept, ignored = [], []
+    for loc, it in unit.weapons():
+        s = table.get(_clean(it)) or {}
+        nm = s.get("name") or it
+        k = _launcher_key(nm)
+        limited = "F_ONE_SHOT" in s.get("_flags", []) or "(OS)" in nm
+        if not limited and k in shots:
+            limited = shots[k] / launchers.get(k, 1) < ba_rules["min_shots"]
+        (ignored if limited else kept).append((loc, it))
+    return kept, ignored
+
+
+class _Suit:
+    """A stand-in unit carrying only the weapons that count."""
+    def __init__(self, items):
+        self._items = items
+
+    def weapons(self):
+        return self._items
+
+
+def squad_hits(troopers: int) -> float:
+    """Average Cluster Hits Table result for a squad of this size (TW: a
+    squad attack rolls on the column for the number of troopers)."""
+    return 1.0 if troopers <= 1 else average_cluster_hits(troopers)
+
+
+def ba_mechanized(unit: Unit) -> bool:
+    """MegaMek's canDoMechanizedBA: can ride an OmniMech."""
+    if (unit.raw.get("chassis") or ["biped"])[0].lower() == "quad":
+        return False
+    items = [it.lower() for it in unit.equipment.get("Squad", [])]
+    if any("magnetic clamp" in it for it in items):
+        return True
+    basic = sum(1 for it in items if "basicmanipulator" in it)
+    claws = sum(1 for it in items if "battleclaw" in it)
+    gloves = sum(1 for it in items if "armoredglove" in it)
+    wc = int((unit.raw.get("weightclass") or ["2"])[0])
+    if wc <= 1:
+        return gloves > 1 or basic > 0 or claws > 0
+    if wc <= 3:
+        return basic > 0 or claws > 0
+    return False
+
+
+def derive_battle_armor(unit: Unit, table: dict, rules=RULES, ba_rules=None) -> Spec:
+    ba_rules = ba_rules or BA_RULES
+    sp = Spec()
+    n = unit.troopers
+    jump = unit.jump_mp
+    if unit.motion in ("j", "v", "n") and jump:
+        sp.mp, sp.mode = jump, unit.motion
+    else:
+        sp.mp, sp.mode = unit.cruise_mp, "f"
+    sp.tmm = tmm_for_mp(sp.mp) + (1 if sp.mode in ("j", "v") else 0)
+    names = " ".join(it.lower() for it in unit.equipment.get("Squad", []))
+    if unit.armor_type in BA_STEALTH_ARMOR or any(k in names for k in ("stealth", "mimetic", "camo system")):
+        sp.tmm += 1
+    kept, ignored = ba_kept_weapons(unit, table, ba_rules)
+    attacks = lambda items: [w for w in weapons(_Suit(items), table, rules)]
+    if ignored and not attacks(kept):
+        # Nothing else to fire (IS Standard [SRM]: one-shot SRM-2 only): use
+        # the limited weapons rather than print no attack.
+        kept, ignored = kept + ignored, []
+        sp.notes.append("only limited-shot weapons: counted anyway")
+    for _, it in ignored:
+        sp.notes.append(f"ignored {it} (limited shots)")
+    ws = weapons(_Suit(kept), table, rules)
+    hits = squad_hits(n)
+    sp.range, dmg, reach = derive_damage(ws, rules)
+    if reach:
+        per_suit = sum(w.damage for w in reach)
+        group = max(1, int(math.floor(per_suit * hits + 0.5)))
+        sp.damage = (group, ba_rules["groups"])
+        hc = rules.get("headcap")
+        if hc and group >= hc and not any(w.per_hit >= 10 and not w.cluster for w in reach):
+            # Same as vehicles: 12+ point groups only from guns that hit for
+            # 10+ on their own; otherwise the squad's damage goes in 10s.
+            total = group * ba_rules["groups"]
+            sp.damage = (10, max(1, int(math.floor(total / 10 + 0.5))))
+        sp.notes.append(f"{per_suit:g} per suit x {hits:.2f} squad hits")
+    else:
+        sp.range = None
+    ind = sum(w.if_damage if w.if_damage is not None else w.damage
+              for w in ws if w.indirect) * hits
+    if ind >= rules["if_min_hits"]:
+        sp.indirect = int(math.floor(ind / 5 + rules.get("if_round", 0.5)))
+    v = (2.5 * unit.armor.get("Total", 0) * n + 1.5 * n) * ba_rules["check_mult"]
+    sp.check = next(chk for lo, chk in rules["check_cutoffs"] if v >= lo)
+    sp.threshold = ba_rules["threshold"]
+    mech = ba_mechanized(unit)
+    wc = int((unit.raw.get("weightclass") or ["2"])[0])
+    if mech:
+        sp.specials.append("Mechanized")
+    sp.specials += ["Nimble", "Spotter"]
+    if mech and wc < 3 and sp.mode != "n":
+        sp.specials.append("Swarm")
+    if sp.indirect:
+        sp.specials.append(f"IF{sp.indirect}")
+    if "tag" in names:
+        sp.specials.append("TAG")
+    if "narc" in names:
+        sp.specials.append("NARC")
+    if "ecm" in names:
+        sp.specials.append("ECM6")
+    if "probe" in names:
+        sp.specials.append("PRB")
+    sp.notes.append(f"armor BV {v:.0f}")
+    return sp
+
+
 def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
     sp = Spec()
     sp.mp = unit.cruise_mp

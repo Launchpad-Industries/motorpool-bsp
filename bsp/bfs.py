@@ -22,6 +22,8 @@ HEADER = """\
 
 MODE = {"t": "TRACKED", "w": "WHEELED", "h": "HOVER", "v": "VTOL",
         "g": "WIGE", "n": "NAVAL"}
+# Infantry and battle armor modes as MegaMek writes them (Elemental .bfs: INF_JUMP).
+INF_MODE = {"j": "INF_JUMP", "f": "INF_LEG", "v": "VTOL", "n": "INF_UMU"}
 ASSET_TYPE = {"Tank": "Vehicle", "VTOL": "Vehicle", "SupportTank": "Vehicle",
               "SupportVTOL": "Vehicle", "Infantry": "ConvInfantry",
               "BattleArmor": "BattleArmor", "GunEmplacement": "Emplacement"}
@@ -39,7 +41,8 @@ def to_bfs(unit: Unit, spec, cost: dict, skill: int,
         "model": unit.model,
         "assetType": ASSET_TYPE.get(unit.unit_type, "Vehicle"),
         "techBase": "Clan" if unit.clan else "IS",
-        "movement": {"mp": spec.mp, "mode": MODE.get(spec.mode, spec.mode.upper())},
+        "movement": {"mp": spec.mp, "mode": (INF_MODE if unit.unit_type in ("BattleArmor", "Infantry") else MODE)
+                     .get(spec.mode, spec.mode.upper())},
         "tmm": spec.tmm,
         "range": rng,
         "skill": {"standard": skill} if cost["veteran"] is None else

@@ -18,7 +18,7 @@ from pathlib import Path
 
 from . import approvals, bfs
 from .cost import cost
-from .derive import derive_vehicle
+from .derive import derive_battle_armor, derive_vehicle
 from .megamek import Unit, load_all
 
 CACHE = Path(__file__).resolve().parent.parent / "cache"
@@ -39,7 +39,8 @@ def default_skill(unit: Unit) -> int:
 
 
 def spec_for(unit: Unit, weapons: dict):
-    sp = derive_vehicle(unit, weapons)
+    sp = (derive_battle_armor(unit, weapons) if unit.unit_type == "BattleArmor"
+          else derive_vehicle(unit, weapons))
     skill = 8 if sp.artillery else default_skill(unit)   # official artillery cards
     if skill < 6 and "TC" not in sp.specials and any(
             "targeting" in it.lower() for _, it in unit.weapons()):
@@ -54,10 +55,13 @@ def main(argv=None):
     ap.add_argument("--mm-data", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--name", default="")
+    ap.add_argument("--battle-armor", action="store_true",
+                    help="battle armor instead of vehicles")
     a = ap.parse_args(argv)
     weapons = json.loads((CACHE / "weapons.json").read_text())
-    units = [u for u in load_all(a.mm_data, folders=("vehicles",))
-             if u.unit_type in ("Tank", "VTOL") and a.name.lower() in u.full_name.lower()]
+    folder, types = (("battlearmor",), ("BattleArmor",)) if a.battle_armor else (("vehicles",), ("Tank", "VTOL"))
+    units = [u for u in load_all(a.mm_data, folders=folder)
+             if u.unit_type in types and a.name.lower() in u.full_name.lower()]
     a.out.mkdir(parents=True, exist_ok=True)
     approved = approvals.load()
     rows = []
