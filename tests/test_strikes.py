@@ -13,7 +13,7 @@ import pytest
 from bsp import app as app_module
 from bsp.cards import card_html, document
 from bsp.sheet import OPTIONS_COLUMNS
-from bsp.strikes import card_from_row, load, parse_stats, radius_svg, scatter_svg
+from bsp.strikes import card_from_row, line_svg, load, parse_stats, radius_svg, scatter_svg
 
 ROOT = Path(__file__).resolve().parent.parent
 MM = Path(os.environ.get("MM_DATA", ROOT / "mm-data" / "data" / "mekfiles"))
@@ -110,6 +110,11 @@ def test_smoke_is_hatched_with_no_group_numbers():
 def test_strafing_is_a_line_of_five_hexes():
     h = html(STRAFING)
     assert h.count("<path") == 5 and "Up to 5 hexes in a line" in h
+
+
+def test_strafing_line_is_vertical():
+    assert set(re.findall(r'<text x="([-\d.]+)"', line_svg("3"))) == {"0.00"}
+    assert len(set(re.findall(r'<text x="[-\d.]+" y="([-\d.]+)"', line_svg("3")))) == 5
 
 
 def test_bombing_is_a_target_hex_and_scatter():

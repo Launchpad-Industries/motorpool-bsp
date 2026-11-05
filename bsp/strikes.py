@@ -53,29 +53,24 @@ def parse_stats(text: str) -> dict:
 
 # --------------------------------------------------------------------------
 # hex diagrams (axial coordinates). Flat-topped, like a mapsheet, so one hex
-# sits directly above the target; only the strafing row stands on its points.
+# sits directly above the target.
 
-def _hex_path(cx: float, cy: float, s: float, flat: bool = True) -> str:
-    turn = 0 if flat else -30
-    pts = [(cx + s * math.cos(math.radians(60 * i + turn)), cy + s * math.sin(math.radians(60 * i + turn)))
+def _hex_path(cx: float, cy: float, s: float) -> str:
+    pts = [(cx + s * math.cos(math.radians(60 * i)), cy + s * math.sin(math.radians(60 * i)))
            for i in range(6)]
     return "M" + " L".join(f"{x:.2f},{y:.2f}" for x, y in pts) + "Z"
 
 
-def _svg(cells: list[tuple], width_in: float, defs: str = "", flat: bool = True) -> str:
+def _svg(cells: list[tuple], width_in: float, defs: str = "") -> str:
     """cells: (q, r, fill, text, text colour)."""
     s, pad, root3 = HEX_SIZE, 1.5, math.sqrt(3)
-    if flat:
-        xy = [(s * 1.5 * c[0], s * root3 * (c[1] + c[0] / 2)) for c in cells]
-        half_w, half_h = s, s * root3 / 2
-    else:
-        xy = [(s * root3 * (c[0] + c[1] / 2), s * 1.5 * c[1]) for c in cells]
-        half_w, half_h = s * root3 / 2, s
+    xy = [(s * 1.5 * c[0], s * root3 * (c[1] + c[0] / 2)) for c in cells]
+    half_w, half_h = s, s * root3 / 2
     minx, maxx = min(x for x, _ in xy) - half_w - pad, max(x for x, _ in xy) + half_w + pad
     miny, maxy = min(y for _, y in xy) - half_h - pad, max(y for _, y in xy) + half_h + pad
     body = []
     for (x, y), (_, _, fill, text, colour) in zip(xy, cells):
-        body.append(f'<path d="{_hex_path(x, y, s, flat)}" fill="{fill}" stroke="{DARK}" stroke-width="1"/>')
+        body.append(f'<path d="{_hex_path(x, y, s)}" fill="{fill}" stroke="{DARK}" stroke-width="1"/>')
         if text != "":
             fs = s * (1.05 if len(str(text)) == 1 else .8)
             body.append(f'<text x="{x:.2f}" y="{y + fs * .36:.2f}" text-anchor="middle" font-family="Oswald" '
@@ -109,7 +104,7 @@ def scatter_svg() -> str:
 
 
 def line_svg(groups: str, n: int = 5) -> str:
-    return _svg([(q, 0, DARK, groups, "#fff") for q in range(n)], 0.96, flat=False)
+    return _svg([(0, r, DARK, groups, "#fff") for r in range(n)], 0.28)
 
 
 def single_svg(groups: str) -> str:
