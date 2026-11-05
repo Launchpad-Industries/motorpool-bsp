@@ -65,6 +65,10 @@ blank.
   Emplacement, or listed under `generic:` in card_links.yaml) are listed as
   official-only entries (ids start with "g"): no calculated card, tweak or
   Differences until the model covers them.
+- Calculated battle armor (model: `derive_battle_armor`): listed as ordinary
+  units beside the generic official cards, not yet linked to them. Standard
+  squad sizes only (`bsp/squads.py`): Clan 5, Inner Sphere 4 and 6, because the
+  data can't tell which designs are ComStar's (6); Will plans to prune the extras.
 - Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
   minefield options from `bsp-options.tsv` (from the Sheet's "BSP Options"
   tab). Minefield titles get "Minefield" added in the app. Same frame as unit cards, no Veteran grade: the chip says STRIKE /
@@ -113,9 +117,9 @@ blank.
 - Bundle the fonts (Oswald, Barlow, Barlow Condensed — OFL) so PDFs look
   right offline.
 - A double-click `Motor Pool.bat` launcher (git pull + start).
-- Tester build: include infantry/BA/emplacement data once the app shows them;
+- Tester build: include infantry/emplacement data once the app shows them;
   a dedicated feedback email address; maybe a calculated-only public build.
-- Infantry, battle armor and emplacement cards once the model supports them.
+- Infantry and emplacement cards once the model supports them.
 
 ## Licensing
 

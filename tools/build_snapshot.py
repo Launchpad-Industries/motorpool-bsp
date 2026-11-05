@@ -12,8 +12,8 @@ Run before each release. It may use the network and your Sheet link
 build input and is git-ignored (the Sheet stays the master for official cards).
 
 Contents (laid out as the app expects them inside the bundle):
-  mm-data/data/mekfiles/vehicles     MegaMek vehicle units (CC BY-NC-SA 4.0)
-  mm-data/data/images/units/...      MegaMek vehicle sprites + mekset.txt
+  mm-data/data/mekfiles/...          MegaMek vehicles, battle armor (CC BY-NC-SA 4.0)
+  mm-data/data/images/units/...      MegaMek vehicle and battle armor sprites + mekset.txt
   cache/                             weapon and ammo tables from MegaMek source
   data/                              card links and approvals
   official.tsv                       official card stats (from the Sheet)
@@ -43,8 +43,8 @@ from bsp import __version__  # noqa: E402
 
 OUT = ROOT / "snapshot"
 MM = ROOT / "mm-data"
-UNIT_FOLDERS = ["data/mekfiles/vehicles"]          # what the app loads (Tank, VTOL)
-IMAGE_FOLDERS = ["data/images/units/vehicles", "data/images/units/defaults"]
+UNIT_FOLDERS = ["data/mekfiles/vehicles", "data/mekfiles/battlearmor"]   # what the app loads
+IMAGE_FOLDERS = ["data/images/units/vehicles", "data/images/units/battle armor", "data/images/units/defaults"]
 IMAGE_FILES = ["data/images/units/mekset.txt"]
 DATA_FILES = ["approvals.yaml", "card_links.yaml", "trusted_keys.yaml"]
 
@@ -159,6 +159,7 @@ def main(argv=None):
         shutil.copy2(ofl, lic / f"Font-{family.replace(' ', '')}-OFL.txt")
 
     n_units = sum(1 for _ in (OUT / "mm-data" / "data" / "mekfiles" / "vehicles").rglob("*.blk"))
+    n_ba = sum(1 for _ in (OUT / "mm-data" / "data" / "mekfiles" / "battlearmor").rglob("*.blk"))
     n_official = sum(1 for line in official.read_text(encoding="utf-8").splitlines()[1:] if line.strip())
     manifest = {
         "app_version": __version__,
@@ -166,6 +167,7 @@ def main(argv=None):
         "megamek_data_commit": git_commit(MM),
         "megamek_source_commit": git_commit(ROOT / "megamek-src"),
         "vehicle_files": n_units,
+        "battle_armor_files": n_ba,
         "official_rows": n_official,
     }
     (OUT / "snapshot.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")

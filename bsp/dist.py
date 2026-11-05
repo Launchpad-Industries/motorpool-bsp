@@ -54,11 +54,12 @@ def check_bundle() -> list[str]:
     for rel in ("official.tsv", "bsp-options.tsv", "cache/weapons.json", "data/card_links.yaml", "fonts/fonts.css"):
         if not (ROOT / rel).exists():
             problems.append(f"{rel} is missing.")
-    units = long_path(ROOT / "mm-data" / "data" / "mekfiles" / "vehicles")
-    expected = m.get("vehicle_files")
-    found = sum(1 for _ in units.rglob("*.blk")) if units.exists() else 0
-    if expected and found < expected:
-        problems.append(f"Only {found} of {expected} unit files are present.")
+    for folder, key in (("vehicles", "vehicle_files"), ("battlearmor", "battle_armor_files")):
+        units = long_path(ROOT / "mm-data" / "data" / "mekfiles" / folder)
+        expected = m.get(key)
+        found = sum(1 for _ in units.rglob("*.blk")) if units.exists() else 0
+        if expected and found < expected:
+            problems.append(f"Only {found} of {expected} {folder} unit files are present.")
     return problems
 
 

@@ -27,7 +27,8 @@ from .megamek import Unit, load_all
 
 ROOT = Path(__file__).resolve().parent.parent
 BV_PER_POINT = 20          # BSP rules: 1 BSP point = 20 BV
-TYPE_NAMES = {"Tank": "Vehicle", "VTOL": "VTOL", "SupportTank": "Support Vehicle"}
+TYPE_NAMES = {"Tank": "Vehicle", "VTOL": "VTOL", "SupportTank": "Support Vehicle",
+              "BattleArmor": "Battle Armor"}
 
 
 @dataclass

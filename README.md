@@ -50,9 +50,13 @@ python -m bsp.app                             # start Motor Pool; opens in your 
   calculation differs; "drift" marks approvals the rules have since moved away from.
 - **Infantry, battle armor and emplacements**: the generic official cards
   (e.g. "Foot Conv. Infantry", "Elemental Battle Armor", "MG Nest") are listed
-  too, official only (no calculated version yet). Any Infantry, Battle Armor
-  or Emplacement row in the official cards export appears automatically, with
-  your image for it if you have one, else MegaMek's generic sprite.
+  too, official only. Any Infantry, Battle Armor or Emplacement row in the
+  official cards export appears automatically, with your image for it if you
+  have one, else MegaMek's generic sprite.
+- **Calculated battle armor**: MegaMek's battle armor designs, each as its own
+  calculated card you can tweak and approve like a vehicle. Clan designs are
+  listed with 5 suits and Inner Sphere designs with 4 and 6 (the data doesn't
+  say which designs are ComStar's); a design with neither keeps its own size.
 - **Force list** on the left: add assets with **+**, pick Regular or Veteran,
   Official or Calculated (where both exist) and quantity. BSP and BV-equivalent
   totals update as you go.

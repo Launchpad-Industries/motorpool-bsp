@@ -72,6 +72,8 @@ class Art:
         rel = self.exact.get(unit.full_name) or self.chassis.get(unit.name)
         if rel and self.units_dir and (self.units_dir / rel).exists():
             return self.units_dir / rel, "sprite"
+        if unit.unit_type == "BattleArmor":
+            return self.find_generic(unit.name, "Battle Armor")
         return None, ""
 
     def find_generic(self, name: str, card_type: str) -> tuple[Path | None, str]:

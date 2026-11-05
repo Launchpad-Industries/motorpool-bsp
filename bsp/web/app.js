@@ -55,7 +55,7 @@ function filtered() {
   const mode = $("#f-mode").value, typ = $("#f-type").value, src = $("#f-source").value, tech = $("#f-tech").value, sort = $("#f-sort").value;
   let rs = ROWS.filter(r => {
     if (mode && r.mode !== mode) return false;
-    if (typ && (typ === "veh" ? r.generic : r.type !== typ)) return false;
+    if (typ && (typ === "veh" ? ["Infantry", "Battle Armor", "Emplacement"].includes(r.type) : r.type !== typ)) return false;
     if (src && r.source !== src) return false;
     if (tech && r.tech !== tech) return false;
     if (!q.length) return true;
@@ -212,11 +212,11 @@ async function openDetail(id, opts = {}) {
   $("#d-views").hidden = $("#d-grade").hidden = !!u.strike;   // strikes: one version, no Veteran
   $("#d-sub").textContent = u.strike ? `${r.support} · ${r.cost} BSP${r.per ? " " + r.per : ""}`
     : u.generic ? `${r.type} · generic official card`
-    : `${r.type} · ${u.tons} t · ${r.tech}${r.year ? " · " + r.year : ""}`;
+    : `${r.type}${u.tons ? ` · ${u.tons} t` : ""} · ${r.tech}${r.year ? " · " + r.year : ""}`;
   const views = [];
   if (u.official) views.push(["official", "Official"]);
   if (u.approval) views.push(["approved", "Approved"]);
-  // Generic cards (infantry, battle armor, emplacements) are official only.
+  // Generic cards (official infantry, battle armor, emplacements) are official only.
   if (!u.generic) views.push(["generated", "Calculated"]);
   if (u.official && !u.generic) views.push(["diff", "Differences"]);
   $("#d-views").innerHTML = views.map(([k, l]) => `<button data-view="${k}" class="${k === cur.view ? "on" : ""}">${l}</button>`).join("");

@@ -38,6 +38,7 @@ from .cards import (BV_PER_POINT, Card, apply_values, card_from_generic, card_fr
                     generic_official, official_index)
 from .cost import cost as bsp_cost
 from .megamek import Unit, load_all
+from .squads import standard_squads
 
 APP_NAME = "Motor Pool"
 ROOT = Path(__file__).resolve().parent.parent
@@ -109,7 +110,8 @@ def diff(a: Card, b: Card) -> list[str]:
 
 class Catalog:
     """Every vehicle with its official card (if any) and calculated card,
-    plus generic official cards (infantry, battle armor, emplacements)."""
+    battle armor in its standard squad sizes with a calculated card, plus
+    generic official cards (infantry, battle armor, emplacements)."""
 
     def __init__(self, settings: dict):
         self.settings = settings
@@ -118,6 +120,8 @@ class Catalog:
         self.mm = mm
         every = load_all(mm, folders=("vehicles",))
         combat = [u for u in every if u.unit_type in ("Tank", "VTOL")]
+        battle_armor = standard_squads([u for u in load_all(mm, folders=("battlearmor",))
+                                        if u.unit_type == "BattleArmor"])
         fluff = Path(settings["fluff_dir"]) if settings.get("fluff_dir") else None
         self.art = Art(mm.parent / "images" / "units", fluff)
         tsv = official_path(settings)
@@ -146,8 +150,9 @@ class Catalog:
                                      f"{', '.join(self.strikes_skipped)})")
         # Support vehicles are only listed when they have an official card
         # (the generator's rules are fitted to combat vehicles).
-        self.units = combat + [u for u in every if u.unit_type.startswith("Support")
-                               and u.path in self.official]
+        self.units = combat + battle_armor + [u for u in every if u.unit_type.startswith("Support")
+                                              and u.path in self.official]
+        self.official_status += f". {len(battle_armor)} calculated battle armor cards"
         self.by_id = {uid(u): u for u in self.units}
         self.reload_approvals()
 
@@ -189,7 +194,7 @@ class Catalog:
         year = (u.raw.get("year") or [""])[0]
         return {
             "id": uid(u), "name": u.full_name, "chassis": c.chassis, "variant": c.variant,
-            "type": c.unit_type, "tons": u.tonnage, "tech": "Clan" if u.clan else "IS",
+            "type": c.unit_type, "tons": u.tonnage or None, "tech": "Clan" if u.clan else "IS",
             "year": int(year) if str(year).isdigit() else None,
             "mp": c.mp, "mode": c.mode, "tmm": c.tmm,
             "range": list(c.range) if isinstance(c.range, tuple) else c.range,
@@ -293,7 +298,7 @@ def create_app(settings: dict | None = None) -> Flask:
         gen = cat().calculated(u, use_approval=False)
         entry = cat().approved.get(u.full_name)
         return jsonify(
-            id=i, name=u.full_name, tons=u.tonnage,
+            id=i, name=u.full_name, tons=u.tonnage or None,
             official=card_values(off) if off else None,
             calculated=card_values(calc), generated=card_values(gen),
             approval={k: v for k, v in entry.items() if k != "sig"} if entry else None,
