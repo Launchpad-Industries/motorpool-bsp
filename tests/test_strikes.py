@@ -107,6 +107,11 @@ def test_smoke_is_hatched_with_no_group_numbers():
     assert 'url(#hatch)' in h and "Smoke radius 1" in h and ">—<" in h
 
 
+def test_smoke_cards_point_to_the_smoke_rules():
+    assert "(Core Rulebook p. 155; smoke rules p. 190)</i>" in html(SMOKE)
+    assert "smoke rules" not in html(LONG_TOM)
+
+
 def test_strafing_is_a_line_of_five_hexes():
     h = html(STRAFING)
     assert h.count("<path") == 5 and "Up to 5 hexes in a line" in h

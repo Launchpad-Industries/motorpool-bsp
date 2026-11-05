@@ -30,6 +30,7 @@ HATCH = ('<defs><pattern id="hatch" width="4" height="4" patternUnits="userSpace
          'patternTransform="rotate(45)"><rect width="4" height="4" fill="#fff"/>'
          '<line x1="0" y1="0" x2="0" y2="4" stroke="#8a8a8a" stroke-width="1.6"/></pattern></defs>')
 HEX_SIZE = 10
+SMOKE_RULES = "smoke rules p. 190"     # added to the page reference on smoke cards
 # Around the target, the direction each 1D6 result scatters: 1 straight up,
 # then clockwise.
 SCATTER = {(0, -1): 1, (1, -1): 2, (1, 0): 3, (0, 1): 4, (-1, 1): 5, (-1, 0): 6}
@@ -228,6 +229,8 @@ class StrikeCard:
             cells = "".join(f'<span class="lbl">{_e(k)}</span><span class="val">{_e(v)}+</span>' for k, v in cover)
             blocks.append(f'<div class="box"><div class="lbl">Cancels on</div><div class="tn">{cells}</div></div>')
         page = self.book.replace("BT Core Rulebook", "Core Rulebook")
+        if page and s.get("Type") == "Smoke":
+            page += f"; {SMOKE_RULES}"
         ref = f' <i class="ref">({_e(page)})</i>' if page else ""
         blocks.append(f'<div class="box rules"><b>RULES </b>{_e(self.effect)}{ref}</div>')
         write = self.write_box()
