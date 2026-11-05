@@ -72,6 +72,10 @@ class Card:
     def current_skill(self) -> int:
         return self.vet_skill if self.is_vet else self.skill
 
+    @property
+    def grade_name(self) -> str:
+        return "Veteran" if self.is_vet else "Regular"
+
 
 def dmg_text(dmg) -> str:
     if not dmg:
@@ -320,6 +324,27 @@ body { margin:0; background:#d9d9d4; font-family:'Barlow Condensed','Arial Narro
 .prov.approved.unverified { background:#fff; color:#5a5a5a; outline:1.2px dotted #5a5a5a; outline-offset:-3px; }
 .prov.calculated { background:#fff; color:var(--ink); outline:1.2px dashed var(--ink); outline-offset:-3px; }
 .screen-only { font-family:'Barlow',Arial,sans-serif; max-width:8in; margin:12px auto 0; font-size:10pt; color:#333; }
+
+/* strike cards (bsp/strikes.py) */
+.cost .per { display:inline; margin-left:3px; }
+.big3 { display:grid; grid-template-columns:1fr 1.2fr 1fr; text-align:center; }
+.big3 > div + div { border-left:1px solid var(--line); }
+.big3 .lbl { display:block; }
+.tn { display:grid; grid-template-columns:auto 1fr; column-gap:6px; align-items:baseline; }
+.tn .val { font-size:11.5pt; text-align:right; line-height:1.05; }
+.tn .lbl { font-size:7pt; }
+.rules { background:#fff; font-family:'Barlow',Arial,sans-serif; font-size:7.2pt; line-height:1.18; padding:2px 6px; }
+.rules b { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.04em; font-size:7pt; color:var(--mid); }
+.rules .ref { white-space:nowrap; }
+.write { background:#fff; display:flex; gap:8px; align-items:flex-end; padding:2px 6px 3px; }
+.write.col { flex-direction:column; align-items:stretch; gap:1px; }
+.write > span { flex:1; display:flex; align-items:flex-end; gap:3px; }
+.write i { flex:1; border-bottom:1px solid var(--ink); height:11px; }
+.used { display:flex; justify-content:flex-end; align-items:center; gap:3px; }
+.write .used.inl { flex:none; }
+.used .bx { width:11px; height:11px; border:1.2px solid var(--ink); border-radius:2px; background:#fff; }
+.side .diag { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+.side .cap { font-size:6.5pt; font-weight:600; letter-spacing:.06em; color:var(--mid); text-transform:uppercase; text-align:center; line-height:1; }
 """
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
@@ -338,7 +363,9 @@ def _e(x) -> str:
     return html.escape(str(x))
 
 
-def card_html(c: Card) -> str:
+def card_html(c) -> str:
+    if not isinstance(c, Card):      # a strike card draws itself (bsp/strikes.py)
+        return c.html()
     # Regular always on the left, Veteran (in parentheses) on the right; the
     # grade in play is emphasised, the other shown small and grey.
     def pair(reg, vet, small_cls):
@@ -410,12 +437,12 @@ def card_frame(inner: str, scale: float | None = None) -> str:
 def summary_html(cards: list[Card], title: str) -> str:
     rows = "".join(
         f"<tr><td>{_e(c.chassis)}{'' if c.variant == 'Standard' else ' ' + _e(c.variant)}</td><td>{_e(c.unit_type)}</td>"
-        f"<td>{'Veteran' if c.is_vet else 'Regular'}</td><td class=n>{c.current_skill}</td><td class=n>{c.current_cost}</td><td class=n>{c.bv:,}</td>"
+        f"<td>{c.grade_name}</td><td class=n>{c.current_skill}</td><td class=n>{c.current_cost}</td><td class=n>{c.bv:,}</td>"
         f"<td class=n>{format(c.tons, 'g') if c.tons else '—'}</td><td>{_e(c.source + (': ' + c.approver if c.approver else ''))}</td></tr>"
         for c in cards)
     tot = (f"<tr class=total><td>{len(cards)} Assets</td><td></td><td></td><td></td>"
            f"<td class=n>{sum(c.current_cost for c in cards)}</td><td class=n>{sum(c.bv for c in cards):,}</td>"
-           f"<td class=n>{sum(c.tons for c in cards):g}</td><td></td></tr>")
+           f"<td class=n>{format(sum(c.tons for c in cards), 'g') if any(c.tons for c in cards) else '—'}</td><td></td></tr>")
     return f"""<div class="page summary"><h1>{_e(title)}</h1>
 <table><thead><tr><th>Asset</th><th>Type</th><th>Grade</th><th>Skill</th><th>BSP Cost</th><th>BV Equivalent</th><th>Tonnage</th><th>Source</th></tr></thead>
 <tbody>{rows}{tot}</tbody></table>

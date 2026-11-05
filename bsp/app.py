@@ -31,7 +31,7 @@ from urllib.parse import quote
 
 from flask import Flask, Response, abort, jsonify, request, send_from_directory
 
-from . import approvals, dist, signing
+from . import approvals, dist, signing, strikes
 from .art import Art
 from .cards import (BV_PER_POINT, Card, apply_values, card_from_generic, card_from_official,
                     card_from_unit, card_frame, card_html, card_values, document,
@@ -72,6 +72,11 @@ def load_settings() -> dict:
         # The packaged app reads only its bundled data.
         s["mm_data"], s["official_tsv"] = str(dist.long_path(Path(DEFAULTS["mm_data"]))), ""
     return s
+
+
+def options_path() -> Path:
+    """The strike cards data, next to official.tsv (git ignores it too)."""
+    return ROOT / "bsp-options.tsv"
 
 
 def official_path(settings: dict) -> Path | None:
@@ -132,6 +137,13 @@ class Catalog:
             if self.missing:
                 self.official_status += (f". {len(self.missing)} skipped because their MegaMek unit file "
                                          f"is missing: {', '.join(self.missing)}")
+        self.strikes, self.strikes_skipped = {}, []
+        if options_path().exists():
+            self.strikes, self.strikes_skipped = strikes.load(options_path())
+        self.official_status += f". {len(self.strikes)} strike cards"
+        if self.strikes_skipped:
+            self.official_status += (f" ({len(self.strikes_skipped)} skipped, numbers not readable: "
+                                     f"{', '.join(self.strikes_skipped)})")
         # Support vehicles are only listed when they have an official card
         # (the generator's rules are fitted to combat vehicles).
         self.units = combat + [u for u in every if u.unit_type.startswith("Support")
@@ -156,7 +168,9 @@ class Catalog:
     def generic_card(self, i: str, image=True) -> Card:
         return card_from_generic(self.generic[i], self.art if image else None)
 
-    def card_for_id(self, i: str, view: str = "official", image=True) -> Card | None:
+    def card_for_id(self, i: str, view: str = "official", image=True):
+        if i in self.strikes:
+            return self.strikes[i]
         if i in self.generic:
             return self.generic_card(i, image)
         u = self.by_id.get(i)
@@ -185,6 +199,16 @@ class Catalog:
             "has_official": off is not None,
             "differs": diff(off, calc) if off else [],
             "drift": calc.drift,
+        }
+
+    def strike_row(self, i: str) -> dict:
+        c = self.strikes[i]
+        return {
+            "id": i, "name": c.name, "chassis": c.name, "strike": True, "category": c.category,
+            "support": c.support, "cost": c.cost, "vet_cost": None, "per": c.per,
+            "tn": c.stats.get("TN"), "groups": c.groups, "type": c.stats.get("Type"), "effect": c.effect,
+            "source": c.source, "approver": "", "verified": True,
+            "has_official": True, "specials": [], "differs": [], "drift": [],
         }
 
     def generic_row(self, i: str) -> dict:
@@ -237,7 +261,7 @@ def create_app(settings: dict | None = None) -> Flask:
         s = state["settings"]
         return jsonify(app=APP_NAME, units=len(cat().units), official=len(cat().official),
                        official_status=cat().official_status,
-                       approved=len(cat().approved), owner=signing.owner_name(),
+                       strikes=len(cat().strikes), approved=len(cat().approved), owner=signing.owner_name(),
                        name=s.get("name") or "", settings=s, bv_per_point=BV_PER_POINT,
                        about=dist.about())
 
@@ -245,8 +269,18 @@ def create_app(settings: dict | None = None) -> Flask:
     def units():
         return jsonify(cat().rows)
 
+    @app.get("/api/strikes")
+    def strike_list():
+        return jsonify([cat().strike_row(i) for i in cat().strikes])
+
     @app.get("/api/unit/<i>")
     def unit(i):
+        if i in cat().strikes:
+            # A strike card has one version: nothing to calculate, tweak or compare.
+            c = cat().strikes[i]
+            return jsonify(id=i, name=c.name, strike=True, generic=True, tons=None, notes=c.notes,
+                           official={}, calculated=None, generated=None, approval=None,
+                           differs=[], drift=[], weapons=[])
         if i in cat().generic:
             # Official-only card for a type of unit: nothing to calculate or tweak.
             return jsonify(id=i, name=cat().generic_row(i)["name"], tons=None, generic=True,
@@ -399,7 +433,8 @@ def recost_values(v: dict) -> dict:
 
 def force_document(cat: Catalog, d: dict) -> str:
     cards = []
-    for it in d.get("items", []):
+    # Units first, then strikes, whatever order they were added in.
+    for it in sorted(d.get("items", []), key=lambda it: it["id"] in cat.strikes):
         if cat.card_for_id(it["id"], image=False) is None:
             continue
         for _ in range(max(1, int(it.get("qty", 1)))):

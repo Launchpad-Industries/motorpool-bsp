@@ -13,7 +13,8 @@ const api = async (url, body) => {
 };
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 3500); }
 
-let INFO = {}, ROWS = [], BYID = {};
+let INFO = {}, ROWS = [], STRIKES = [], BYID = {};
+let tab = store.get("tab", "assets");        // results section: "assets" or "strikes"
 let force = store.get("force", []);          // [{id, grade, qty, view}]
 let proposals = store.get("proposals", []);  // [{id, name, values, note}]
 let cur = null;                              // detail state
@@ -28,16 +29,29 @@ async function init() {
   $("#ver").title = ab.megamek_data_commit ? `MegaMek data ${ab.megamek_data_commit.slice(0, 7)}, source ${ab.megamek_source_commit.slice(0, 7)}` : "";
   $("#force-title").value = store.get("title", $("#force-title").value);
   $("#opt-summary").checked = store.get("summary", true);
-  ROWS = await (await api("/api/units")).json();
-  BYID = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  await loadRows();
   force = force.filter(f => BYID[f.id]);
   renderTable(); renderForce(); renderProposals();
   if (!INFO.official) toast(INFO.official_status + " Everything shows as approved or calculated.");
 }
 
+async function loadRows() {
+  ROWS = await (await api("/api/units")).json();
+  STRIKES = await (await api("/api/strikes")).json();
+  BYID = Object.fromEntries([...ROWS, ...STRIKES].map(r => [r.id, r]));
+}
+
 // ---------------------------------------------------------------- search
+const searchWords = () => $("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+function filteredStrikes() {
+  const q = searchWords();
+  return STRIKES.filter(r => {
+    const hay = `${r.name} ${r.category} ${r.support} ${r.type || ""} ${r.effect}`.toLowerCase();
+    return q.every(w => hay.includes(w));
+  });
+}
 function filtered() {
-  const q = $("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const q = searchWords();
   const mode = $("#f-mode").value, typ = $("#f-type").value, src = $("#f-source").value, tech = $("#f-tech").value, sort = $("#f-sort").value;
   let rs = ROWS.filter(r => {
     if (mode && r.mode !== mode) return false;
@@ -52,8 +66,29 @@ function filtered() {
   rs.sort((a, b) => key(a) < key(b) ? -1 : key(a) > key(b) ? 1 : 0);
   return rs;
 }
+const perTxt = r => r.per ? `<small>/${esc(r.per.replace("per ", ""))}</small>` : "";
+function renderStrikes(rs) {
+  let group = null;
+  $("#tbl-strikes tbody").innerHTML = rs.map(r => {
+    const head = r.category !== group ? `<tr class="grp"><td colspan="7">${esc(r.category)}</td></tr>` : "";
+    group = r.category;
+    return `${head}<tr data-id="${r.id}" class="${cur && cur.id === r.id ? "sel" : ""}">
+    <td><button class="add" data-add="${r.id}" title="Add to force">+</button></td>
+    <td class="nm">${esc(r.name)}</td><td class="n">${r.cost}${perTxt(r)}</td>
+    <td class="n">${r.tn ? esc(r.tn) + "+" : "—"}</td><td>${r.groups && r.groups !== "none" ? esc(r.groups) : "—"}</td>
+    <td>${esc(r.type || "—")}</td><td class="fx">${esc(r.effect)}</td></tr>`;
+  }).join("");
+}
 function renderTable() {
-  const rs = filtered(), shown = rs.slice(0, 400);
+  const rs = filtered(), shown = rs.slice(0, 400), ss = filteredStrikes(), strikes = tab === "strikes";
+  $("#n-assets").textContent = rs.length; $("#n-strikes").textContent = ss.length;
+  [...$("#r-tabs").children].forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  $("#tbl").hidden = strikes; $("#tbl-strikes").hidden = !strikes;
+  $(".filters").hidden = strikes;           // movement, source, tech, sort: units only
+  if (strikes) {
+    $("#count").textContent = `${ss.length} strikes`;
+    return renderStrikes(ss);
+  }
   $("#count").textContent = `${rs.length} assets` + (rs.length > shown.length ? ` (showing first ${shown.length}; refine the search)` : "");
   $("#tbl tbody").innerHTML = shown.map(r => `<tr data-id="${r.id}" class="${cur && cur.id === r.id ? "sel" : ""}">
     <td><button class="add" data-add="${r.id}" title="Add to force">+</button></td>
@@ -63,10 +98,14 @@ function renderTable() {
     <td class="sp">${esc(r.specials.join(", "))}</td></tr>`).join("");
 }
 ["#q", "#f-mode", "#f-type", "#f-source", "#f-tech", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
-$("#tbl tbody").addEventListener("click", e => {
+$("#r-tabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-tab]"); if (!b) return;
+  tab = b.dataset.tab; store.set("tab", tab); renderTable();
+});
+for (const body of ["#tbl tbody", "#tbl-strikes tbody"]) $(body).addEventListener("click", e => {
   const add = e.target.closest("[data-add]");
   if (add) { addToForce(add.dataset.add); e.stopPropagation(); return; }
-  const tr = e.target.closest("tr"); if (tr) openDetail(tr.dataset.id);
+  const tr = e.target.closest("tr"); if (tr && tr.dataset.id) openDetail(tr.dataset.id);
 });
 
 // ---------------------------------------------------------------- force
@@ -83,9 +122,14 @@ function cardCost(f) {
 }
 function renderForce() {
   $("#force-empty").hidden = force.length > 0;
-  $("#force-list").innerHTML = force.map((f, i) => {
+  const entry = (f, i) => {
     const r = BYID[f.id];
     const vetOk = r.vet_cost != null;
+    if (r.strike) return `<div class="fitem${cur && cur.id === f.id ? " sel" : ""}" data-i="${i}">
+      <div class="nm" data-open="${f.id}">${esc(r.name)}</div><button class="rm" data-rm="${i}" title="Remove">×</button>
+      <div class="meta">${esc(r.category)}${r.per ? " · " + esc(r.per) : ""}
+        <span class="qty"><button data-q="-1">−</button>${f.qty}<button data-q="1">+</button></span>
+        <span class="cost">${cardCost(f) * f.qty} BSP</span></div></div>`;
     return `<div class="fitem${cur && cur.id === f.id ? " sel" : ""}" data-i="${i}">
       <div class="nm" data-open="${f.id}">${esc(r.name)}</div><button class="rm" data-rm="${i}" title="Remove">×</button>
       <div class="meta">${srcBadge(r)}
@@ -93,7 +137,14 @@ function renderForce() {
         ${r.has_official && !r.generic ? `<span class="pill"><button data-v="official" class="${f.view !== "calculated" ? "on" : ""}">Official</button><button data-v="calculated" class="${f.view === "calculated" ? "on" : ""}">Calc</button></span>` : ""}
         <span class="qty"><button data-q="-1">−</button>${f.qty}<button data-q="1">+</button></span>
         <span class="cost">${cardCost(f) * f.qty} BSP</span></div></div>`;
-  }).join("");
+  };
+  // Units first, then strikes in their own section (i stays the place in force).
+  const items = force.map((f, i) => [f, i]);
+  const strikes = items.filter(([f]) => BYID[f.id].strike);
+  const strikeBsp = strikes.reduce((s, [f]) => s + cardCost(f) * f.qty, 0);
+  $("#force-list").innerHTML = items.filter(([f]) => !BYID[f.id].strike).map(([f, i]) => entry(f, i)).join("")
+    + (strikes.length ? `<div class="fsec"><span>Strikes</span><span>${strikeBsp} BSP</span></div>` : "")
+    + strikes.map(([f, i]) => entry(f, i)).join("");
   const bsp = force.reduce((s, f) => s + cardCost(f) * f.qty, 0);
   $("#tot-bsp").textContent = bsp; $("#tot-bv").textContent = (bsp * (INFO.bv_per_point || 20)).toLocaleString();
   $("#tot-n").textContent = force.reduce((s, f) => s + f.qty, 0);
@@ -158,7 +209,9 @@ async function openDetail(id, opts = {}) {
   cur = {id, u, r, view, grade: opts.grade || "reg"};
   $("#detail").hidden = false; $("#editor").hidden = true;
   $("#d-name").textContent = u.name;
-  $("#d-sub").textContent = u.generic ? `${r.type} · generic official card`
+  $("#d-views").hidden = $("#d-grade").hidden = !!u.strike;   // strikes: one version, no Veteran
+  $("#d-sub").textContent = u.strike ? `${r.support} · ${r.cost} BSP${r.per ? " " + r.per : ""}`
+    : u.generic ? `${r.type} · generic official card`
     : `${r.type} · ${u.tons} t · ${r.tech}${r.year ? " · " + r.year : ""}`;
   const views = [];
   if (u.official) views.push(["official", "Official"]);
@@ -179,7 +232,7 @@ function showView() {
     const apiView = view === "official" ? "official" : view === "approved" ? "calculated" : "generated";
     frame.src = `/api/card/${cur.id}?view=${apiView}&grade=${cur.grade}`;
   }
-  $("#d-diff").innerHTML = view === "diff" ? diffTable(u.official, u.calculated) : (u.drift.length && view === "approved" ? `<p class="flag">The rules have changed since this was approved (${esc(u.drift.join(", "))}). The approved values still print; re-approve to update.</p>` : "");
+  $("#d-diff").innerHTML = u.strike ? (u.notes ? `<p class="muted">${esc(u.notes)}</p>` : "") : view === "diff" ? diffTable(u.official, u.calculated) : (u.drift.length && view === "approved" ? `<p class="flag">The rules have changed since this was approved (${esc(u.drift.join(", "))}). The approved values still print; re-approve to update.</p>` : "");
   const a = u.approval;
   $("#d-approval").innerHTML = a ? `Approved by <b>${esc(a.by)}</b> on ${esc(a.on)} — ${a.verified ? "verified signature" : "<span class=flag>unverified</span>"}${a.changes ? " · tweaked: " + esc(Object.keys(a.changes).join(", ")) : ""}${a.cost_override ? " · cost overridden" : ""}${a.note ? " · " + esc(a.note) : ""}` : "";
   const canApprove = view === "generated" || view === "approved";
@@ -259,8 +312,7 @@ async function approve(values, override, note) {
   } catch (err) { toast(err.message); }
 }
 async function refreshRows() {
-  ROWS = await (await api("/api/units")).json();
-  BYID = Object.fromEntries(ROWS.map(r => [r.id, r])); renderTable(); renderForce();
+  await loadRows(); renderTable(); renderForce();
 }
 
 // ---------------------------------------------------------------- proposals

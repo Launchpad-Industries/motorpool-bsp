@@ -91,7 +91,8 @@ want, through a small Apps Script in the Sheet. Setup, once:
 
 ```
 python -m bsp.sheet tabs    # check the link: lists the Sheet's tabs
-python -m bsp.sheet pull    # official cards tab -> official.tsv (old one kept as official.tsv.bak)
+python -m bsp.sheet pull    # official cards tab -> official.tsv, "BSP Options" tab -> bsp-options.tsv
+                            # (old files kept as *.tsv.bak)
 python -m bsp.sheet push    # every calculated vehicle -> new tab "Calculated <date>"
 ```
 
@@ -115,6 +116,18 @@ git add data/trusted_keys.yaml data/approvals.yaml && git commit -m "Trust Launc
 Approvals made on a machine without the key are saved in
 `~/.motorpool/approvals.yaml` under that person's name, unverified.
 
+### Strike cards
+
+The Battlefield Support options that aren't units (air strikes, bombing, air
+cover, artillery, smoke, minefields) have their own **Strikes** section in the
+search results and the force list, and their BSP counts toward the force total.
+They print after the units. The data is `bsp-options.tsv` in this folder, from
+the Sheet's "BSP Options" tab; like `official.tsv`, git ignores it. Columns:
+`name, category, costR, costV, per, stats, effect, source, notes`. `stats`
+holds `Label=Value` pairs separated by semicolons (TN, Groups, Type, Radius,
+Scatter, Area, Needs, Support) and picks what the card draws; `notes` shows
+only in the app's detail panel.
+
 ## Tester build (Windows .exe)
 
 Testers get a zip with `MotorPool.exe` that runs offline with no Python.
@@ -128,7 +141,7 @@ python tools/build.py --refresh   # refresh MegaMek data and pull the Sheet firs
 
 `tools/build_snapshot.py` gathers the bundled data into `snapshot/`
 (vehicle units and sprites, weapon cache, card links, approvals,
-`official.tsv`, fonts, licences, and `snapshot.json` with the date and
+`official.tsv`, `bsp-options.tsv`, fonts, licences, and `snapshot.json` with the date and
 MegaMek commits). `tools/build.py` builds in its own virtual environment
 (`build/venv`) with PyInstaller (`motorpool.spec`, one-folder), adds
 `packaging/README-for-testers.txt`, `NOTICE.txt`, `LICENSE` and the

@@ -65,10 +65,17 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
   </aside>
 
   <section class="results">
+    <div class="rtabs seg small" id="r-tabs">
+      <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
+    </div>
     <div class="rhead"><span id="count"></span><span class="hint">Click a row for its card. <b>+</b> adds it to the force.</span></div>
     <div class="table-wrap">
       <table id="tbl">
         <thead><tr><th></th><th>Asset</th><th>Src</th><th class=n>Cost</th><th class=n>Tons</th><th>MP</th><th class=n>TMM</th><th>Range</th><th>Dmg</th><th class=n>Chk</th><th>Specials</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <table id="tbl-strikes" hidden>
+        <thead><tr><th></th><th>Strike</th><th class=n>Cost</th><th class=n>TN</th><th>Groups ×5</th><th>Type</th><th>Effect</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>

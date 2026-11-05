@@ -75,6 +75,18 @@ def test_pull_writes_tsv_the_app_can_read(fake_sheet, tmp_path):
     assert (tmp_path / "official.tsv.bak").read_text(encoding="utf-8") == "old"
 
 
+def test_pull_options_writes_the_strike_cards_tab(fake_sheet, tmp_path):
+    settings, state = fake_sheet
+    state["tabs"][sheet.OPTIONS_TAB] = [sheet.OPTIONS_COLUMNS, ["Long Tom", "Artillery", "24", "", "", "TN=8", "x", "p", ""]]
+    dest = tmp_path / "bsp-options.tsv"
+    assert sheet.pull_options(settings, dest) == 1
+    assert dest.read_text(encoding="utf-8").splitlines()[1].startswith("Long Tom\tArtillery\t24")
+    state["tabs"][sheet.OPTIONS_TAB] = [["name", "cost"], ["Long Tom", "24"]]
+    with pytest.raises(sheet.SheetError, match="bsp-options.tsv was left"):
+        sheet.pull_options(settings, dest)
+    assert "Long Tom\tArtillery" in dest.read_text(encoding="utf-8")
+
+
 def test_pull_refuses_a_tab_without_the_columns(fake_sheet, tmp_path):
     settings, state = fake_sheet
     state["tabs"]["Official"] = [["Chassis", "Variant"], ["Puma", "PAT-001"]]

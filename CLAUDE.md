@@ -15,7 +15,7 @@ Work is split between two places:
 | Area | Where it's worked on | Files |
 |---|---|---|
 | **Translation model** (how TW stats become BSP stats and cost) | Will's claude.ai project chat "Battletech BSP Generator" | `bsp/derive.py` (`RULES`), `bsp/cost.py` (`COST_RULES`), `bsp/weapons.py`, `docs/cost-rationale.md`, `data/card_links.yaml` |
-| **App / website** (Motor Pool) | Claude Code in this folder | `bsp/app.py`, `bsp/web/`, `bsp/cards.py`, `bsp/art.py`, `bsp/approvals.py`, `bsp/signing.py`, `README.md` |
+| **App / website** (Motor Pool) | Claude Code in this folder | `bsp/app.py`, `bsp/web/`, `bsp/cards.py`, `bsp/strikes.py`, `bsp/art.py`, `bsp/approvals.py`, `bsp/signing.py`, `README.md` |
 
 Don't change the model files from an app session without asking Will: rule
 changes are decided with him one at a time and recorded, with reasons, in
@@ -64,6 +64,13 @@ blank.
   Emplacement, or listed under `generic:` in card_links.yaml) are listed as
   official-only entries (ids start with "g"): no calculated card, tweak or
   Differences until the model covers them.
+- Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
+  minefield options from `bsp-options.tsv` (git-ignored, Sheet's "BSP Options"
+  tab). Same frame as unit cards, no Veteran grade: the chip says STRIKE /
+  MINEFIELD / NOT AN ATTACK, the side shows a radius, scatter, line or single
+  hex diagram, and the card has write-on boxes. Footer "Source: BattleTech Core
+  Rulebook". Own section in search and the force list; printed after the units;
+  BSP counts toward the force total. Effect text must stay in our own words.
 - Official card always used when one exists; Official/Calculated switch per
   force entry; Differences view in the detail panel.
 - Optional summary page: asset, type, grade, skill, BSP cost, BV equivalent

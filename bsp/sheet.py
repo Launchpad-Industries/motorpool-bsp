@@ -9,12 +9,13 @@ bsp/sheet_sync.gs, and only when you run it:
 
     python -m bsp.sheet setup    # store the web app URL, secret and tab name
     python -m bsp.sheet tabs     # list the Sheet's tabs (checks the link)
-    python -m bsp.sheet pull     # official-cards tab -> official.tsv
+    python -m bsp.sheet pull     # official-cards tab -> official.tsv,
+                                 # "BSP Options" tab -> bsp-options.tsv
     python -m bsp.sheet push     # every calculated vehicle -> a new tab
 
 The link settings live in ~/.motorpool/sheet.json, apart from the app's
-settings. Pull checks the tab has the columns the app reads before replacing
-official.tsv, and keeps the previous file as official.tsv.bak."""
+settings. Pull checks each tab has the columns the app reads before replacing
+a file, and keeps the previous file as *.tsv.bak."""
 
 from __future__ import annotations
 
@@ -35,6 +36,9 @@ DEFAULTS = {"url": "", "key": "", "official_tab": "Official"}
 # Columns the app and listing read from the official cards export.
 OFFICIAL_COLUMNS = ["name", "variant", "type", "costR", "costV", "skill", "mp",
                     "mtype", "tmm", "range", "dmg", "check", "thr", "specials"]
+# Columns of the strike cards tab (read by bsp/strikes.py).
+OPTIONS_COLUMNS = ["name", "category", "costR", "costV", "per", "stats", "effect", "source", "notes"]
+OPTIONS_TAB = "BSP Options"       # another name can go in sheet.json as "options_tab"
 
 
 class SheetError(Exception):
@@ -85,14 +89,23 @@ def pull(config: dict, dest: Path) -> int:
     tab = config.get("official_tab", "").strip()
     if not tab:
         raise SheetError("No official cards tab set. Run: python -m bsp.sheet setup")
+    return pull_tab(config, tab, OFFICIAL_COLUMNS, dest)
+
+
+def pull_options(config: dict, dest: Path) -> int:
+    """Download the strike cards tab to dest (a TSV). Returns the card count."""
+    return pull_tab(config, config.get("options_tab", OPTIONS_TAB), OPTIONS_COLUMNS, dest)
+
+
+def pull_tab(config: dict, tab: str, columns: list[str], dest: Path) -> int:
     rows = [r for r in call(config, {"action": "pull", "tab": tab})["rows"]
             if any(str(c).strip() for c in r)]
     if not rows:
         raise SheetError(f'The "{tab}" tab is empty.')
-    missing = [c for c in OFFICIAL_COLUMNS if c not in rows[0]]
+    missing = [c for c in columns if c not in rows[0]]
     if missing:
         raise SheetError(f'The "{tab}" tab is missing columns the app needs: {", ".join(missing)}. '
-                         "official.tsv was left as it was.")
+                         f"{dest.name} was left as it was.")
     buf = io.StringIO()
     csv.writer(buf, delimiter="\t", lineterminator="\n").writerows(rows)
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -154,6 +167,11 @@ def main(argv=None):
             dest = official_path(s) or APP_ROOT / "official.tsv"
             n = pull(config, dest)
             print(f"Pulled {n} official cards from \"{config['official_tab']}\" into {dest}")
+            options = APP_ROOT / "bsp-options.tsv"
+            try:
+                print(f"Pulled {pull_options(config, options)} strike cards into {options}")
+            except SheetError as e:
+                print(f"Strike cards not updated: {e}")
             print("Restart Motor Pool to load them.")
         else:
             name, n = push(config, Path(s["mm_data"]), a.tab)

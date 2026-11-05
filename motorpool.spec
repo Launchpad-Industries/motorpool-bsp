@@ -21,6 +21,7 @@ datas = [
     (f"{SNAP}/cache", "cache"),
     (f"{SNAP}/data", "data"),
     (f"{SNAP}/official.tsv", "."),
+    (f"{SNAP}/bsp-options.tsv", "."),
     (f"{SNAP}/fonts/fonts.css", "fonts"),
     (f"{SNAP}/snapshot.json", "."),
 ]

@@ -17,6 +17,7 @@ Contents (laid out as the app expects them inside the bundle):
   cache/                             weapon and ammo tables from MegaMek source
   data/                              card links and approvals
   official.tsv                       official card stats (from the Sheet)
+  bsp-options.tsv                    strike cards (from the Sheet)
   fonts/fonts.css                    Barlow, Barlow Condensed, Oswald (OFL), inlined
   licenses/                          MegaMek data licence, font licences
   snapshot.json                      date, MegaMek commits, counts
@@ -109,6 +110,9 @@ def main(argv=None):
     official = ROOT / "official.tsv"
     if not official.exists():
         raise SystemExit("No official.tsv. Pull it first (python -m bsp.sheet pull).")
+    options = ROOT / "bsp-options.tsv"
+    if not options.exists():
+        raise SystemExit("No bsp-options.tsv. Pull it first (python -m bsp.sheet pull).")
 
     fonts = OUT / "fonts"
     kept_fonts = OUT.with_name("snapshot-fonts.tmp")
@@ -130,6 +134,7 @@ def main(argv=None):
         if (ROOT / "data" / name).exists():
             shutil.copy2(ROOT / "data" / name, OUT / "data" / name)
     shutil.copy2(official, OUT / "official.tsv")
+    shutil.copy2(options, OUT / "bsp-options.tsv")
 
     lic = OUT / "licenses"
     lic.mkdir()

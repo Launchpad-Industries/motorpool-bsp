@@ -51,7 +51,7 @@ def check_bundle() -> list[str]:
     extraction or an antivirus scan), as plain sentences; empty when fine."""
     m = manifest()
     problems = []
-    for rel in ("official.tsv", "cache/weapons.json", "data/card_links.yaml", "fonts/fonts.css"):
+    for rel in ("official.tsv", "bsp-options.tsv", "cache/weapons.json", "data/card_links.yaml", "fonts/fonts.css"):
         if not (ROOT / rel).exists():
             problems.append(f"{rel} is missing.")
     units = long_path(ROOT / "mm-data" / "data" / "mekfiles" / "vehicles")
