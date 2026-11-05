@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 from . import __version__
@@ -103,7 +104,9 @@ def html_to_pdf_edge(html_doc: str) -> bytes:
     if FONTS_CSS.exists():
         html_doc = html_doc.replace(FONTS_LINK, "<style>" + FONTS_CSS.read_text(encoding="utf-8") + "</style>")
     html_doc = html_doc.replace("</head>", PRINT_CSS + "</head>", 1)
-    with tempfile.TemporaryDirectory(prefix="motorpool-") as d:
+    # A finished Edge can still hold its profile folder for a moment: leaving
+    # the temporary folder behind is better than failing a good PDF.
+    with tempfile.TemporaryDirectory(prefix="motorpool-", ignore_cleanup_errors=True) as d:
         src, out = Path(d) / "cards.html", Path(d) / "cards.pdf"
         src.write_text(html_doc, encoding="utf-8")
         subprocess.run(
@@ -114,7 +117,20 @@ def html_to_pdf_edge(html_doc: str) -> bytes:
              f"--print-to-pdf={out}", src.as_uri()],
             check=False, timeout=180, capture_output=True,
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        if not out.exists() or out.stat().st_size == 0:
+        if not wait_for_file(out):
             raise RuntimeError("Edge did not produce a PDF. Use Print view and your browser's "
                                "Print > Save as PDF instead")
         return out.read_bytes()
+
+
+def wait_for_file(path: Path, timeout: float = 90, poll: float = 0.25) -> bool:
+    """True once path has stopped growing. msedge.exe can hand off to an Edge
+    process and return before that process has written the file."""
+    end, last = time.monotonic() + timeout, 0
+    while time.monotonic() < end:
+        size = path.stat().st_size if path.exists() else 0
+        if size and size == last:
+            return True
+        last = size
+        time.sleep(poll)
+    return False
