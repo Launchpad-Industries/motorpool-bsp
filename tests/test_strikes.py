@@ -117,6 +117,12 @@ def test_minefield_has_hex_and_a_group_countdown():
     assert "<span>4</span><span>3</span><span>2</span><span>1</span>" in h
 
 
+def test_minefield_titles_say_minefield():
+    assert '<div class="chassis long">Medium Density Minefield<' in html(MINES)
+    assert card_from_row(row("Minefield (Light)", "Minefield", 3, "Groups=2")).title == "Minefield (Light)"
+    assert card_from_row(LONG_TOM).title == "Long Tom"
+
+
 def test_other_cards_get_a_used_box():
     for r in (STRAFING, BOMBING, COVER, BLUFF):
         assert html(r).count(">Used<") == 1
@@ -159,7 +165,7 @@ def client(tmp_path, monkeypatch):
 
 def test_app_lists_strikes_apart_from_units(client):
     rows = client.get("/api/strikes").get_json()
-    assert [(r["name"], r["cost"], r["per"]) for r in rows] == [("Long Tom", 24, ""), ("Medium Density", 5, "per hex")]
+    assert [(r["name"], r["cost"], r["per"]) for r in rows] == [("Long Tom", 24, ""), ("Medium Density Minefield", 5, "per hex")]
     assert not any(r.get("strike") for r in client.get("/api/units").get_json())
     assert client.get("/api/info").get_json()["strikes"] == 2
 
@@ -182,4 +188,4 @@ def test_printing_puts_strikes_after_units_and_counts_their_cost(client):
     body = doc[doc.index("<tbody>"):]
     assert body.index(unit["chassis"]) < body.index("Medium Density")
     assert f'<td class=n>{unit["cost"] + 15}</td>' in body
-    assert doc.count('<div class="chassis">Medium Density<') == 3
+    assert doc.count('<div class="chassis long">Medium Density Minefield<') == 3

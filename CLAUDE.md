@@ -66,7 +66,7 @@ blank.
   Differences until the model covers them.
 - Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
   minefield options from `bsp-options.tsv` (git-ignored, Sheet's "BSP Options"
-  tab). Same frame as unit cards, no Veteran grade: the chip says STRIKE /
+  tab). Minefield titles get "Minefield" added in the app. Same frame as unit cards, no Veteran grade: the chip says STRIKE /
   MINEFIELD / NOT AN ATTACK, the side shows a radius, scatter, line or single
   hex diagram, and the card has write-on boxes. Footer "Source: BattleTech Core
   Rulebook". Own section in search and the force list; printed after the units;

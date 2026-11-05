@@ -137,8 +137,15 @@ class StrikeCard:
         return strike_id(self.name)
 
     @property
-    def chassis(self) -> str:
+    def title(self) -> str:
+        """The name to show: "Light Density" alone doesn't say it's a minefield."""
+        if self.category == "Minefield" and "minefield" not in self.name.lower():
+            return f"{self.name} Minefield"
         return self.name
+
+    @property
+    def chassis(self) -> str:
+        return self.title
 
     @property
     def support(self) -> str:
@@ -204,7 +211,8 @@ class StrikeCard:
 
     def html(self) -> str:
         s = self.stats
-        long_name = " xlong" if len(self.name) > 24 else " long" if len(self.name) > 17 else ""
+        title = self.title
+        long_name = " xlong" if len(title) > 24 else " long" if len(title) > 17 else ""
         per = f'<small class="per">/{_e(self.per.replace("per ", ""))}</small>' if self.per else ""
         blocks = []
         if "TN" in s:
@@ -225,7 +233,7 @@ class StrikeCard:
         used = "" if write else '<div class="used"><span class="lbl">Used</span><span class="bx"></span></div>'
         return (f'<div class="card strike"><div class="stripe"></div>'
                 f'<div class="hd"><div class="names"><div class="variant">{_e(self.support) or "&nbsp;"}</div>'
-                f'<div class="chassis{long_name}">{_e(self.name)}</div></div>'
+                f'<div class="chassis{long_name}">{_e(title)}</div></div>'
                 f'<div class="cost"><small>COST</small>{self.cost}{per}</div></div>'
                 f'<div class="bd"><div class="stats">{"".join(blocks)}</div>'
                 f'<div class="side">{self.chip()}<div class="diag">{self.diagrams()}</div>{used}</div></div>'

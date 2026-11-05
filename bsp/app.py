@@ -204,7 +204,7 @@ class Catalog:
     def strike_row(self, i: str) -> dict:
         c = self.strikes[i]
         return {
-            "id": i, "name": c.name, "chassis": c.name, "strike": True, "category": c.category,
+            "id": i, "name": c.title, "chassis": c.title, "strike": True, "category": c.category,
             "support": c.support, "cost": c.cost, "vet_cost": None, "per": c.per,
             "tn": c.stats.get("TN"), "groups": c.groups, "type": c.stats.get("Type"), "effect": c.effect,
             "source": c.source, "approver": "", "verified": True,
@@ -278,7 +278,7 @@ def create_app(settings: dict | None = None) -> Flask:
         if i in cat().strikes:
             # A strike card has one version: nothing to calculate, tweak or compare.
             c = cat().strikes[i]
-            return jsonify(id=i, name=c.name, strike=True, generic=True, tons=None, notes=c.notes,
+            return jsonify(id=i, name=c.title, strike=True, generic=True, tons=None, notes=c.notes,
                            official={}, calculated=None, generated=None, approval=None,
                            differs=[], drift=[], weapons=[])
         if i in cat().generic:
