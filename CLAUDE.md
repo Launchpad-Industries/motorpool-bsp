@@ -106,7 +106,7 @@ blank.
 - "Send tweaks for approval": mailto to the Settings address
   (williamtbecker@gmail.com for now; Will wants a dedicated address before
   wider distribution) with a readable summary + `MOTORPOOL:` import code;
-  "Import proposals" reads it back.
+  "Import proposals" in Settings reads it back.
 - **About** button beside Settings shows `bsp/web/about.html`: a plain-language
   description of the model and costing, in our own words, plus credits and
   notices. When a rule changes, in either place, update it and its "Last updated"

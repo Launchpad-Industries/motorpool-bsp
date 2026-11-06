@@ -40,7 +40,6 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     </select>
   </div>
   <div class="tools">
-    <button id="btn-import" class="ghost" title="Review tweaks someone sent you">Import proposals</button>
     <button id="btn-about" class="ghost" title="How cards are made, and credits">About</button>
     <button id="btn-settings" class="ghost" title="Settings">Settings</button>
   </div>
@@ -140,6 +139,7 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     <label class="dev-only">Official cards export (TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
     <label>Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
     <label>Theme (this browser) <select id="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="auto">Match Windows</option></select></label>
+    <div class="import-row"><button type="button" id="btn-import" class="ghost">Import proposals…</button><span class="muted">Review tweaks someone sent you.</span></div>
     <p class="muted" id="owner-note"></p>
     <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>
   </form>

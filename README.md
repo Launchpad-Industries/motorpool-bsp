@@ -76,8 +76,8 @@ python -m bsp.app                             # start Motor Pool; opens in your 
 - **About**: how cards and costs are worked out, in plain language, plus credits
   and notices (`bsp/web/about.html`; update it when a rule changes).
 - **Send tweaks for approval**: collects tweaks into a pre-filled email to the
-  address in Settings (with a `MOTORPOOL:` import code). **Import proposals**
-  reads that code back so the approver can review, adjust and approve.
+  address in Settings (with a `MOTORPOOL:` import code). **Import proposals**, in
+  Settings, reads that code back so the approver can review, adjust and approve.
 
 Settings (name, approval email, data folders, your images folder) live in
 `~/.motorpool/settings.json` and in the app's Settings dialog. Card images

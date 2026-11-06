@@ -502,7 +502,7 @@ def export_proposals(cat: Catalog, items: list[dict], sender: str) -> dict:
         {"v": 1, "from": sender, "on": date.today().isoformat(), "items": payload}).encode())).decode()
     subject = f"{APP_NAME}: {len(payload)} card tweak(s) for approval from {sender}"
     body = (f"{sender} proposes these card changes:\n\n" + "\n".join(lines) +
-            f"\n\nTo review them, open {APP_NAME} > Import proposals and paste this code:\n\n"
+            f"\n\nTo review them, open {APP_NAME} > Settings > Import proposals and paste this code:\n\n"
             f"MOTORPOOL:{code}\n")
     return {"subject": subject, "body": body, "code": f"MOTORPOOL:{code}", "count": len(payload)}
 

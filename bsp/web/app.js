@@ -340,7 +340,10 @@ $("#send-mail").addEventListener("click", () => setTimeout(() => {
 }, 800));
 
 // import
-$("#btn-import").addEventListener("click", () => { $("#imp-list").innerHTML = ""; $("#dlg-import").showModal(); });
+$("#btn-import").addEventListener("click", () => {
+  $("#dlg-settings").close("cancel");     // leaves any unsaved Settings edits unsaved
+  $("#imp-list").innerHTML = ""; $("#dlg-import").showModal();
+});
 $("#imp-close").addEventListener("click", () => $("#dlg-import").close());
 $("#imp-read").addEventListener("click", async () => {
   try {
