@@ -103,7 +103,13 @@ blank.
   (williamtbecker@gmail.com for now; Will wants a dedicated address before
   wider distribution) with a readable summary + `MOTORPOOL:` import code;
   "Import proposals" reads it back.
+- **About** button beside Settings shows `bsp/web/about.html`: a plain-language
+  description of the model and costing, in our own words, plus credits and
+  notices. When a rule changes, in either place, update it and its "Last updated"
+  date. `tests/test_about.py` checks the worked example against the cost formula.
+  No GitHub link while the repository is private.
 - Working title **Motor Pool** (may change once infantry/battle armor arrive).
+  Tagline: "Unofficial fan-made BattleTech force builder for assets".
 
 - **Tester build** (`python tools/build.py` → `dist/MotorPool-vX.Y.Z.zip`):
   PyInstaller one-folder exe, waitress on a free 127.0.0.1 port, console

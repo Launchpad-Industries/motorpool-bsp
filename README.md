@@ -71,6 +71,8 @@ python -m bsp.app                             # start Motor Pool; opens in your 
 - **Card detail**: Official / Approved / Calculated / Differences views, a
   Regular / Veteran toggle, **Tweak…** (edit any stat; the cost re-calculates
   live; tick "Override cost" to set it by hand) and **Approve**.
+- **About**: how cards and costs are worked out, in plain language, plus credits
+  and notices (`bsp/web/about.html`; update it when a rule changes).
 - **Send tweaks for approval**: collects tweaks into a pre-filled email to the
   address in Settings (with a `MOTORPOOL:` import code). **Import proposals**
   reads that code back so the approver can review, adjust and approve.

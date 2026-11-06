@@ -371,6 +371,13 @@ async function openSettings() {
   $("#dlg-settings").showModal();
 }
 $("#btn-settings").addEventListener("click", openSettings);
+$("#btn-about").addEventListener("click", async () => {
+  const r = await fetch("/web/about.html");
+  $("#about-body").innerHTML = r.ok ? await r.text() : "<p>The About page couldn't be loaded.</p>";
+  $("#dlg-about").showModal();
+  $("#about-body").scrollTop = 0;
+});
+$("#about-close").addEventListener("click", () => $("#dlg-about").close());
 // Theme is a per-browser choice, applied at once (index.html sets it before first paint).
 $("#theme").value = document.documentElement.dataset.theme;
 $("#theme").addEventListener("change", e => { document.documentElement.dataset.theme = e.target.value; store.set("theme", e.target.value); });

@@ -38,6 +38,7 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
   </div>
   <div class="tools">
     <button id="btn-import" class="ghost" title="Review tweaks someone sent you">Import proposals</button>
+    <button id="btn-about" class="ghost" title="How cards are made, and credits">About</button>
     <button id="btn-settings" class="ghost" title="Settings">Settings</button>
   </div>
 </header>
@@ -143,6 +144,11 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     <p class="muted" id="owner-note"></p>
     <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>
   </form>
+</dialog>
+
+<dialog id="dlg-about">
+  <div id="about-body"></div>
+  <div class="dactions"><button id="about-close" class="ghost">Close</button></div>
 </dialog>
 
 <dialog id="dlg-import">
