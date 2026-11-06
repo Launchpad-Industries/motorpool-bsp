@@ -10,7 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from bsp import app as app_module
-from bsp.squads import design_name, standard_squads
+from bsp.squads import design_name, six_suit_squads, standard_squads
 
 ROOT = Path(__file__).resolve().parent.parent
 MM = Path(os.environ.get("MM_DATA", ROOT / "mm-data" / "data" / "mekfiles"))
@@ -21,7 +21,7 @@ def suit(name, troopers, clan=False):
 
 
 def kept(*units):
-    return sorted(u.full_name for u in standard_squads(list(units)))
+    return sorted(u.full_name for u in standard_squads(list(units), six_suit={"Kobold(Sqd6)"}))
 
 
 def test_design_name_drops_only_the_squad_tag():
@@ -33,8 +33,12 @@ def test_clan_keeps_five_suits():
     assert kept(*(suit(f"Elemental(Sqd{n})", n, clan=True) for n in (3, 4, 5, 6))) == ["Elemental(Sqd5)"]
 
 
-def test_inner_sphere_keeps_four_and_six():
-    assert kept(*(suit(f"Kage(Sqd{n})", n) for n in (4, 5, 6))) == ["Kage(Sqd4)", "Kage(Sqd6)"]
+def test_inner_sphere_keeps_four():
+    assert kept(*(suit(f"Kage(Sqd{n})", n) for n in (4, 5, 6))) == ["Kage(Sqd4)"]
+
+
+def test_a_listed_design_also_keeps_six():
+    assert kept(*(suit(f"Kobold(Sqd{n})", n) for n in (4, 5, 6))) == ["Kobold(Sqd4)", "Kobold(Sqd6)"]
 
 
 def test_a_design_without_a_standard_size_keeps_what_it_has():
@@ -56,11 +60,15 @@ def rows(client):
 
 def test_app_lists_standard_sizes_with_unique_ids(rows):
     ba = [r for r in rows.values() if r["type"] == "Battle Armor" and not r.get("generic")]
-    assert len({r["id"] for r in ba}) == len(ba) > 500
+    assert len({r["id"] for r in ba}) == len(ba) > 400
     assert "Elemental Battle Armor [MG](Sqd5)" in rows
     assert "Elemental Battle Armor [MG](Sqd4)" not in rows
     assert "IS Standard Battle Armor [MG](Sqd4)" in rows and "IS Standard Battle Armor [MG](Sqd6)" in rows
     assert "IS Standard Battle Armor [MG](Sqd5)" not in rows
+    assert "Cavalier Battle Armor [MG](Sqd4)" in rows and "Cavalier Battle Armor [MG](Sqd6)" not in rows
+    # Every name on the six-suit list must still match a MegaMek unit.
+    assert six_suit_squads() <= set(rows)
+    assert sum(r["tech"] == "IS" and "Sqd6" in r["name"] for r in ba) == len(six_suit_squads())
     assert all(r["tons"] is None for r in ba)
     assert sum(r["source"] == "Official" for r in ba) == 4
     assert all(r["source"] == "Calculated" for r in ba if not r["has_official"])

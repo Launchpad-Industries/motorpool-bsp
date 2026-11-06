@@ -46,7 +46,7 @@ MM = ROOT / "mm-data"
 UNIT_FOLDERS = ["data/mekfiles/vehicles", "data/mekfiles/battlearmor"]   # what the app loads
 IMAGE_FOLDERS = ["data/images/units/vehicles", "data/images/units/battle armor", "data/images/units/defaults"]
 IMAGE_FILES = ["data/images/units/mekset.txt"]
-DATA_FILES = ["approvals.yaml", "card_links.yaml", "trusted_keys.yaml"]
+DATA_FILES = ["approvals.yaml", "card_links.yaml", "six_suit_squads.yaml", "trusted_keys.yaml"]
 
 FONTS_URL = ("https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&"
              "family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@400;500;600;700&display=swap")
