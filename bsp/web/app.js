@@ -87,17 +87,15 @@ function renderTable() {
   [...$("#r-tabs").children].forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
   $("#tbl").hidden = strikes; $("#tbl-strikes").hidden = !strikes;
   $(".filters").hidden = strikes;           // movement, source, tech, sort: units only
-  if (strikes) {
-    $("#count").textContent = `${ss.length} strikes`;
-    return renderStrikes(ss);
-  }
-  $("#count").textContent = `${rs.length} assets` + (rs.length > shown.length ? ` (showing first ${shown.length}; refine the search)` : "");
+  if (strikes) return renderStrikes(ss);
+  const capped = rs.length > shown.length
+    ? `<tr class="capped"><td colspan="11">Showing the first ${shown.length} of ${rs.length}. Search or filter to narrow the list.</td></tr>` : "";
   $("#tbl tbody").innerHTML = shown.map(r => `<tr data-id="${r.id}" class="${cur && cur.id === r.id ? "sel" : ""}">
     <td><button class="add" data-add="${r.id}" title="Add to force">+</button></td>
     <td class="nm">${esc(r.chassis)}<small>${esc(r.variant === "Standard" ? "" : r.variant)}</small>${r.differs.length ? `<span class="flag" title="Calculated differs: ${esc(r.differs.join(", "))}">≠</span>` : ""}${r.drift.length ? `<span class="flag" title="Rules changed since approval: ${esc(r.drift.join(", "))}">drift</span>` : ""}</td>
     <td>${srcBadge(r)}</td><td class="n">${r.cost}${r.vet_cost != null ? ` <small>(${r.vet_cost})</small>` : ""}</td><td class="n">${r.tons ?? "—"}</td>
     <td>${r.mp}${r.mode === "na" ? "" : r.mode}</td><td class="n">+${r.tmm}</td><td>${esc(rangeTxt(r.range))}</td><td>${esc(r.damage)}</td><td class="n">${r.check}</td>
-    <td class="sp">${esc(r.specials.join(", "))}</td></tr>`).join("");
+    <td class="sp">${esc(r.specials.join(", "))}</td></tr>`).join("") + capped;
 }
 ["#q", "#f-mode", "#f-type", "#f-source", "#f-tech", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
 $("#r-tabs").addEventListener("click", e => {

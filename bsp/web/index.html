@@ -14,6 +14,9 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <body>
 <header class="top">
   <div class="brand">MOTOR<span>POOL</span><small id="ver"></small><small class="tagline">Unofficial fan-made BattleTech force builder for assets</small></div>
+  <div class="rtabs seg small" id="r-tabs">
+    <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
+  </div>
   <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
   <div class="filters">
     <select id="f-mode" title="Movement">
@@ -47,7 +50,7 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
   <aside class="force">
     <input id="force-title" class="force-title" value="Battlefield Support - Forces" aria-label="Force name">
     <div id="force-list" class="force-list"></div>
-    <div class="force-empty" id="force-empty">Add assets from the list to build a force.</div>
+    <div class="force-empty" id="force-empty">Click a row in the list for its card. <b>+</b> adds it to the force.</div>
     <div class="totals">
       <div><span>BSP</span><b id="tot-bsp">0</b></div>
       <div><span>BV equiv.</span><b id="tot-bv">0</b></div>
@@ -67,10 +70,6 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
   </aside>
 
   <section class="results">
-    <div class="rtabs seg small" id="r-tabs">
-      <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
-    </div>
-    <div class="rhead"><span id="count"></span><span class="hint">Click a row for its card. <b>+</b> adds it to the force.</span></div>
     <div class="table-wrap">
       <table id="tbl">
         <thead><tr><th></th><th>Asset</th><th>Src</th><th class=n>Cost</th><th class=n>Tons</th><th>MP</th><th class=n>TMM</th><th>Range</th><th>Dmg</th><th class=n>Chk</th><th>Specials</th></tr></thead>

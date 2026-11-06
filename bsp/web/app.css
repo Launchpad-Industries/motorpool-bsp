@@ -14,13 +14,13 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-size:14px;display:flex;flex-direction:column}
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
-.top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.top{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{font-family:"Oswald","Arial Narrow",sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;line-height:24px}
 .brand span{color:var(--acc);margin-left:4px}
 .brand small{font-family:"Barlow",sans-serif;font-weight:400;font-size:10px;letter-spacing:0;color:var(--mut)}
 .brand #ver{margin-left:8px}
 .brand .tagline{display:block;white-space:nowrap;font-size:11px;line-height:1.2}
-#q{flex:1;min-width:200px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
+#q{flex:1;min-width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
 select,input,textarea{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 .tools{display:flex;gap:6px}
@@ -68,13 +68,15 @@ main{display:grid;grid-template-columns:320px 1fr auto;flex:1;min-height:0}
 
 /* results */
 .results{display:flex;flex-direction:column;min-width:0;min-height:0}
-.rtabs{margin:10px 14px 0}
+.seg.rtabs{align-self:center;flex:none}
+.rtabs button{white-space:nowrap}
+tr.capped,tr.capped:hover{background:var(--panel2);cursor:default}
+tr.capped td{padding:12px 14px;text-align:center;color:var(--mut)}
 .rtabs span{opacity:.75;font-variant-numeric:tabular-nums}
 tr.grp,tr.grp:hover{background:var(--panel2);cursor:default}
 tr.grp td{font-family:"Oswald",sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
 td.fx{white-space:normal;color:var(--mut);font-size:12px;min-width:260px}
 td.n small{color:var(--mut)}
-.rhead{display:flex;justify-content:space-between;padding:8px 14px;color:var(--mut);font-size:12px}
 .table-wrap{overflow:auto;flex:1;min-height:0}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
