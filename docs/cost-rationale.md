@@ -108,6 +108,11 @@ Official cards the rules don't reproduce, kept as printed:
 Only 4 official BA cards exist, all generic (Elemental, Elemental (AP Gauss),
 Elemental III, Inner Sphere BA), so rules are kept few and anchored to them.
 MegaMek links the generic Elemental card to Elemental BA [MG] (Sqd5).
+Since 5 Nov (Will) the app links all four to these suits in
+`data/card_links.yaml`: Elemental [MG] (Sqd5), Elemental [APG] (Sqd5),
+Elemental III [AP Gauss] (Sqd5), IS Standard [MG] (Sqd4). The cards still say
+"Official" and print as Catalyst printed them; other squad sizes and weapon
+versions of those suits stay calculated.
 
 | Stat | Rule | Why |
 |---|---|---|

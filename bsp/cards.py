@@ -162,11 +162,19 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         n, _, h = dmg.partition("x")
         dmg = f"{n}d×{h or 1}"
     path, src = art.find(unit) if (unit and art) else (None, "")
+    if unit and art and row["type"] in GENERIC_TYPES:
+        # The owner's image for the card's own name beats the linked suit's art.
+        own, own_src = art.find_generic(row["name"], row["type"])
+        if own_src == "fluff":
+            path, src = own, own_src
+    variant = row["variant"]
+    if row["type"] in GENERIC_TYPES and variant.strip("()").lower() in row["name"].lower():
+        variant = "Standard"     # "Heavy Emplacement / Heavy": don't say it twice
     cv = row.get("costV", "").strip()
     if not cv.isdigit() or cv == row["costR"].strip():
         cv = ""          # no Veteran version (e.g. artillery: no Skill upgrades)
     return Card(
-        chassis=row["name"], variant=row["variant"], unit_type=row["type"],
+        chassis=row["name"], variant=variant, unit_type=row["type"],
         tons=unit.tonnage if unit else 0, mp=int(row["mp"]), mode=row["mtype"],
         tmm=int(row["tmm"]), range=rng, skill=int(row["skill"]),
         vet_skill=int(row["skill"]) - 1 if cv else None, damage=dmg or "-",
@@ -176,25 +184,27 @@ def card_from_official(row: dict, unit: Unit | None, art: Art) -> Card:
         source="Official", image=Art.data_uri(path, trim=src == "sprite") if path else "", image_source=src)
 
 
-# Official cards of these types stand for a kind of unit, not one MegaMek design.
+# Official cards of these types stand for a kind of unit unless card_links.yaml
+# links them to one MegaMek design.
 GENERIC_TYPES = ("Infantry", "Battle Armor", "Emplacement")
 
 
 def generic_official(official_tsv: Path) -> list[dict]:
     """Generic official card rows (conventional infantry, battle armor,
-    emplacements, and any row listed under generic: in card_links.yaml)."""
+    emplacements, and any row listed under generic: in card_links.yaml),
+    leaving out cards linked to a MegaMek unit."""
     import csv
     import yaml
     links = yaml.safe_load((ROOT / "data" / "card_links.yaml").read_text())
     generic = set(links.get("generic", []))
-    return [r for r in csv.DictReader(open(official_tsv, encoding="utf-8"), delimiter="\t")
-            if f"{r['name']}|{r['variant']}" in generic or r["type"] in GENERIC_TYPES]
+    linked = set(links.get("links", {})) | set(links.get("review", {}))
+    rows = csv.DictReader(open(official_tsv, encoding="utf-8"), delimiter="\t")
+    return [r for r in rows if f"{r['name']}|{r['variant']}" not in linked
+            and (f"{r['name']}|{r['variant']}" in generic or r["type"] in GENERIC_TYPES)]
 
 
 def card_from_generic(row: dict, art: Art | None) -> Card:
     c = card_from_official(row, None, None)
-    if c.variant.strip("()").lower() in c.chassis.lower():
-        c.variant = "Standard"     # "Heavy Emplacement / Heavy": don't say it twice
     if art:
         path, src = art.find_generic(row["name"], row["type"])
         if path:
@@ -216,9 +226,9 @@ def official_index(official_tsv: Path, mm_root: Path, vehicles: list[Unit],
     out = {}
     for r in csv.DictReader(open(official_tsv, encoding="utf-8"), delimiter="\t"):
         key = f"{r['name']}|{r['variant']}"
-        if key in links.get("generic", []) or r["type"] != "Vehicle":
-            continue
         path = links["links"].get(key) or links["review"].get(key)
+        if key in links.get("generic", []) or (r["type"] != "Vehicle" and not path):
+            continue
         try:
             unit = load_unit(mm_root / path) if path else best_match(r, vehicles).unit
         except OSError:

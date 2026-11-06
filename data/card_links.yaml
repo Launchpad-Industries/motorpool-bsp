@@ -29,6 +29,11 @@ links:
   "Tracked APC|Standard": "vehicles/3039u/APC (Tracked).blk"
   # Support vehicle; no calculated spec until support vehicles are handled.
   "Savior Repair Vehicle|Standard": "vehicles/3145/Merc/Savior Repair Vehicle.blk"
+  # Battle armor: the suits the model was fitted against (docs/cost-rationale.md).
+  "Elemental Battle Armor|Standard": "battlearmor/3058Uu/Elemental BA [MG] (Sqd5).blk"
+  "Elemental Battle Armor (AP Gauss)|(AP Gauss)": "battlearmor/3058Uu/Elemental BA [APG] (Sqd5).blk"
+  "Elemental III Battle Armor|Standard": "battlearmor/Rec Guides ilClan/Vol 24/Elemental III BA [AP Gauss](Sqd5).blk"
+  "Inner Sphere Battle Armor|Standard": "battlearmor/3058Uu/IS Standard BA [MG] (Sqd4).blk"
 
 review:
   # Mk. I and Mk. II both have 160 armor; Mk. I carries two AC/20s (card 20x2).
@@ -48,7 +53,3 @@ generic:
   - "Foot Conv. Infantry|Standard"
   - "Jump Con. Infantry|Standard"
   - "Mechanized/Motorized Conv. Infantry|Standard"
-  - "Inner Sphere Battle Armor|Standard"
-  - "Elemental Battle Armor|Standard"
-  - "Elemental Battle Armor (AP Gauss)|(AP Gauss)"
-  - "Elemental III Battle Armor|Standard"

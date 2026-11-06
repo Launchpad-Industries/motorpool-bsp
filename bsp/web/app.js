@@ -30,6 +30,8 @@ async function init() {
   $("#force-title").value = store.get("title", $("#force-title").value);
   $("#opt-summary").checked = store.get("summary", true);
   await loadRows();
+  const moved = Object.fromEntries(ROWS.filter(r => r.old_id).map(r => [r.old_id, r.id]));
+  force.forEach(f => { f.id = moved[f.id] || f.id; });
   force = force.filter(f => BYID[f.id]);
   renderTable(); renderForce(); renderProposals();
   if (!INFO.official) toast(INFO.official_status + " Everything shows as approved or calculated.");
@@ -59,7 +61,7 @@ function filtered() {
     if (src && r.source !== src) return false;
     if (tech && r.tech !== tech) return false;
     if (!q.length) return true;
-    const hay = (r.name + " " + r.specials.join(" ") + " " + r.type + " " + r.tech).toLowerCase();
+    const hay = (r.name + " " + r.chassis + " " + r.specials.join(" ") + " " + r.type + " " + r.tech).toLowerCase();
     return q.every(w => hay.includes(w));
   });
   const key = {name: r => r.name.toLowerCase(), cost: r => r.cost, tons: r => r.tons ?? 0, year: r => r.year || 9999}[sort];

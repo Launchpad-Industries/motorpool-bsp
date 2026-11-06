@@ -62,13 +62,14 @@ blank.
   footer "Source: Official Catalyst BSP" (solid) / "Approved-<name>" (grey) /
   "Unverified-<name>" (dotted) / "Calculated" (dashed).
 - Generic official cards (official.tsv rows of type Infantry, Battle Armor,
-  Emplacement, or listed under `generic:` in card_links.yaml) are listed as
-  official-only entries (ids start with "g"): no calculated card, tweak or
-  Differences until the model covers them.
-- Calculated battle armor (model: `derive_battle_armor`): listed as ordinary
-  units beside the generic official cards, not yet linked to them. Standard
-  squad sizes only (`bsp/squads.py`): Clan 5, Inner Sphere 4 and 6, because the
-  data can't tell which designs are ComStar's (6); Will plans to prune the extras.
+  Emplacement, or listed under `generic:` in card_links.yaml, unless linked to
+  a unit there) are listed as official-only entries (ids start with "g"): no
+  calculated card, tweak or Differences until the model covers them.
+- Battle armor (model: `derive_battle_armor`): listed as ordinary units.
+  Standard squad sizes only (`bsp/squads.py`): Clan 5, Inner Sphere 4 and 6,
+  because the data can't tell which designs are ComStar's (6); Will plans to
+  prune the extras. The four official BA cards are linked to one suit each in
+  card_links.yaml, so those suits show the official card by default.
 - Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
   minefield options from `bsp-options.tsv` (from the Sheet's "BSP Options"
   tab). Minefield titles get "Minefield" added in the app. Same frame as unit cards, no Veteran grade: the chip says STRIKE /

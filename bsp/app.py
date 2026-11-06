@@ -109,9 +109,9 @@ def diff(a: Card, b: Card) -> list[str]:
 
 
 class Catalog:
-    """Every vehicle with its official card (if any) and calculated card,
-    battle armor in its standard squad sizes with a calculated card, plus
-    generic official cards (infantry, battle armor, emplacements)."""
+    """Every vehicle and every battle armor design in its standard squad sizes,
+    with its official card (if any) and calculated card, plus generic official
+    cards (infantry, emplacements)."""
 
     def __init__(self, settings: dict):
         self.settings = settings
@@ -136,8 +136,8 @@ class Catalog:
             self.missing = []
             self.official = official_index(tsv, mm, combat, self.missing)
             self.generic = {generic_id(r): r for r in generic_official(tsv)}
-            self.official_status = (f"{len(self.official)} official vehicle cards and {len(self.generic)} "
-                                    f"infantry, battle armor and emplacement cards from {tsv}")
+            self.official_status = (f"{len(self.official)} official unit cards and {len(self.generic)} "
+                                    f"generic official cards from {tsv}")
             if self.missing:
                 self.official_status += (f". {len(self.missing)} skipped because their MegaMek unit file "
                                          f"is missing: {', '.join(self.missing)}")
@@ -192,8 +192,11 @@ class Catalog:
         off = self.official_card(u)
         c = off or calc
         year = (u.raw.get("year") or [""])[0]
+        card_row = self.official.get(u.path)
         return {
             "id": uid(u), "name": u.full_name, "chassis": c.chassis, "variant": c.variant,
+            # These cards used to be listed on their own: saved forces may hold that id.
+            "old_id": generic_id(card_row) if card_row and u.unit_type == "BattleArmor" else None,
             "type": c.unit_type, "tons": u.tonnage or None, "tech": "Clan" if u.clan else "IS",
             "year": int(year) if str(year).isdigit() else None,
             "mp": c.mp, "mode": c.mode, "tmm": c.tmm,

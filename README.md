@@ -48,15 +48,18 @@ python -m bsp.app                             # start Motor Pool; opens in your 
   source and tech base). Units with an official card show it; the rest show
   the approved or calculated card. "≠" marks official cards where the
   calculation differs; "drift" marks approvals the rules have since moved away from.
-- **Infantry, battle armor and emplacements**: the generic official cards
-  (e.g. "Foot Conv. Infantry", "Elemental Battle Armor", "MG Nest") are listed
-  too, official only. Any Infantry, Battle Armor or Emplacement row in the
-  official cards export appears automatically, with your image for it if you
-  have one, else MegaMek's generic sprite.
-- **Calculated battle armor**: MegaMek's battle armor designs, each as its own
-  calculated card you can tweak and approve like a vehicle. Clan designs are
-  listed with 5 suits and Inner Sphere designs with 4 and 6 (the data doesn't
-  say which designs are ComStar's); a design with neither keeps its own size.
+- **Infantry and emplacements**: the generic official cards (e.g. "Foot Conv.
+  Infantry", "MG Nest") are listed too, official only. Any Infantry, Battle
+  Armor or Emplacement row in the official cards export that isn't linked to a
+  unit in `data/card_links.yaml` appears automatically, with your image for it
+  if you have one, else MegaMek's generic sprite.
+- **Battle armor**: MegaMek's battle armor designs, each as its own card you
+  can tweak and approve like a vehicle. Clan designs are listed with 5 suits
+  and Inner Sphere designs with 4 and 6 (the data doesn't say which designs are
+  ComStar's); a design with neither keeps its own size. The four official cards
+  are linked to the suits they match, with the same Official / Calculated switch
+  and Differences view as a vehicle: Elemental [MG], Elemental [AP Gauss] and
+  Elemental III [AP Gauss] with 5 suits, and IS Standard [MG] with 4.
 - **Force list** on the left: add assets with **+**, pick Regular or Veteran,
   Official or Calculated (where both exist) and quantity. BSP and BV-equivalent
   totals update as you go.
