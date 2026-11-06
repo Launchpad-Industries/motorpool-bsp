@@ -39,6 +39,8 @@ python -m bsp.setup_data                      # fetch MegaMek data + unit sprite
 python -m bsp.app                             # start Motor Pool; opens in your browser
 ```
 
+"Make PDF" falls back to Microsoft Edge if Playwright isn't available.
+
 ## Motor Pool (the app)
 
 `python -m bsp.app` starts a small server on this computer only

@@ -365,9 +365,8 @@ def create_app(settings: dict | None = None) -> Flask:
         html_doc = force_document(cat(), d)
         try:
             data = html_to_pdf(html_doc)
-        except Exception as e:     # Playwright/Chromium (or Edge, packaged) missing
-            hint = "" if dist.DIST else ". Run: python -m playwright install chromium"
-            return jsonify(error=f"PDF engine unavailable: {e}{hint}"), 500
+        except Exception as e:     # no working PDF engine
+            return jsonify(error=f"PDF engine unavailable: {e}"), 500
         name = (d.get("title") or "motor-pool").strip().replace(" ", "-").lower()
         return Response(data, mimetype="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="{name}.pdf"'})
@@ -457,8 +456,20 @@ _PDF_LOCK = threading.Lock()
 
 
 def html_to_pdf(html_doc: str) -> bytes:
+    """Playwright in development, Edge in the tester build. Development also
+    falls back to Edge, so Make PDF works from a Python without Playwright."""
     if dist.DIST:
         return dist.html_to_pdf_edge(html_doc)
+    try:
+        return playwright_pdf(html_doc)
+    except Exception as first:
+        try:
+            return dist.html_to_pdf_edge(html_doc)
+        except Exception as second:
+            raise RuntimeError(f"Playwright failed ({first}). {second}") from second
+
+
+def playwright_pdf(html_doc: str) -> bytes:
     from playwright.sync_api import sync_playwright
     with _PDF_LOCK, sync_playwright() as p:
         b = p.chromium.launch()

@@ -36,12 +36,16 @@ before starting; both places push to `origin main`.
 ## Running things (Windows, Anaconda Prompt, from this folder)
 
 ```
+conda activate bsp                        # Will's environment for this project
 pip install -r requirements.txt
 python -m playwright install chromium     # PDF engine, once
 python -m bsp.setup_data                  # MegaMek data + sprites + caches
 python -m bsp.app                         # Motor Pool on http://127.0.0.1:8640
 python -m pytest tests
 ```
+
+Make PDF uses Playwright in dev mode and falls back to the installed Microsoft
+Edge if Playwright is missing or fails (the tester build always uses Edge).
 
 `official.tsv` (the export of the official cards from Will's Sheet, which
 stays the master copy) sits in this folder and is committed to git, as is
