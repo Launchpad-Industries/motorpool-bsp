@@ -151,6 +151,8 @@ for Will to review:
   suits: 2 armored gloves also do; magnetic clamps always; assault never);
   Swarm also needs light/medium weight and not UMU.
 - IF: indirect-fire launchers (BA LRMs) give IF from their damage x squad hits.
+- No Crit-Seeker for BA for now (Will, 6 Nov): every squad already lands its
+  damage in small groups; revisit later.
 - TAG, NARC, ECM6, PRB specials from equipment names; BA improved sensors give PRB (6 Nov).
 - AP Gauss Elemental's printed 2/4/6: Will checked his card, it does say
   2/4/6; treated as a Catalyst oddity (rule keeps 3/6/9).
