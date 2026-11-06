@@ -121,6 +121,7 @@ versions of those suits stay calculated.
 | Attacker movement | No cost for it | The book never applies attacker movement to any Asset's attacks; "not moved" only matters when spotting, which the Spotter special covers |
 | Ignored weapons | Weapons with 2 shots or fewer (one-shot SRM packs etc.) | Elemental's SRM-2 (2 shots) doesn't set range or damage; Elemental III's one-shot Advanced SRM-2 neither |
 | Damage | Main weapon damage x average Cluster Hits for the trooper count (5 troopers 3.17, 4 troopers 2.64), rounded, in 2 groups | Elemental [MG]: 2 x 3.17 = 6 -> 6x2; IS squad of 4 with a 2-point weapon -> 5x2. Will chose this over a fixed Clan 6x2 / IS 5x2 template, 4 Nov, so heavier suits hit harder. Laser Elemental comes out 10x2 (card 6x2: the generic card is the MG suit). |
+| Damage groups (6 Nov) | Total = 2 x (damage per suit x squad hits), kept; printed in at least 2 groups of 2-6 points (or up to one suit's biggest single gun hit, max 10), the biggest groups that keep the total within 10% | Will: a squad lands its damage in 2s and 3s; groups of 5-6 are fine for distributed weapons, no more. Rottweiler (Close Combat) Sqd4 was 11x2, now 5x4. Elemental 6x2 and IS Standard 5x2 unchanged; Elemental III 10x2 -> 6x3, still costs 26. Replaces the 10s split for big squads. |
 | Check | Vehicle armor score (2.5 x armor + 1.5 x troopers) x 2.8 instead of the motive multiplier, then the vehicle Check cutoffs | IS Standard BA 4 x (9+1) -> 269 -> Check 8; Elemental 5 x (10+1) -> 371 -> Check 9; Elemental III 9. Any multiplier 2.66-2.97 fits all three; each suit soaks hits separately and overkill is lost. Will chose this, 4 Nov. |
 | Skill | Same rule as vehicles (`default_skill`): Inner Sphere 6, Clan 5, targeting computer -1 | Elemental 5, Elemental III 5, IS Standard BA 6: no new rule needed |
 | Threshold | 5 | All BA cards |
@@ -139,9 +140,7 @@ for Will to review:
   one-shot SRM-2 only), they're counted anyway rather than printing no attack.
 - Several weapons per suit: the vehicle main-weapon rules pick which count,
   their damage is added per suit, then x squad hits.
-- Big squads: groups of 12+ only from guns hitting 10+ on their own, as for
-  vehicles; otherwise the squad's damage is regrouped in 10s (Tortoise II
-  (SRM) Sqd6: 57x2 -> 10x11).
+- Big squads: superseded 6 Nov by groups of up to 6 (see Damage groups).
 - Movement: jump (j), VTOL (v, +1 TMM like VTOL vehicles) and UMU (n) use the
   jump MP line; walking suits use walk MP (f). Written to .bfs as INF_JUMP /
   INF_LEG / VTOL / INF_UMU, as MegaMek's own Elemental .bfs does.
@@ -152,7 +151,7 @@ for Will to review:
   suits: 2 armored gloves also do; magnetic clamps always; assault never);
   Swarm also needs light/medium weight and not UMU.
 - IF: indirect-fire launchers (BA LRMs) give IF from their damage x squad hits.
-- TAG, NARC, ECM6, PRB specials from equipment names.
+- TAG, NARC, ECM6, PRB specials from equipment names; BA improved sensors give PRB (6 Nov).
 - AP Gauss Elemental's printed 2/4/6: Will checked his card, it does say
   2/4/6; treated as a Catalyst oddity (rule keeps 3/6/9).
 

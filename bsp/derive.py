@@ -462,6 +462,8 @@ BA_STEALTH_ARMOR = {31, 32, 33, 34, 36}      # basic/standard/improved/prototype
 BA_RULES = {
     "check_mult": 2.8,      # replaces the vehicle motive multiplier (fits all 4 BA cards: 2.66-2.97)
     "groups": 2,            # every official BA card has 2 groups
+    "max_group": 6,         # squad damage lands in small hits: groups of up to 6 (Will, 6 Nov),
+                            # or the biggest single hit a suit's gun makes (up to 10)
     "min_shots": 3,         # weapons with fewer shots (one-shot packs, SRM-2 x2) are ignored
     "threshold": 5,
 }
@@ -500,6 +502,21 @@ def ba_kept_weapons(unit: Unit, table: dict, ba_rules=None) -> tuple[list, list]
             limited = shots[k] / launchers.get(k, 1) < ba_rules["min_shots"]
         (ignored if limited else kept).append((loc, it))
     return kept, ignored
+
+
+def ba_groups(total: float, cap: int, tol: float = 0.10) -> tuple[int, int]:
+    """Split a squad's damage into at least 2 groups of 2..cap points, keeping
+    the total within 10% if possible and using the biggest groups that do:
+    12.7 -> 6x2, 10.6 -> 5x2, 21.1 -> 5x4, 25.4 -> 6x4, 32 -> 6x5."""
+    best = None
+    t = int(round(total))
+    for sz in range(2, cap + 1):
+        for h in {max(2, t // sz), max(2, -(-t // sz))}:
+            err = abs(sz * h - total)
+            key = (max(0.0, err / total - tol), -sz, err)
+            if best is None or key < best[0]:
+                best = (key, sz, h)
+    return best[1], best[2]
 
 
 class _Suit:
@@ -562,14 +579,12 @@ def derive_battle_armor(unit: Unit, table: dict, rules=RULES, ba_rules=None) -> 
     sp.range, dmg, reach = derive_damage(ws, rules)
     if reach:
         per_suit = sum(w.damage for w in reach)
-        group = max(1, int(math.floor(per_suit * hits + 0.5)))
-        sp.damage = (group, ba_rules["groups"])
-        hc = rules.get("headcap")
-        if hc and group >= hc and not any(w.per_hit >= 10 and not w.cluster for w in reach):
-            # Same as vehicles: 12+ point groups only from guns that hit for
-            # 10+ on their own; otherwise the squad's damage goes in 10s.
-            total = group * ba_rules["groups"]
-            sp.damage = (10, max(1, int(math.floor(total / 10 + 0.5))))
+        # Total = 2 groups of one average squad volley (the official cards'
+        # pattern), regrouped in the small hits a squad really lands (Will).
+        total = per_suit * hits * ba_rules["groups"]
+        big = max([int(round(w.per_hit)) for w in reach if not w.cluster] + [0])
+        cap = min(10, max(ba_rules["max_group"], big))
+        sp.damage = ba_groups(total, cap)
         sp.notes.append(f"{per_suit:g} per suit x {hits:.2f} squad hits")
     else:
         sp.range = None
@@ -595,7 +610,7 @@ def derive_battle_armor(unit: Unit, table: dict, rules=RULES, ba_rules=None) -> 
         sp.specials.append("NARC")
     if "ecm" in names:
         sp.specials.append("ECM6")
-    if "probe" in names:
+    if "probe" in names or "improvedsensors" in names:
         sp.specials.append("PRB")
     sp.notes.append(f"armor BV {v:.0f}")
     return sp

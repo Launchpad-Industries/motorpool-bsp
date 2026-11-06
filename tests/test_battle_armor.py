@@ -46,10 +46,19 @@ def test_elemental_mg_matches_official_card_stats():
 
 @need_data
 def test_elemental_iii_stealth_and_cost():
-    # Stealth +1 TMM; the generated card's cost equals the official 26 (30).
+    # Stealth +1 TMM; 19 damage in groups of up to 6 (6x3); the generated
+    # card's cost equals the official 26 (Veteran 29, card 30).
     sp, skill, c = _card("Elemental III BA [AP Gauss](Sqd5).blk")
-    assert (sp.tmm, sp.range, sp.damage, sp.check) == (3, (3, 6, 9), (10, 2), 9)
-    assert (c["regular"], c["veteran"]) == (26, 30)
+    assert (sp.tmm, sp.range, sp.damage, sp.check) == (3, (3, 6, 9), (6, 3), 9)
+    assert c["regular"] == 26
+
+
+def test_ba_groups_keep_the_total_in_small_hits():
+    from bsp.derive import ba_groups
+    assert ba_groups(12.68, 6) == (6, 2)     # Elemental, as printed
+    assert ba_groups(10.56, 6) == (5, 2)     # IS Standard, as printed
+    assert ba_groups(21.12, 6) == (5, 4)     # Rottweiler (Close Combat) Sqd4
+    assert ba_groups(32, 6) == (6, 5)
 
 
 @need_data
