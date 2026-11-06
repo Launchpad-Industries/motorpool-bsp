@@ -135,7 +135,7 @@ Approvals made on a machine without the key are saved in
 The Battlefield Support options that aren't units (air strikes, bombing, air
 cover, artillery, smoke, minefields) have their own **Strikes** section in the
 search results and the force list, and their BSP counts toward the force total.
-They print after the units. The data is `bsp-options.tsv` in this folder, from
+On that tab the type filter offers Air, Artillery and Minefields. They print after the units. The data is `bsp-options.tsv` in this folder, from
 the Sheet's "BSP Options" tab; like `official.tsv`, it's committed here. Columns:
 `name, category, costR, costV, per, stats, effect, source, notes`. `stats`
 holds `Label=Value` pairs separated by semicolons (TN, Groups, Type, Radius,

@@ -19,14 +19,18 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
   </div>
   <div class="filters">
+    <select id="f-type" title="Type">
+      <option value="">Any type</option><option value="veh">Vehicles</option><option>Infantry</option>
+      <option>Battle Armor</option><option>Emplacement</option>
+    </select>
+    <select id="f-strike-type" title="Type" hidden>
+      <option value="">Any type</option><option>Air</option><option>Artillery</option>
+      <option value="Minefield">Minefields</option>
+    </select>
     <select id="f-mode" title="Movement">
       <option value="">Any move</option><option value="t">Tracked</option><option value="w">Wheeled</option>
       <option value="h">Hover</option><option value="v">VTOL</option><option value="g">WiGE</option>
       <option value="n">Naval / UMU</option><option value="j">Jump</option><option value="f">Foot</option>
-    </select>
-    <select id="f-type" title="Type">
-      <option value="">Any type</option><option value="veh">Vehicles</option><option>Infantry</option>
-      <option>Battle Armor</option><option>Emplacement</option>
     </select>
     <select id="f-source" title="Source">
       <option value="">Any source</option><option>Official</option><option>Approved</option><option>Calculated</option>

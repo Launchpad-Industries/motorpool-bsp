@@ -24,7 +24,8 @@ button{cursor:pointer}
 .brand .tagline{display:block;white-space:nowrap;font-size:11px;line-height:1.2}
 #q{flex:1;min-width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
-.filters.off{opacity:.4}
+.filters select:disabled{opacity:.4}
+#f-type,#f-strike-type{width:124px}  /* same width, so swapping them on the Strikes tab moves nothing */
 select,input,textarea{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 .tools{display:flex;gap:6px}
 button.primary,a.btn.primary{background:var(--acc);color:#111;border:0;border-radius:7px;padding:8px 14px;font-weight:600;text-decoration:none;display:inline-block}
