@@ -66,10 +66,11 @@ blank.
   a unit there) are listed as official-only entries (ids start with "g"): no
   calculated card, tweak or Differences until the model covers them.
 - Battle armor (model: `derive_battle_armor`): listed as ordinary units.
-  Standard squad sizes only (`bsp/squads.py`): Clan 5, Inner Sphere 4, and 6
-  for the versions in `data/six_suit_squads.yaml` (Will chose those MegaMek's
-  force generator lists: ComStar, Word of Blake, one general entry). The list
-  is by hand from then on: refreshed MegaMek data doesn't add to it. The four official BA cards are linked to one suit each in
+  Only squads in `data/battle_armor_squads.yaml` (`bsp/squads.py`), built by
+  `tools/battle_armor_list.py`: Will chose squads MegaMek's force generator gives
+  to a faction, at standard sizes (Clan 5, Inner Sphere 4 and 6; a design available
+  only at another size keeps it). Refreshed MegaMek data doesn't change the list
+  until that script is rerun. The four official BA cards are linked to one suit each in
   card_links.yaml, so those suits show the official card by default.
 - Strike cards (`bsp/strikes.py`, ids start with "s"): air, artillery and
   minefield options from `bsp-options.tsv` (from the Sheet's "BSP Options"

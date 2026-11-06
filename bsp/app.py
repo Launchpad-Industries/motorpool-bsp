@@ -38,7 +38,7 @@ from .cards import (BV_PER_POINT, Card, apply_values, card_from_generic, card_fr
                     generic_official, official_index)
 from .cost import cost as bsp_cost
 from .megamek import Unit, load_all
-from .squads import standard_squads
+from .squads import listed_squads
 
 APP_NAME = "Motor Pool"
 ROOT = Path(__file__).resolve().parent.parent
@@ -109,9 +109,9 @@ def diff(a: Card, b: Card) -> list[str]:
 
 
 class Catalog:
-    """Every vehicle and every battle armor design in its standard squad sizes,
-    with its official card (if any) and calculated card, plus generic official
-    cards (infantry, emplacements)."""
+    """Every vehicle and the listed battle armor squads, with their official
+    card (if any) and calculated card, plus generic official cards (infantry,
+    emplacements)."""
 
     def __init__(self, settings: dict):
         self.settings = settings
@@ -120,8 +120,8 @@ class Catalog:
         self.mm = mm
         every = load_all(mm, folders=("vehicles",))
         combat = [u for u in every if u.unit_type in ("Tank", "VTOL")]
-        battle_armor = standard_squads([u for u in load_all(mm, folders=("battlearmor",))
-                                        if u.unit_type == "BattleArmor"])
+        battle_armor = listed_squads([u for u in load_all(mm, folders=("battlearmor",))
+                                      if u.unit_type == "BattleArmor"])
         fluff = Path(settings["fluff_dir"]) if settings.get("fluff_dir") else None
         self.art = Art(mm.parent / "images" / "units", fluff)
         tsv = official_path(settings)

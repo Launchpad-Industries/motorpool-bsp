@@ -4,46 +4,56 @@
 """Battle armor in the app: which squad sizes are listed, and their cards."""
 
 import os
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 from bsp import app as app_module
-from bsp.squads import design_name, six_suit_squads, standard_squads
+from bsp.squads import design_name, squad_names
 
 ROOT = Path(__file__).resolve().parent.parent
 MM = Path(os.environ.get("MM_DATA", ROOT / "mm-data" / "data" / "mekfiles"))
 
+sys.path.insert(0, str(ROOT / "tools"))
+from battle_armor_list import choose  # noqa: E402
+
 
 def suit(name, troopers, clan=False):
-    return SimpleNamespace(full_name=name, troopers=troopers, clan=clan)
+    return SimpleNamespace(full_name=f"{name}(Sqd{troopers})", name=name, model=f"(Sqd{troopers})",
+                           troopers=troopers, clan=clan)
 
 
-def kept(*units):
-    return sorted(u.full_name for u in standard_squads(list(units), six_suit={"Kobold(Sqd6)"}))
+def kept(units, available_sizes):
+    """Names chosen when the force generator lists these sizes of each design."""
+    available = {(u.name, u.model) for u in units if u.troopers in available_sizes}
+    return choose(units, available)
 
 
 def test_design_name_drops_only_the_squad_tag():
-    assert design_name(suit("Elemental Battle Armor [MG](Sqd5)", 5)) == "Elemental Battle Armor [MG]"
-    assert design_name(suit("Achileus BA (WoB) (Sqn 6)", 6)) == "Achileus BA (WoB)"
+    assert design_name(SimpleNamespace(full_name="Elemental Battle Armor [MG](Sqd5)")) == "Elemental Battle Armor [MG]"
+    assert design_name(SimpleNamespace(full_name="Achileus BA (WoB) (Sqn 6)")) == "Achileus BA (WoB)"
 
 
-def test_clan_keeps_five_suits():
-    assert kept(*(suit(f"Elemental(Sqd{n})", n, clan=True) for n in (3, 4, 5, 6))) == ["Elemental(Sqd5)"]
+def test_clan_lists_five_suits():
+    units = [suit("Elemental", n, clan=True) for n in (3, 4, 5, 6)]
+    assert kept(units, {3, 4, 5, 6}) == ["Elemental(Sqd5)"]
 
 
-def test_inner_sphere_keeps_four():
-    assert kept(*(suit(f"Kage(Sqd{n})", n) for n in (4, 5, 6))) == ["Kage(Sqd4)"]
+def test_inner_sphere_lists_available_fours_and_sixes():
+    units = [suit("Kage", n) for n in (4, 5, 6)]
+    assert kept(units, {4, 5, 6}) == ["Kage(Sqd4)", "Kage(Sqd6)"]
+    assert kept(units, {6}) == ["Kage(Sqd6)"]
+    assert kept(units, {4}) == ["Kage(Sqd4)"]
 
 
-def test_a_listed_design_also_keeps_six():
-    assert kept(*(suit(f"Kobold(Sqd{n})", n) for n in (4, 5, 6))) == ["Kobold(Sqd4)", "Kobold(Sqd6)"]
+def test_a_design_with_no_faction_is_not_listed():
+    assert kept([suit("PowerLoader", 4)], set()) == []
 
 
-def test_a_design_without_a_standard_size_keeps_what_it_has():
-    assert kept(suit("Interface Armor(Sqd1)", 1, clan=True)) == ["Interface Armor(Sqd1)"]
-    assert kept(suit("Gnome 'Dwarf'(Sqd4)", 4, clan=True)) == ["Gnome 'Dwarf'(Sqd4)"]
+def test_a_design_available_only_at_another_size_keeps_that_size():
+    assert kept([suit("Ravager", n) for n in (4, 5, 6)], {5}) == ["Ravager(Sqd5)"]
 
 
 @pytest.fixture(scope="module")
@@ -60,15 +70,17 @@ def rows(client):
 
 def test_app_lists_standard_sizes_with_unique_ids(rows):
     ba = [r for r in rows.values() if r["type"] == "Battle Armor" and not r.get("generic")]
-    assert len({r["id"] for r in ba}) == len(ba) > 400
+    assert len({r["id"] for r in ba}) == len(ba) > 300
     assert "Elemental Battle Armor [MG](Sqd5)" in rows
     assert "Elemental Battle Armor [MG](Sqd4)" not in rows
     assert "IS Standard Battle Armor [MG](Sqd4)" in rows and "IS Standard Battle Armor [MG](Sqd6)" in rows
     assert "IS Standard Battle Armor [MG](Sqd5)" not in rows
     assert "Cavalier Battle Armor [MG](Sqd4)" in rows and "Cavalier Battle Armor [MG](Sqd6)" not in rows
-    # Every name on the six-suit list must still match a MegaMek unit.
-    assert six_suit_squads() <= set(rows)
-    assert sum(r["tech"] == "IS" and "Sqd6" in r["name"] for r in ba) == len(six_suit_squads())
+    assert "Achileus Light Battle Armor (WoB)(Sqd6)" in rows
+    assert "Achileus Light Battle Armor (WoB)(Sqd4)" not in rows
+    assert "Ravager Assault Battle Armor (LRM)(Sqd5)" in rows
+    # Exactly the list: a name that stops matching a MegaMek unit fails here.
+    assert {r["name"] for r in ba} == squad_names()
     assert all(r["tons"] is None for r in ba)
     assert sum(r["source"] == "Official" for r in ba) == 4
     assert all(r["source"] == "Calculated" for r in ba if not r["has_official"])

@@ -54,11 +54,12 @@ python -m bsp.app                             # start Motor Pool; opens in your 
   unit in `data/card_links.yaml` appears automatically, with your image for it
   if you have one, else MegaMek's generic sprite.
 - **Battle armor**: MegaMek's battle armor designs, each as its own card you
-  can tweak and approve like a vehicle. Clan designs are listed with 5 suits
-  and Inner Sphere designs with 4. The 74 six-suit versions MegaMek's force
-  generator gives to a faction (ComStar and Word of Blake, plus one general
-  entry) are listed too, named in `data/six_suit_squads.yaml`, which you can
-  edit by hand. A design with no standard size keeps its own. The four official cards
+  can tweak and approve like a vehicle. Only squads MegaMek's force generator
+  gives to a faction are listed, at standard sizes: Clan 5, Inner Sphere 4 and 6
+  (nearly all the 6s are ComStar and Word of Blake). A design available only at
+  another size keeps that size. The list is `data/battle_armor_squads.yaml`;
+  `python tools/battle_armor_list.py` rebuilds it, which overwrites hand edits.
+  The four official cards
   are linked to the suits they match, with the same Official / Calculated switch
   and Differences view as a vehicle: Elemental [MG], Elemental [AP Gauss] and
   Elemental III [AP Gauss] with 5 suits, and IS Standard [MG] with 4.
