@@ -113,7 +113,7 @@ blank.
   date. `tests/test_about.py` checks the worked example against the cost formula.
   No GitHub link while the repository is private.
 - Working title **Motor Pool** (may change once infantry/battle armor arrive).
-  Tagline: "Unofficial fan-made BattleTech force builder for assets".
+  Tagline: "Unofficial fan-made BattleTech force builder for battlefield support".
 
 - **Tester build** (`python tools/build.py` → `dist/MotorPool-vX.Y.Z.zip`):
   PyInstaller one-folder exe, waitress on a free 127.0.0.1 port, console
