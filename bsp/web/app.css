@@ -34,7 +34,11 @@ main{display:grid;grid-template-columns:320px 1fr auto;height:calc(100% - 58px);
 .force{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:12px;gap:10px;min-height:0;overflow:auto}
 .force-title{font-family:"Oswald",sans-serif;font-size:16px;font-weight:600;background:transparent;border:1px solid transparent}
 .force-title:hover,.force-title:focus{border-color:var(--line)}
-.force-list{display:flex;flex-direction:column;gap:6px}
+/* Only the entries scroll; the totals and buttons below stay put. The panel
+   itself scrolls only if the window is too short to fit them all. */
+.force-list{display:flex;flex-direction:column;gap:6px;flex:0 1 auto;min-height:140px;overflow-y:auto;padding-right:2px}
+.force-list:empty{display:none}
+.fitem{flex:none}
 .force-empty{color:var(--mut);font-size:13px;padding:8px 2px}
 .fsec{display:flex;justify-content:space-between;font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);padding:6px 2px 0;border-top:1px solid var(--line);margin-top:4px}
 .fitem{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 8px;display:grid;grid-template-columns:1fr auto;gap:4px 8px}
