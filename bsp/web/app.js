@@ -85,7 +85,9 @@ function renderTable() {
   $("#n-assets").textContent = rs.length; $("#n-strikes").textContent = ss.length;
   [...$("#r-tabs").children].forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
   $("#tbl").hidden = strikes; $("#tbl-strikes").hidden = !strikes;
-  $(".filters").hidden = strikes;           // movement, type, source, sort: units only
+  // Movement, type, source, sort: units only. Greyed out, not hidden, so the header doesn't shift.
+  $(".filters").classList.toggle("off", strikes);
+  document.querySelectorAll(".filters select").forEach(s => { s.disabled = strikes; });
   if (strikes) return renderStrikes(ss);
   const capped = rs.length > shown.length
     ? `<tr class="capped"><td colspan="11">Showing the first ${shown.length} of ${rs.length}. Search or filter to narrow the list.</td></tr>` : "";

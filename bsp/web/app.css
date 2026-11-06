@@ -24,6 +24,7 @@ button{cursor:pointer}
 .brand .tagline{display:block;white-space:nowrap;font-size:11px;line-height:1.2}
 #q{flex:1;min-width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters.off{opacity:.4}
 select,input,textarea{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 .tools{display:flex;gap:6px}
 button.primary,a.btn.primary{background:var(--acc);color:#111;border:0;border-radius:7px;padding:8px 14px;font-weight:600;text-decoration:none;display:inline-block}
@@ -79,7 +80,7 @@ tr.grp,tr.grp:hover{background:var(--panel2);cursor:default}
 tr.grp td{font-family:"Oswald",sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
 td.fx{white-space:normal;color:var(--mut);font-size:12px;min-width:260px}
 td.n small{color:var(--mut)}
-.table-wrap{overflow:auto;flex:1;min-height:0}
+.table-wrap{overflow:auto;flex:1;min-height:0;scrollbar-gutter:stable}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
 th{position:sticky;top:0;background:var(--panel);font-weight:600;font-size:12px;color:var(--mut);z-index:1}
