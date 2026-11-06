@@ -14,10 +14,10 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <body>
 <header class="top">
   <div class="brand">MOTOR<span>POOL</span><small id="ver"></small><small class="tagline">Unofficial fan-made BattleTech force builder for assets</small></div>
+  <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
   <div class="rtabs seg small" id="r-tabs">
     <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
   </div>
-  <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
   <div class="filters">
     <select id="f-mode" title="Movement">
       <option value="">Any move</option><option value="t">Tracked</option><option value="w">Wheeled</option>
@@ -30,9 +30,6 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     </select>
     <select id="f-source" title="Source">
       <option value="">Any source</option><option>Official</option><option>Approved</option><option>Calculated</option>
-    </select>
-    <select id="f-tech" title="Tech base">
-      <option value="">IS + Clan</option><option>IS</option><option>Clan</option>
     </select>
     <select id="f-sort" title="Sort">
       <option value="name">Sort: name</option><option value="cost">Sort: cost</option>

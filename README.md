@@ -47,7 +47,7 @@ python -m bsp.app                             # start Motor Pool; opens in your 
 (http://127.0.0.1:8640) and opens it in your browser.
 
 - **Search** every vehicle and VTOL in MegaMek's data (filters for movement,
-  source and tech base). Units with an official card show it; the rest show
+  type and source). Units with an official card show it; the rest show
   the approved or calculated card. "≠" marks official cards where the
   calculation differs; "drift" marks approvals the rules have since moved away from.
 - **Infantry and emplacements**: the generic official cards (e.g. "Foot Conv.

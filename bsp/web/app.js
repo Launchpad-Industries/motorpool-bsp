@@ -54,12 +54,11 @@ function filteredStrikes() {
 }
 function filtered() {
   const q = searchWords();
-  const mode = $("#f-mode").value, typ = $("#f-type").value, src = $("#f-source").value, tech = $("#f-tech").value, sort = $("#f-sort").value;
+  const mode = $("#f-mode").value, typ = $("#f-type").value, src = $("#f-source").value, sort = $("#f-sort").value;
   let rs = ROWS.filter(r => {
     if (mode && r.mode !== mode) return false;
     if (typ && (typ === "veh" ? ["Infantry", "Battle Armor", "Emplacement"].includes(r.type) : r.type !== typ)) return false;
     if (src && r.source !== src) return false;
-    if (tech && r.tech !== tech) return false;
     if (!q.length) return true;
     const hay = (r.name + " " + r.chassis + " " + r.specials.join(" ") + " " + r.type + " " + r.tech).toLowerCase();
     return q.every(w => hay.includes(w));
@@ -86,7 +85,7 @@ function renderTable() {
   $("#n-assets").textContent = rs.length; $("#n-strikes").textContent = ss.length;
   [...$("#r-tabs").children].forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
   $("#tbl").hidden = strikes; $("#tbl-strikes").hidden = !strikes;
-  $(".filters").hidden = strikes;           // movement, source, tech, sort: units only
+  $(".filters").hidden = strikes;           // movement, type, source, sort: units only
   if (strikes) return renderStrikes(ss);
   const capped = rs.length > shown.length
     ? `<tr class="capped"><td colspan="11">Showing the first ${shown.length} of ${rs.length}. Search or filter to narrow the list.</td></tr>` : "";
@@ -97,7 +96,7 @@ function renderTable() {
     <td>${r.mp}${r.mode === "na" ? "" : r.mode}</td><td class="n">+${r.tmm}</td><td>${esc(rangeTxt(r.range))}</td><td>${esc(r.damage)}</td><td class="n">${r.check}</td>
     <td class="sp">${esc(r.specials.join(", "))}</td></tr>`).join("") + capped;
 }
-["#q", "#f-mode", "#f-type", "#f-source", "#f-tech", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
+["#q", "#f-mode", "#f-type", "#f-source", "#f-sort"].forEach(s => $(s).addEventListener("input", renderTable));
 $("#r-tabs").addEventListener("click", e => {
   const b = e.target.closest("[data-tab]"); if (!b) return;
   tab = b.dataset.tab; store.set("tab", tab); renderTable();

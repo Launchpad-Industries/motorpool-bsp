@@ -15,7 +15,9 @@ body{margin:0;background:var(--bg);color:var(--fg);font-size:14px;display:flex;f
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 .top{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
-.brand{font-family:"Oswald","Arial Narrow",sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;line-height:24px}
+/* 302px + the header's 10px padding and 8px gap = 320px, so the search box lines
+   up with the asset list beside the 320px force panel. */
+.brand{font-family:"Oswald","Arial Narrow",sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;line-height:24px;flex:none;width:302px}
 .brand span{color:var(--acc);margin-left:4px}
 .brand small{font-family:"Barlow",sans-serif;font-weight:400;font-size:10px;letter-spacing:0;color:var(--mut)}
 .brand #ver{margin-left:8px}
@@ -30,7 +32,7 @@ button.ghost{background:transparent;border:1px solid var(--line);border-radius:7
 button.ghost:hover{border-color:var(--mut)}
 button:disabled{opacity:.5;cursor:not-allowed}
 main{display:grid;grid-template-columns:320px 1fr auto;flex:1;min-height:0}
-@media (max-width:900px){ main{grid-template-columns:1fr;flex:none} .detail{position:fixed;inset:0;z-index:5} }
+@media (max-width:900px){ .brand{width:auto} main{grid-template-columns:1fr;flex:none} .detail{position:fixed;inset:0;z-index:5} }
 
 /* force list */
 .force{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:12px;gap:10px;min-height:0;overflow:auto}
