@@ -100,8 +100,6 @@ blank.
 - Approvals are **signed** (Ed25519, `bsp/signing.py`): Will's private key
   stays in `~/.motorpool`; trusted public keys in `data/trusted_keys.yaml`.
   Others' approvals are saved locally under their own name, unverified.
-  Will still needs to run `python -m bsp.signing init --name Launchpad` and
-  `sign-existing`, then commit `data/trusted_keys.yaml` and `data/approvals.yaml`.
 - Tweak → live re-cost → optional cost override → approve, recording changes.
 - "Send tweaks for approval": mailto to the Settings address
   (williamtbecker@gmail.com for now; Will wants a dedicated address before

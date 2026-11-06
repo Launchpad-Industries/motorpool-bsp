@@ -1,11 +1,13 @@
-# Calculated specs approved by a named reviewer, with the values
-# approved. Written by `python -m bsp.approvals`; the generator flags
-# drift when a rule change disagrees with these values.
+# Calculated specs approved by a named reviewer. `values` are the
+# generator's values when approved (drift is flagged when the rules
+# change); `card` is the card as approved, including any tweaks.
+# Entries signed with a trusted key (data/trusted_keys.yaml) are verified.
 approvals:
   Balac Strike VTOL:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: l48Dk0hvjbafMvCVNlVOmmwVJGFDgYpDsTTdWAyJrBKQhGhAsWq0nVMOKEtnrHVBz4nHctJT4LTiCfkSLqoDCw==
     values:
       check: 6
       cost: 40 (46)
@@ -20,6 +22,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: 6JKlaOb0Ax+RKFx8CbBvP73vNeYzu86eSb7Lv57GnpCXj+6bOzvI51NPclpbH5B6VlGmCsb3EQNBT2vLuyr1CQ==
     values:
       check: 11
       cost: 40 (46)
@@ -34,6 +37,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: s0rIMqVoC9oKzIqbGizE7muM3zCpJAxWjB9CvJ71gQ3cjC2uRML7qoOZInGN4o7J3SWzb2mI/Sz8LIEfB+B3Cg==
     values:
       check: 5
       cost: 13 (15)
@@ -48,6 +52,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: 1uLnIB/hNXLMqgfSfNXLY2LYWH+28azAFtemKmspmqtQ55ghwEN3Fm7gSqesn2fkW65CMEqWnU9sXz86jOR6Dw==
     values:
       check: 8
       cost: 22 (25)
@@ -62,6 +67,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: VpmFTMIAiXgkztxaQi2SDp82dGkrbUXugB8I45TkzniUyTyt0vufpbncQ2XGEB0095DxNi1FVaJrl7W01ZICCg==
     values:
       check: 7
       cost: 23 (26)
@@ -76,6 +82,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: YLIXQcRyX2ZVA65H8SIStZwEJ0lHYjYcE+6/Da3coern0+sl1u2Q5DXkGTRNXzowyBgggcEC/g18GbP3LW8JAg==
     values:
       check: 5
       cost: 19 (22)
@@ -90,6 +97,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: zvK91YVPp7N+CQt0pstQOtU8oLDtUR8Hn6sIfyq1DbHXbbsnAE3/xUe5nwsQ16XycVHtwibuPTwVE4U+xF3fCw==
     values:
       check: 10
       cost: 41 (47)
@@ -104,6 +112,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: Gzcyg464oHA8DQINvcfS6LHvaJBda9hmTkQ2dwse9qOCvYYUztDHpk9sYdAji8D3jGudsTXMkzUiYFiaEyeaCQ==
     values:
       check: 5
       cost: 21 (24)
@@ -118,6 +127,7 @@ approvals:
     by: Launchpad
     note: Reviewed with Claude against the hand-made Custom BSP card
     'on': '2026-10-31'
+    sig: 5fJUIFnwSJIgP/QVrdMSL1YraVjwOW2uZ+3/Byl3J1v9Mi3izJ7i9lpjhJYhMhELXe9X/0B2rZaonDlfakjEAQ==
     values:
       check: 8
       cost: 20 (22)

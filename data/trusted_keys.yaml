@@ -1,0 +1,4 @@
+# Public keys whose signatures make an approval verified.
+# The matching private keys never leave their owners' machines.
+keys:
+  Launchpad: RtyuC835LX17Wybegh/9wl39qgZmdrADiskMupxTY2c=
