@@ -225,7 +225,8 @@ All tunable constants are in `RULES` (`derive.py`) and `COST_RULES`
 **Unit data and sprites:** downloaded at run time from
 [MegaMek Data](https://github.com/MegaMek/mm-data), (C) The MegaMek Team,
 licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
-It is not stored in this repository. Asset specs and cards this tool
+It is not stored in this repository, except the unit sprites the public site
+shows (`site/img/units/`, credited there). Asset specs and cards this tool
 generates are derived from that data, so if you share them they fall under
 the same license: credit MegaMek, non-commercial use only, share alike.
 

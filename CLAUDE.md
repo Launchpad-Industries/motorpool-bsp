@@ -143,5 +143,7 @@ blank.
 ## Licensing
 
 Code GPL v3 or later (keep the header comment on new files). MegaMek data
-and sprites are CC BY-NC-SA 4.0, downloaded at run time, never committed.
+and sprites are CC BY-NC-SA 4.0, downloaded at run time, never committed,
+except the sprites the public site uses (`site/img/units/`, credited; Will
+agreed 2026-11-09).
 BattleTech is a Topps trademark; cards are unofficial fan content.

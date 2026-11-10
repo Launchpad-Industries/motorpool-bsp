@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motor Pool — BattleTech Battlefield Support cards</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <h1>Motor Pool</h1>
+    <span class="tag">Unofficial Battlefield Support cards</span>
+  </header>
+
+  <aside class="force">
+    <h2>Force</h2>
+    <ul id="force-list"></ul>
+    <div class="totals" id="force-totals"></div>
+    <div class="force-actions">
+      <button id="print-btn" class="primary">Print cards</button>
+      <button id="clear-btn">Clear</button>
+    </div>
+  </aside>
+
+  <main class="browse">
+    <div class="filters">
+      <input id="search" type="search" placeholder="Search units and strikes…" autocomplete="off">
+      <select id="type-filter"><option value="">All types</option></select>
+      <select id="prov-filter">
+        <option value="">All sources</option>
+        <option value="official">Official</option>
+        <option value="approved">Approved</option>
+        <option value="calculated">Calculated</option>
+      </select>
+    </div>
+    <div class="results-wrap">
+      <ul id="results"></ul>
+      <section id="detail" class="detail"><p class="muted">Pick a unit to see its card.</p></section>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="footer"></footer>
+</div>
+
+<div id="print-sheet" aria-hidden="true"></div>
+<script src="app.js"></script>
+</body>
+</html>
