@@ -183,30 +183,54 @@ class StrikeCard:
             return '<span class="grade">NOT AN ATTACK</span>'
         return f'<span class="grade vet">{"MINEFIELD" if self.category == "Minefield" else "STRIKE"}</span>'
 
-    def diagrams(self) -> str:
+    def diagram_parts(self) -> list[tuple[str, str]]:
+        """The side diagrams as (SVG, caption) pairs."""
         s, groups, out = self.stats, self.groups, []
         if s.get("Needs") == "TAG":
-            out += [single_svg(groups), '<div class="cap">TAG-painted target</div>']
+            out.append((single_svg(groups), "TAG-painted target"))
         elif "Radius" in s:
             radius, smoke = int(s["Radius"]), s.get("Type") == "Smoke"
-            out.append(radius_svg([] if smoke else groups.split("/"), radius, smoke))
-            out.append(f'<div class="cap">{"Smoke" if smoke else "Damage"} radius {radius}</div>')
+            out.append((radius_svg([] if smoke else groups.split("/"), radius, smoke),
+                        f'{"Smoke" if smoke else "Damage"} radius {radius}'))
         elif "line" in s.get("Area", ""):
-            out += [line_svg(groups), '<div class="cap">Up to 5 hexes in a line</div>']
+            out.append((line_svg(groups), "Up to 5 hexes in a line"))
         elif groups not in ("", "none"):
-            cap = "One hex" if self.category == "Minefield" else "Target hex"
-            out += [single_svg(groups), f'<div class="cap">{cap}</div>']
+            out.append((single_svg(groups), "One hex" if self.category == "Minefield" else "Target hex"))
         if "Scatter" in s:
-            out += [scatter_svg(), f'<div class="cap">Scatter ({_e(s["Scatter"])})</div>']
-        return "".join(out)
+            out.append((scatter_svg(), f'Scatter ({s["Scatter"]})'))
+        return out
+
+    def diagrams(self) -> str:
+        return "".join(f'{svg}<div class="cap">{_e(cap)}</div>' for svg, cap in self.diagram_parts())
+
+    @property
+    def rules_ref(self) -> str:
+        """The page reference printed after the rules text."""
+        page = self.book.replace("BT Core Rulebook", "Core Rulebook")
+        if page and self.stats.get("Type") == "Smoke":
+            page += f"; {SMOKE_RULES}"
+        return page
+
+    @property
+    def cancels(self) -> list[tuple[str, str]]:
+        """Air cover: (strike name, number needed to cancel it)."""
+        return [(k, self.stats[k]) for k in COVER_KEYS if k in self.stats]
+
+    @property
+    def write_on(self) -> str:
+        """Which write-on box the card has: "target" (hex and turn), "hex"
+        (with a groups-left track) or ""."""
+        if self.category == "Artillery" and not self.guided:
+            return "target"
+        return "hex" if self.category == "Minefield" else ""
 
     def write_box(self) -> str:
         """The box for the player to write on, under the rules."""
-        if self.category == "Artillery" and not self.guided:
+        if self.write_on == "target":
             return ('<div class="box write"><span class="lbl">Target hex<i></i></span>'
                     '<span class="lbl" style="flex:.6">Turn<i></i></span>'
                     '<span class="used inl"><span class="lbl">Used</span><span class="bx"></span></span></div>')
-        if self.category == "Minefield":
+        if self.write_on == "hex":
             track = "".join(f"<span>{n}</span>" for n in range(int(self.groups), 0, -1))
             return ('<div class="box write col"><span class="lbl">Hex<i></i></span>'
                     f'<div class="track" title="Groups left">{track}</div></div>')
@@ -223,13 +247,11 @@ class StrikeCard:
                           f'<div><span class="lbl">Target No.</span><span class="val">{_e(s["TN"])}+</span></div>'
                           f'<div><span class="lbl">Groups ×5</span><span class="val">{_e(groups)}</span></div>'
                           f'<div><span class="lbl">Type</span><span class="val">{_e(s.get("Type", "—"))}</span></div></div>')
-        cover = [(k, s[k]) for k in COVER_KEYS if k in s]
-        if cover:
-            cells = "".join(f'<span class="lbl">{_e(k)}</span><span class="val">{_e(v)}+</span>' for k, v in cover)
+        if self.cancels:
+            cells = "".join(f'<span class="lbl">{_e(k)}</span><span class="val">{_e(v)}+</span>'
+                            for k, v in self.cancels)
             blocks.append(f'<div class="box"><div class="lbl">Cancels on</div><div class="tn">{cells}</div></div>')
-        page = self.book.replace("BT Core Rulebook", "Core Rulebook")
-        if page and s.get("Type") == "Smoke":
-            page += f"; {SMOKE_RULES}"
+        page = self.rules_ref
         ref = f' <i class="ref">({_e(page)})</i>' if page else ""
         blocks.append(f'<div class="box rules"><b>RULES </b>{_e(self.effect)}{ref}</div>')
         write = self.write_box()

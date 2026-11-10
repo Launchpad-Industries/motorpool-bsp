@@ -14,8 +14,9 @@ Usage:
     python -m bsp.export_site --out site/data/units.json
 
 Units are the ones Motor Pool lists (vehicles, listed battle armor squads,
-support vehicles with an official card, and generic official cards). Strike
-cards aren't part of the site schema yet, so they're left out.
+support vehicles with an official card, and generic official cards), plus the
+strike cards from bsp-options.tsv in their own list, with their hex diagrams
+as SVG files in ``site/img/strikes/``.
 """
 
 from __future__ import annotations
@@ -172,6 +173,79 @@ def trimmed_png(path: Path) -> bytes:
     return buf.getvalue()
 
 
+STRIKE_IMG_DIR = "img/strikes"     # relative to site/
+SVG_FONT = 'font-family="Oswald, \'Arial Narrow\', sans-serif"'
+
+
+def standalone_svg(svg: str) -> str:
+    """A card diagram as its own file: an SVG namespace, and the printed width
+    as an attribute (the card's inline style doesn't apply inside an <img>)."""
+    m = re.search(r'style="width:([\d.]+)in;height:auto;display:block"', svg)
+    if m:
+        svg = svg.replace(m.group(0), f'xmlns="http://www.w3.org/2000/svg" width="{m.group(1)}in"', 1)
+    elif "xmlns=" not in svg:
+        svg = svg.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ', 1)
+    return svg.replace('font-family="Oswald"', SVG_FONT)
+
+
+def strike_entry(c, write_svg=None) -> dict:
+    """One schema Strike from a strikes.StrikeCard. write_svg(name, svg) -> src
+    saves a diagram file; without it, diagrams get their would-be path."""
+    s = c.stats
+    sid = "strike-" + slug(c.title)
+    out = {"id": sid, "name": c.title, "category": c.category}
+    if c.support:
+        out["support"] = c.support
+    out["chip"] = "NOT AN ATTACK" if c.not_attack else "MINEFIELD" if c.category == "Minefield" else "STRIKE"
+    out["cost"] = c.cost
+    if c.per:
+        out["per"] = c.per
+    if str(s.get("TN", "")).isdigit():
+        out["tn"] = int(s["TN"])
+    for key, field in (("Groups", "groups"), ("Type", "attackType"), ("Scatter", "scatter"), ("Needs", "needs")):
+        if isinstance(s.get(key), str) and s[key]:
+            out[field] = s[key]
+    if str(s.get("Radius", "")).isdigit():
+        out["radius"] = int(s["Radius"])
+    if c.cancels:
+        out["cancels"] = [{"strike": k, "tn": int(v)} for k, v in c.cancels]
+    out["effect"] = c.effect
+    if c.rules_ref:
+        out["rulesRef"] = c.rules_ref
+    if c.write_on:
+        out["writeOn"] = c.write_on
+    diagrams = []
+    for n, (svg, caption) in enumerate(c.diagram_parts(), 1):
+        name = f"{sid.removeprefix('strike-')}-{n}.svg"
+        src = write_svg(name, standalone_svg(svg)) if write_svg else f"{STRIKE_IMG_DIR}/{name}"
+        diagrams.append({"src": src, "caption": caption})
+    out["diagrams"] = diagrams
+    if c.notes:
+        out["notes"] = c.notes
+    out["source"] = "BattleTech Core Rulebook"
+    return out
+
+
+def export_strikes(cards, site: Path) -> list[dict]:
+    dest = site / STRIKE_IMG_DIR
+    dest.mkdir(parents=True, exist_ok=True)
+    written = set()
+
+    def write_svg(name: str, svg: str) -> str:
+        (dest / name).write_text(svg, encoding="utf-8")
+        written.add(name)
+        return f"{STRIKE_IMG_DIR}/{name}"
+
+    out = [strike_entry(c, write_svg) for c in cards]
+    for f in dest.iterdir():
+        if f.is_file() and f.name not in written:
+            f.unlink()
+    ids = [s["id"] for s in out]
+    if len(ids) != len(set(ids)):
+        raise SystemExit("Two strike cards have the same name; ids would clash.")
+    return out          # file order, as in Motor Pool: air, artillery, minefields
+
+
 def git_rev() -> str:
     try:
         return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True,
@@ -214,6 +288,7 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
                                "(game statistics only; no official art, logos or rules text)"]
                               if official else []),
         "units": assign_ids(entries),
+        "strikes": export_strikes(cat.strikes.values(), site),
     }
 
 
@@ -232,9 +307,12 @@ def main(argv=None):
     counts: dict[str, int] = {}
     for u in data["units"]:
         counts[u["provenance"]] = counts.get(u["provenance"], 0) + 1
-    print(f"Wrote {len(data['units'])} units to {a.out} "
-          f"({', '.join(f'{n} {k}' for k, n in sorted(counts.items()))}); "
-          f"art in {site / IMG_DIR}")
+    print(f"Wrote {len(data['units'])} units "
+          f"({', '.join(f'{n} {k}' for k, n in sorted(counts.items()))}) and "
+          f"{len(data['strikes'])} strike cards to {a.out}; art in {site / IMG_DIR}, "
+          f"diagrams in {site / STRIKE_IMG_DIR}")
+    if cat.strikes_skipped:
+        print(f"Skipped strike cards (numbers not readable): {', '.join(cat.strikes_skipped)}")
 
 
 if __name__ == "__main__":

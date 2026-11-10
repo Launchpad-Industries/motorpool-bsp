@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from bsp.cards import Card
-from bsp.export_site import assign_ids, spec_of, unit_entry
+from bsp.export_site import assign_ids, spec_of, standalone_svg, strike_entry, unit_entry
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = (ROOT / "docs" / "site-data-schema.md").read_text(encoding="utf-8")
@@ -67,16 +67,41 @@ def validate_unit(u: dict):
     assert isinstance(s["specials"], list) and all(isinstance(x, str) for x in s["specials"])
 
 
-def validate(data: dict):
+STRIKE = schema_table("Strike")
+
+
+def validate_strike(s: dict, site: Path | None = None):
+    required = {k for k, t in STRIKE.items() if "?" not in t}
+    assert required <= set(s), f"missing {required - set(s)}"
+    assert set(s) <= set(STRIKE), f"not in schema: {set(s) - set(STRIKE)}"
+    for k, v in s.items():
+        check_value(k, STRIKE[k], v)
+    assert re.fullmatch(r"strike(-[a-z0-9]+)+", s["id"])
+    assert s["category"] in ("Air", "Artillery", "Minefield")
+    assert s["chip"] in ("STRIKE", "MINEFIELD", "NOT AN ATTACK")
+    assert isinstance(s["cost"], int)
+    assert s.get("writeOn") in (None, "target", "hex")
+    for c in s.get("cancels", []):
+        assert set(c) == {"strike", "tn"} and isinstance(c["tn"], int)
+    for d in s["diagrams"]:
+        assert set(d) == {"src", "caption"} and d["src"].endswith(".svg")
+        if site:
+            svg = (site / d["src"]).read_text(encoding="utf-8")
+            assert 'xmlns="http://www.w3.org/2000/svg"' in svg and 'width="' in svg
+
+
+def validate(data: dict, site: Path | None = None):
     for k in ("schemaVersion", "generatedOn", "generator", "disclaimer", "credits", "units"):
         assert k in data, k
     assert data["schemaVersion"] == 1
-    ids = [u["id"] for u in data["units"]]
+    ids = [u["id"] for u in data["units"]] + [s["id"] for s in data.get("strikes", [])]
     assert len(ids) == len(set(ids)), "duplicate ids"
     names = [u["name"].lower() for u in data["units"]]
     assert names == sorted(names), "units not sorted by name"
     for u in data["units"]:
         validate_unit(u)
+    for s in data.get("strikes", []):
+        validate_strike(s, site)
 
 
 def card(**kw) -> Card:
@@ -117,9 +142,35 @@ def test_spec_without_veteran_hides_vet_skill():
     assert spec_of(card(vet_cost=None))["skill"] == {"regular": 6, "veteran": None}
 
 
+def test_strike_entries_match_schema():
+    from bsp.strikes import load
+    cards, skipped = load(ROOT / "bsp-options.tsv")
+    assert not skipped
+    strikes = [strike_entry(c) for c in cards.values()]
+    for s in strikes:
+        validate_strike(s)
+    by_id = {s["id"]: s for s in strikes}
+    assert len(by_id) == len(strikes)
+    lt = by_id["strike-long-tom"]
+    assert (lt["tn"], lt["groups"], lt["radius"], lt["scatter"], lt["writeOn"]) == (8, "5/3/1", 2, "1D6", "target")
+    assert [d["caption"] for d in lt["diagrams"]] == ["Damage radius 2", "Scatter (1D6)"]
+    mine = by_id["strike-light-density-minefield"]
+    assert (mine["chip"], mine["per"], mine["writeOn"]) == ("MINEFIELD", "per hex", "hex")
+    cover = by_id["strike-light-air-cover"]
+    assert cover["chip"] == "NOT AN ATTACK" and "tn" not in cover
+    assert {"strike": "Strafing", "tn": 11} in cover["cancels"]
+
+
+def test_standalone_svg():
+    from bsp.strikes import single_svg
+    svg = standalone_svg(single_svg("3"))
+    assert 'xmlns="http://www.w3.org/2000/svg" width="0.42in">' in svg.split("<path", 1)[0]
+    assert "style=" not in svg and 'font-family="Oswald"' not in svg
+
+
 SITE_DATA = ROOT / "site" / "data" / "units.json"
 
 
 @pytest.mark.skipif(not SITE_DATA.exists(), reason="no site export")
 def test_site_data_matches_schema():
-    validate(json.loads(SITE_DATA.read_text(encoding="utf-8")))
+    validate(json.loads(SITE_DATA.read_text(encoding="utf-8")), SITE_DATA.parent.parent)

@@ -26,9 +26,12 @@ falls back to calculated values with `hasOfficialCard: true`, in case that's eve
   "generator": "bsp-card-generator 0.x (git abc1234)",
   "disclaimer": "Unofficial fan-made content. BattleTech is a registered trademark of ...",
   "credits": ["Unit data: MegaMek mm-data (CC BY-NC-SA 4.0)", "..."],
-  "units": [ /* Unit */ ]
+  "units": [ /* Unit */ ],
+  "strikes": [ /* Strike */ ]
 }
 ```
+
+`strikes` may be missing from older files; treat that as an empty list.
 
 ## Unit
 
@@ -65,6 +68,36 @@ falls back to calculated values with `hasOfficialCard: true`, in case that's eve
 | `check` | number | Destroy Check |
 | `threshold` | number | |
 | `specials` | string[] | `["ECM", "TAG", "IF1"]` — keywords only, as on the card. |
+
+## Strike
+
+Strike cards (air strikes, bombing, air cover, artillery, smoke, minefields) from
+`bsp-options.tsv`. They have no Veteran grade and no provenance: they're always the
+Core Rulebook options. Kept in their own list (decided 2026-11-09) because they share
+none of a unit's stats.
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | string | `strike-` + name slug, e.g. `"strike-light-air-strike"`, so it never clashes with a unit id. Never change once published. |
+| `name` | string | As on the card; minefields end in "Minefield", e.g. `"Light Density Minefield"`. |
+| `category` | string | `Air`, `Artillery`, `Minefield`. |
+| `support` | string? | Card subtitle, e.g. `"Offensive Aerospace Support"`. |
+| `chip` | string | `STRIKE`, `MINEFIELD` or `NOT AN ATTACK`. |
+| `cost` | number | BSP. Counts toward the force total. |
+| `per` | string? | `"per hex"` when the cost is per hex (minefields). |
+| `tn` | number? | Target number (printed as `5+`). |
+| `groups` | string? | Damage groups of 5: `"3"`, or by distance from the target `"5/3/1"`; `"none"` for smoke. |
+| `attackType` | string? | `AE`, `DE`, `N/A`, `Smoke`. |
+| `scatter` | string? | e.g. `"1D6"`. |
+| `radius` | number? | Hexes around the target. |
+| `needs` | string? | e.g. `"TAG"`. |
+| `cancels` | `[{ "strike": string, "tn": number }]`? | Air cover: the roll needed to cancel each strike. |
+| `effect` | string | Rules summary, in our own words. |
+| `rulesRef` | string? | e.g. `"Core Rulebook p. 154"`. |
+| `writeOn` | string? | `target` (target hex, turn and Used boxes) or `hex` (hex box and a groups-left track); omitted = just a Used box. |
+| `diagrams` | `[{ "src": string, "caption": string }]` | SVG files relative to `site/`, e.g. `"img/strikes/long-tom-1.svg"`; each sets its own printed width. |
+| `notes` | string? | Detail panel only, never printed. |
+| `source` | string | `"BattleTech Core Rulebook"` (card footer). |
 
 ## Exporter (to build in Claude Code)
 

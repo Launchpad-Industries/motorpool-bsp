@@ -127,7 +127,9 @@ blank.
   `site/data/units.json` (schema: `docs/site-data-schema.md`) from the same
   catalog Motor Pool shows, official values by default, and copies the MegaMek
   sprites it uses into `site/img/units/` (never the owner's images folder).
-  Strike cards aren't in the site schema yet.
+  Strike cards go in their own `strikes` list (Will, 2026-11-09), with their
+  hex diagrams as SVG files in `site/img/strikes/`; the site prints them after
+  the units.
 
 ## App to-do / ideas
 
