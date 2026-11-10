@@ -123,6 +123,12 @@ blank.
   yet. Dev mode
   (`python -m bsp.app`) is unchanged.
 
+- **Public site export**: `python -m bsp.export_site [--no-official]` writes
+  `site/data/units.json` (schema: `docs/site-data-schema.md`) from the same
+  catalog Motor Pool shows, official values by default, and copies the MegaMek
+  sprites it uses into `site/img/units/` (never the owner's images folder).
+  Strike cards aren't in the site schema yet.
+
 ## App to-do / ideas
 
 - Bundle the fonts (Oswald, Barlow, Barlow Condensed — OFL) so PDFs look
