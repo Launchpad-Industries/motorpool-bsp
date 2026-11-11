@@ -6,11 +6,46 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("mp." + k); return v ? JSON.parse(v) : d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem("mp." + k, JSON.stringify(v)); } catch {} },
 };
+// Website mode: the public site (python -m bsp.export_site) runs this same
+// page with no server. It reads exported files instead of /api/..., shows
+// pre-drawn cards, and hides what needs Motor Pool on your own computer
+// (tweaks, approvals, settings, proposals).
+const STATIC = window.MOTORPOOL_STATIC || null;
 const api = async (url, body) => {
+  if (STATIC) return staticApi(url, body);
   const r = await fetch(url, body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
   if (!r.ok) { let m = r.statusText; try { m = (await r.json()).error || m; } catch {} throw new Error(m); }
   return r;
 };
+let staticData = null;
+async function staticApi(url, body) {
+  const ONLY_APP = "Not available on the website: use Motor Pool on your own computer.";
+  if (body !== undefined) throw new Error(ONLY_APP);
+  const json = x => new Response(JSON.stringify(x), {headers: {"Content-Type": "application/json"}});
+  staticData = staticData || fetch(STATIC.data + "motorpool.json", {cache: "no-cache"})
+    .then(r => { if (!r.ok) throw new Error(`unit data: HTTP ${r.status}`); return r.json(); });
+  const d = await staticData;
+  if (url === "/api/info") return json(d.info);
+  if (url === "/api/units") return json(d.units);
+  if (url === "/api/strikes") return json(d.strikes);
+  const m = url.match(/^\/api\/unit\/([\w-]+)$/);
+  if (m) {
+    const r = await fetch(`${STATIC.data}unit/${m[1]}.json`);
+    if (!r.ok) throw new Error("No details for this unit.");
+    return r;
+  }
+  throw new Error(ONLY_APP);
+}
+// The card page for an id: the server draws it; the website has it pre-drawn.
+// view: "official" | "calculated" | "generated"; grade: "reg" | "vet".
+function cardSrc(id, view, grade) {
+  if (!STATIC) return `/api/card/${id}?view=${view}&grade=${grade}`;
+  return staticPage(id, view, grade).src;
+}
+function staticPage(id, view, grade) {
+  const p = BYID[id].pages, v = p[view] || p.calculated || p.official;
+  return {src: STATIC.cards + ((grade === "vet" && v.vet) || v.reg), sum: v.sum, vet: grade === "vet" && !!v.vet};
+}
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 3500); }
 
 let INFO = {}, ROWS = [], STRIKES = [], BYID = {};
@@ -23,6 +58,12 @@ const rangeTxt = r => Array.isArray(r) ? r.join("/") : (r || "-");
 const srcBadge = r => `<span class="src ${r.source}${r.source === "Approved" && !r.verified ? " unv" : ""}" title="${r.source === "Approved" ? "Approved by " + esc(r.approver) + (r.verified ? " (verified)" : " (unverified)") : r.source}">${r.source === "Calculated" ? "Calc" : r.source === "Approved" ? "Appr" : "Off"}</span>`;
 
 async function init() {
+  if (STATIC) {
+    document.body.classList.add("static");
+    $("#btn-pdf").textContent = "Print / PDF";
+    $("#btn-pdf").title = "Opens the cards in a new tab and prints them (choose Save as PDF for a file)";
+    $("#settings-cancel").textContent = "Close";         // the theme applies at once
+  }
   INFO = await (await api("/api/info")).json();
   const ab = INFO.about || {};
   $("#ver").textContent = `v${ab.version}` + (ab.data_date ? ` · data ${ab.data_date}` : " · dev");
@@ -35,6 +76,12 @@ async function init() {
   force = force.filter(f => BYID[f.id]);
   renderTable(); renderForce(); renderProposals();
   if (!INFO.official) toast(INFO.official_status + " Everything shows as approved or calculated.");
+  if (STATIC) {
+    // Links like .../#scorpion-light-tank-lrm open that card.
+    const slug = decodeURIComponent(location.hash.slice(1));
+    const r = slug && [...ROWS, ...STRIKES].find(x => x.slug === slug);
+    if (r) openDetail(r.id);
+  }
 }
 
 async function loadRows() {
@@ -185,6 +232,7 @@ function confirmLight(msg) { return window.confirm(msg); }
 const forceBody = () => ({items: force, summary: $("#opt-summary").checked, title: $("#force-title").value});
 $("#btn-pdf").addEventListener("click", async () => {
   if (!force.length) return toast("Add some assets first.");
+  if (STATIC) return staticPrint();
   const b = $("#btn-pdf"); b.disabled = true; b.textContent = "Making PDF…";
   try {
     const r = await api("/api/pdf", forceBody());
@@ -200,6 +248,67 @@ $("#btn-print").addEventListener("click", async () => {
   const w = window.open("", "_blank"); w.document.write(html); w.document.close();
 });
 
+// Website mode printing: the same page as Make PDF (cards.document): an
+// optional summary page, then the pre-drawn cards 2 x 4 per Letter page,
+// units first, then strikes. Opens in a new tab with the print dialog.
+const cardParts = {};
+function cardPart(src) {
+  cardParts[src] = cardParts[src] || fetch(src).then(r => {
+    if (!r.ok) throw new Error(`card ${src}: HTTP ${r.status}`);
+    return r.text();
+  }).then(t => new DOMParser().parseFromString(t, "text/html").querySelector(".one").innerHTML);
+  return cardParts[src];
+}
+function summaryHTML(cards, title) {
+  // Mirrors cards.summary_html.
+  const bvPer = INFO.bv_per_point || 20, num = n => n.toLocaleString("en-US");
+  const tons = t => t ? String(+t) : "—";
+  const line = c => {
+    const s = c.sum, vet = c.vet && s.vet_cost != null;
+    const cost = vet ? s.vet_cost : s.cost;
+    return {s, cost, bv: cost * bvPer, grade: s.strike ? "—" : vet ? "Veteran" : "Regular",
+            skill: s.strike ? "—" : vet ? s.vet_skill : s.skill};
+  };
+  const ls = cards.map(line);
+  const rows = ls.map(l => `<tr><td>${esc(l.s.name)}</td><td>${esc(l.s.type)}</td><td>${l.grade}</td><td class=n>${l.skill}</td>`
+    + `<td class=n>${l.cost}</td><td class=n>${num(l.bv)}</td><td class=n>${tons(l.s.tons)}</td>`
+    + `<td>${esc(l.s.source + (l.s.approver ? ": " + l.s.approver : ""))}</td></tr>`).join("");
+  const sumTons = ls.reduce((t, l) => t + (l.s.tons || 0), 0);
+  const tot = `<tr class=total><td>${ls.length} Assets</td><td></td><td></td><td></td>`
+    + `<td class=n>${ls.reduce((t, l) => t + l.cost, 0)}</td><td class=n>${num(ls.reduce((t, l) => t + l.bv, 0))}</td>`
+    + `<td class=n>${ls.some(l => l.s.tons) ? tons(sumTons) : "—"}</td><td></td></tr>`;
+  return `<div class="page summary"><h1>${esc(title)}</h1>
+<table><thead><tr><th>Asset</th><th>Type</th><th>Grade</th><th>Skill</th><th>BSP Cost</th><th>BV Equivalent</th><th>Tonnage</th><th>Source</th></tr></thead>
+<tbody>${rows}${tot}</tbody></table>
+<div class="note">BV equivalent = BSP cost × ${bvPer} (Battle Value Integration). Unofficial fan-made cards; calculated specs derived from MegaMek Data (CC BY-NC-SA 4.0).</div></div>`;
+}
+async function staticPrint() {
+  const w = window.open("", "_blank");     // now, while the click still allows a new tab
+  if (!w) return toast("Allow pop-ups for this site to print.");
+  w.document.write("<p style='font-family:sans-serif'>Preparing cards…</p>");
+  try {
+    const items = [...force].sort((a, b) => !!BYID[a.id].strike - !!BYID[b.id].strike);
+    const cards = [];
+    for (const it of items) {
+      const p = staticPage(it.id, it.view === "calculated" ? "calculated" : "official", it.grade);
+      for (let n = 0; n < Math.max(1, it.qty); n++) cards.push(p);
+    }
+    const parts = await Promise.all(cards.map(c => cardPart(c.src)));
+    const title = $("#force-title").value || "Battlefield Support - Forces";
+    const pages = $("#opt-summary").checked ? [summaryHTML(cards, title)] : [];
+    for (let i = 0; i < parts.length; i += 8) {
+      pages.push(`<div class="page"><div class="sheet">${parts.slice(i, i + 8).map(p => `<div class="cell">${p}</div>`).join("")}</div></div>`);
+    }
+    const base = new URL(STATIC.cards, location.href).href;
+    w.document.open();
+    w.document.write(`<!doctype html><html lang=en><head><meta charset=utf-8><base href="${esc(base)}">`
+      + `<meta name=viewport content='width=device-width,initial-scale=1'><title>Motor Pool – ${esc(title)}</title>`
+      + `${STATIC.fonts}<link rel="stylesheet" href="card.css"></head><body>${pages.join("")}`
+      + `<script>addEventListener("load",function(){(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){print();});});<\/script></body></html>`);
+    w.document.close();
+  } catch (err) { w.close(); toast(err.message); }
+}
+
 // ---------------------------------------------------------------- detail
 async function openDetail(id, opts = {}) {
   const u = await (await api("/api/unit/" + id)).json();
@@ -209,6 +318,7 @@ async function openDetail(id, opts = {}) {
   let view = r.has_official ? "official" : (r.source === "Approved" ? "approved" : "generated");
   if (opts.view === "calculated") view = u.approval ? "approved" : "generated";
   cur = {id, u, r, view, grade: opts.grade || "reg"};
+  if (STATIC && r.slug) history.replaceState(null, "", "#" + encodeURIComponent(r.slug));
   $("#detail").hidden = false; $("#editor").hidden = true;
   $("#d-name").textContent = u.name;
   $("#d-views").hidden = $("#d-grade").hidden = !!u.strike;   // strikes: one version, no Veteran
@@ -232,7 +342,7 @@ function showView() {
   frame.hidden = view === "diff";
   if (view !== "diff") {
     const apiView = view === "official" ? "official" : view === "approved" ? "calculated" : "generated";
-    frame.src = `/api/card/${cur.id}?view=${apiView}&grade=${cur.grade}`;
+    frame.src = cardSrc(cur.id, apiView, cur.grade);
   }
   $("#d-diff").innerHTML = u.strike ? (u.notes ? `<p class="muted">${esc(u.notes)}</p>` : "") : view === "diff" ? diffTable(u.official, u.calculated) : (u.drift.length && view === "approved" ? `<p class="flag">The rules have changed since this was approved (${esc(u.drift.join(", "))}). The approved values still print; re-approve to update.</p>` : "");
   const a = u.approval;
@@ -251,7 +361,10 @@ function diffTable(off, calc) {
 }
 $("#d-views").addEventListener("click", e => { if (e.target.dataset.view) { cur.view = e.target.dataset.view; showView(); } });
 $("#d-grade").addEventListener("click", e => { if (e.target.dataset.g) { cur.grade = e.target.dataset.g; if ($("#editor").hidden) showView(); else livePreview(); } });
-$("#d-close").addEventListener("click", () => { $("#detail").hidden = true; cur = null; renderTable(); renderForce(); });
+$("#d-close").addEventListener("click", () => {
+  $("#detail").hidden = true; cur = null; renderTable(); renderForce();
+  if (STATIC) history.replaceState(null, "", location.pathname + location.search);
+});
 $("#d-add").addEventListener("click", () => addToForce(cur.id, cur.grade, cur.view === "generated" && cur.r.has_official ? "calculated" : "official"));
 $("#d-approve").addEventListener("click", () => approve(cur.view === "approved" ? cur.u.calculated : cur.u.generated, false, ""));
 $("#d-tweak").addEventListener("click", () => openEditor(cur.view === "approved" ? cur.u.calculated : cur.u.generated));
@@ -365,6 +478,7 @@ const fmtV = v => Array.isArray(v) ? (v.every(x => typeof x === "number") ? v.jo
 
 // ---------------------------------------------------------------- settings
 async function openSettings() {
+  if (STATIC) { $("#dlg-settings").showModal(); return; }     // the website: theme only
   const s = await (await api("/api/settings")).json(), f = $("#dlg-settings form");
   for (const [k, v] of Object.entries(s)) if (f.elements[k]) f.elements[k].value = v;
   for (const el of f.querySelectorAll(".dev-only")) el.hidden = !!(INFO.about && INFO.about.dist);
@@ -375,7 +489,7 @@ async function openSettings() {
 }
 $("#btn-settings").addEventListener("click", openSettings);
 $("#btn-about").addEventListener("click", async () => {
-  const r = await fetch("/web/about.html");
+  const r = await fetch(STATIC ? "about.html" : "/web/about.html");
   $("#about-body").innerHTML = r.ok ? await r.text() : "<p>The About page couldn't be loaded.</p>";
   $("#dlg-about").showModal();
   $("#about-body").scrollTop = 0;
@@ -385,7 +499,7 @@ $("#about-close").addEventListener("click", () => $("#dlg-about").close());
 $("#theme").value = document.documentElement.dataset.theme;
 $("#theme").addEventListener("change", e => { document.documentElement.dataset.theme = e.target.value; store.set("theme", e.target.value); });
 $("#dlg-settings").addEventListener("close", async () => {
-  if ($("#dlg-settings").returnValue !== "save") return;
+  if (STATIC || $("#dlg-settings").returnValue !== "save") return;
   const f = $("#dlg-settings form"), body = {};
   for (const k of ["name", "approval_email", "mm_data", "official_tsv", "fluff_dir"]) body[k] = f.elements[k].value.trim();
   try { await api("/api/settings", body); INFO = await (await api("/api/info")).json(); await refreshRows(); toast("Settings saved. " + INFO.official_status); }

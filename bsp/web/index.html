@@ -59,10 +59,10 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     <label class="check"><input type="checkbox" id="opt-summary" checked> Summary page</label>
     <div class="force-actions">
       <button id="btn-pdf" class="primary">Make PDF</button>
-      <button id="btn-print" class="ghost" title="Open the printable page in a new tab">Print view</button>
+      <button id="btn-print" class="ghost server-only" title="Open the printable page in a new tab">Print view</button>
       <button id="btn-clear" class="ghost">Clear</button>
     </div>
-    <div class="proposals" id="proposals" hidden>
+    <div class="proposals server-only" id="proposals" hidden>
       <div class="ph"><b>Tweaks to send</b> <span id="prop-n"></span></div>
       <div id="prop-list"></div>
       <button id="btn-send" class="primary">Send tweaks for approval</button>
@@ -96,11 +96,11 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     <div id="d-approval" class="approval"></div>
     <div class="dactions">
       <button id="d-add" class="primary">Add to force</button>
-      <button id="d-tweak" class="ghost">Tweak…</button>
-      <button id="d-approve" class="ghost">Approve as shown</button>
+      <button id="d-tweak" class="ghost server-only">Tweak…</button>
+      <button id="d-approve" class="ghost server-only">Approve as shown</button>
     </div>
 
-    <div class="editor" id="editor" hidden>
+    <div class="editor server-only" id="editor" hidden>
       <h3>Tweak card</h3>
       <div class="grid">
         <label>MP <input id="e-mp" type="number" min="0"></label>
@@ -134,15 +134,15 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <dialog id="dlg-settings">
   <form method="dialog">
     <h3>Settings</h3>
-    <label>Your name (shown on approvals) <input name="name"></label>
-    <label>Send tweaks to (email) <input name="approval_email" type="email"></label>
-    <label class="dev-only">MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
-    <label class="dev-only">Official cards export (TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
-    <label>Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
+    <label class="server-only">Your name (shown on approvals) <input name="name"></label>
+    <label class="server-only">Send tweaks to (email) <input name="approval_email" type="email"></label>
+    <label class="dev-only server-only">MegaMek data folder (…/data/mekfiles) <input name="mm_data"></label>
+    <label class="dev-only server-only">Official cards export (TSV; blank = official.tsv in the app folder) <input name="official_tsv"></label>
+    <label class="server-only">Your unit images folder (optional; e.g. drillson.jpg) <input name="fluff_dir"></label>
     <label>Theme (this browser) <select id="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="auto">Match Windows</option></select></label>
-    <div class="import-row"><button type="button" id="btn-import" class="ghost">Import proposals…</button><span class="muted">Review tweaks someone sent you.</span></div>
-    <p class="muted" id="owner-note"></p>
-    <div class="dactions"><button value="save" class="primary">Save</button><button value="cancel" class="ghost">Cancel</button></div>
+    <div class="import-row server-only"><button type="button" id="btn-import" class="ghost">Import proposals…</button><span class="muted">Review tweaks someone sent you.</span></div>
+    <p class="muted server-only" id="owner-note"></p>
+    <div class="dactions"><button value="save" class="primary server-only">Save</button><button value="cancel" class="ghost" id="settings-cancel">Cancel</button></div>
   </form>
 </dialog>
 

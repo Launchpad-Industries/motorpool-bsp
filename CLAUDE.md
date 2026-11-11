@@ -133,9 +133,16 @@ blank.
   `site/cards/` (one page per card and grade, styles in `cards/card.css`), so
   the site's cards match the app's exactly (Will, 2026-11-10). The site's own
   JS only shows and prints those pages; don't draw cards in JS. Will is still
-  considering making a JavaScript card renderer the master later. Next step
-  agreed in principle: the site to reuse Motor Pool's own front end
-  (`bsp/web/`) in a static mode.
+  considering making a JavaScript card renderer the master later.
+- **The website is Motor Pool's own page** (`bsp/web/`) in **website mode**
+  (Will, 2026-11-10): the exporter copies `bsp/web/` into `site/` with
+  `window.MOTORPOOL_STATIC` set; `app.js` then reads `site/data/motorpool.json`
+  and `data/unit/<id>.json` instead of `/api/...`, shows the pre-drawn cards,
+  prints via a new tab (summary page + cards), and hides elements marked
+  `server-only` (tweak, approve, settings except theme, proposals). Edit
+  `bsp/web/`, never the copies in `site/`; any new server-only control needs
+  the `server-only` class, and any new `/api/` read needs a static answer in
+  `staticApi()` plus exported data.
 
 ## App to-do / ideas
 

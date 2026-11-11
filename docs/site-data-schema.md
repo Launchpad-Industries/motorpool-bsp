@@ -112,6 +112,26 @@ in an `<iframe>` (3.5 : 2.5) and prints by taking each page's `.one` contents in
 Motor Pool's print layout (`.page` > `.sheet` > `.cell`, styled by `card.css`).
 The Spec values above stay in `units.json` for search, filters and totals.
 
+## The website page: Motor Pool in website mode
+
+Since 2026-11-10 the website *is* Motor Pool's own page (`bsp/web/`), so it looks and works
+like the app. The exporter copies `app.js`, `app.css` and `about.html` into `site/` and writes
+`site/index.html` from `bsp/web/index.html` with `window.MOTORPOOL_STATIC` set, which makes
+`app.js` read files instead of the local server and hide what needs the app on your own
+computer (tweak, approve, settings except the theme, proposals). Never edit those copies in
+`site/`: edit `bsp/web/` and re-export.
+
+Files that website mode reads (internal to the site; `units.json` stays the public format):
+
+| File | What it holds |
+|---|---|
+| `data/motorpool.json` | `{info, units, strikes}`: what Motor Pool's `/api/info`, `/api/units` and `/api/strikes` return, each row with `slug` (its id in `units.json`, used in `#slug` links) and `pages`. |
+| `data/unit/<id>.json` | What `/api/unit/<id>` returns (`Catalog.detail`), loaded when a card is opened. |
+| `cards/*.html` | Card pages. `pages` maps a Motor Pool view to them: `official` (prints by default), `calculated` (with any approval; `.calc.html` when it differs) and `generated` (without it; `.gen.html`), each `{reg, vet, sum}` where `sum` is what the print summary page shows. |
+
+"Print / PDF" builds Motor Pool's print page (summary page, then 2 × 4 cards) from those
+card pages in a new tab and opens the print dialog.
+
 ## Exporter (to build in Claude Code)
 
 Prompt to use in the local code folder:

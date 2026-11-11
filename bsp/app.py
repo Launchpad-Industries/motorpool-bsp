@@ -209,6 +209,36 @@ class Catalog:
             "drift": calc.drift,
         }
 
+    def detail(self, i: str) -> dict | None:
+        """Everything the detail panel shows for an id (also exported for the
+        public site, bsp/export_site.py)."""
+        if i in self.strikes:
+            # A strike card has one version: nothing to calculate, tweak or compare.
+            c = self.strikes[i]
+            return dict(id=i, name=c.title, strike=True, generic=True, tons=None, notes=c.notes,
+                        official={}, calculated=None, generated=None, approval=None,
+                        differs=[], drift=[], weapons=[])
+        if i in self.generic:
+            # Official-only card for a type of unit: nothing to calculate or tweak.
+            return dict(id=i, name=self.generic_row(i)["name"], tons=None, generic=True,
+                        official=card_values(self.generic_card(i, image=False)),
+                        calculated=None, generated=None, approval=None,
+                        differs=[], drift=[], weapons=[])
+        u = self.by_id.get(i)
+        if u is None:
+            return None
+        off = self.official_card(u)
+        calc = self.calculated(u)
+        gen = self.calculated(u, use_approval=False)
+        entry = self.approved.get(u.full_name)
+        return dict(
+            id=i, name=u.full_name, tons=u.tonnage or None,
+            official=card_values(off) if off else None,
+            calculated=card_values(calc), generated=card_values(gen),
+            approval={k: v for k, v in entry.items() if k != "sig"} if entry else None,
+            differs=diff(off, calc) if off else [], drift=calc.drift,
+            weapons=[n for _, n in u.weapons()])
+
     def strike_row(self, i: str) -> dict:
         c = self.strikes[i]
         return {
@@ -283,30 +313,10 @@ def create_app(settings: dict | None = None) -> Flask:
 
     @app.get("/api/unit/<i>")
     def unit(i):
-        if i in cat().strikes:
-            # A strike card has one version: nothing to calculate, tweak or compare.
-            c = cat().strikes[i]
-            return jsonify(id=i, name=c.title, strike=True, generic=True, tons=None, notes=c.notes,
-                           official={}, calculated=None, generated=None, approval=None,
-                           differs=[], drift=[], weapons=[])
-        if i in cat().generic:
-            # Official-only card for a type of unit: nothing to calculate or tweak.
-            return jsonify(id=i, name=cat().generic_row(i)["name"], tons=None, generic=True,
-                           official=card_values(cat().generic_card(i, image=False)),
-                           calculated=None, generated=None, approval=None,
-                           differs=[], drift=[], weapons=[])
-        u = unit_or_404(i)
-        off = cat().official_card(u)
-        calc = cat().calculated(u)
-        gen = cat().calculated(u, use_approval=False)
-        entry = cat().approved.get(u.full_name)
-        return jsonify(
-            id=i, name=u.full_name, tons=u.tonnage or None,
-            official=card_values(off) if off else None,
-            calculated=card_values(calc), generated=card_values(gen),
-            approval={k: v for k, v in entry.items() if k != "sig"} if entry else None,
-            differs=diff(off, calc) if off else [], drift=calc.drift,
-            weapons=[n for _, n in u.weapons()])
+        d = cat().detail(i)
+        if d is None:
+            abort(404)
+        return jsonify(d)
 
     @app.get("/api/card/<i>")
     def card(i):

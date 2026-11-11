@@ -199,7 +199,56 @@ def test_standalone_svg():
     assert "style=" not in svg and 'font-family="Oswald"' not in svg
 
 
+def test_views_share_pages_when_cards_match(tmp_path):
+    from bsp.export_site import CardPages
+    pages = CardPages(tmp_path)
+    calc, gen = card(source="Approved", approver="Launchpad"), card()
+    # No official card: the default card is the calculated one, so they share files.
+    pv = pages.views("x", {"official": calc, "calculated": calc, "generated": gen}, None)
+    assert pv["official"] is pv["calculated"]
+    assert (pv["official"]["reg"], pv["official"]["vet"]) == ("x.html", "x-vet.html")
+    assert (pv["generated"]["reg"], pv["generated"]["vet"]) == ("x.gen.html", "x.gen-vet.html")
+    assert pv["official"]["sum"]["source"] == "Approved" and pv["official"]["sum"]["approver"] == "Launchpad"
+    off = card(source="Official", vet_cost=None, vet_skill=None)
+    pv = pages.views("y", {"official": off, "calculated": gen}, None)
+    assert pv["official"]["reg"] == "y.html" and pv["official"]["vet"] is None
+    assert pv["calculated"]["reg"] == "y.calc.html" and "generated" not in pv
+
+
+def test_site_index_switches_to_website_mode():
+    from bsp.export_site import site_index
+    page = site_index("<link rel=stylesheet href=fonts>")
+    assert 'href="app.css"' in page and '<script src="app.js"></script>' in page
+    assert '"/web/' not in page             # no links to the local server's paths
+    cfg = json.loads(re.search(r"window\.MOTORPOOL_STATIC = (\{.*?\});", page).group(1))
+    assert cfg == {"data": "data/", "cards": "cards/", "fonts": "<link rel=stylesheet href=fonts>"}
+    # The controls that need Motor Pool on your own computer are marked.
+    for el in ('id="d-tweak"', 'id="d-approve"', 'id="editor"', 'id="proposals"', 'id="btn-print"'):
+        tag = page[page.rindex("<", 0, page.index(el)):page.index(">", page.index(el))]
+        assert "server-only" in tag, el
+
+
 SITE_DATA = ROOT / "site" / "data" / "units.json"
+MP_DATA = ROOT / "site" / "data" / "motorpool.json"
+
+
+@pytest.mark.skipif(not MP_DATA.exists(), reason="no site export")
+def test_site_motor_pool_data():
+    site = MP_DATA.parent.parent
+    d = json.loads(MP_DATA.read_text(encoding="utf-8"))
+    assert d["info"]["static"] is True and d["info"]["bv_per_point"] == 20
+    slugs = set()
+    for r in d["units"] + d["strikes"]:
+        assert r["slug"] not in slugs
+        slugs.add(r["slug"])
+        assert "official" in r["pages"]
+        for v in r["pages"].values():
+            for g in ("reg", "vet"):
+                if v[g]:
+                    assert (site / "cards" / v[g]).exists(), v[g]
+        assert (site / "data" / "unit" / f"{r['id']}.json").exists()
+    for name in ("index.html", "app.js", "app.css", "about.html"):
+        assert (site / name).exists()
 
 
 @pytest.mark.skipif(not SITE_DATA.exists(), reason="no site export")

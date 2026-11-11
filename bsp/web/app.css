@@ -151,4 +151,5 @@ dialog textarea{width:100%}
 .imp{border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:8px;font-size:13px}
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--panel);padding:8px 14px;border-radius:8px;font-size:13px;z-index:20}
 [hidden]{display:none !important}
+body.static .server-only{display:none !important}   /* website mode: needs Motor Pool on your computer */
 .detail > *{flex-shrink:0}

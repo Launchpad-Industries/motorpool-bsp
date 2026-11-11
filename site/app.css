@@ -1,0 +1,155 @@
+/* Motor Pool — BSP Card Generator. GPL v3 or later. */
+:root{
+  --bg:#16181b; --panel:#1f2226; --panel2:#262a2f; --line:#353a41; --fg:#e8e6e1; --mut:#9aa0a6;
+  --acc:#d9a441; --acc2:#f0c060; --ok:#6fbf73; --warn:#e07a5f; --official:#e8e6e1; --approved:#9aa0a6;
+  font-family: "Barlow", "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+}
+/* Theme (Settings): data-theme="dark" (default), "light", or "auto" to match Windows. */
+:root[data-theme="light"]{
+  --bg:#eceae5; --panel:#fff; --panel2:#f5f4f0; --line:#d6d3cc; --fg:#1d1d1b; --mut:#6b6a64; --acc:#a5520b; --acc2:#c46a16; color-scheme: light; }
+@media (prefers-color-scheme: light){ :root[data-theme="auto"]{
+  --bg:#eceae5; --panel:#fff; --panel2:#f5f4f0; --line:#d6d3cc; --fg:#1d1d1b; --mut:#6b6a64; --acc:#a5520b; --acc2:#c46a16; color-scheme: light; } }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-size:14px;display:flex;flex-direction:column}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.top{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+/* 302px + the header's 10px padding and 8px gap = 320px, so the search box lines
+   up with the asset list beside the 320px force panel. */
+.brand{font-family:"Oswald","Arial Narrow",sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;line-height:24px;flex:none;width:302px}
+.brand span{color:var(--acc);margin-left:4px}
+.brand small{font-family:"Barlow",sans-serif;font-weight:400;font-size:10px;letter-spacing:0;color:var(--mut)}
+.brand #ver{margin-left:8px}
+.brand .tagline{display:block;white-space:nowrap;font-size:10px;line-height:13.2px}
+#q{flex:1;min-width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters select:disabled{opacity:.4}
+#f-type,#f-strike-type{width:124px}  /* same width, so swapping them on the Strikes tab moves nothing */
+select,input,textarea{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.tools{display:flex;gap:6px}
+button.primary,a.btn.primary{background:var(--acc);color:#111;border:0;border-radius:7px;padding:8px 14px;font-weight:600;text-decoration:none;display:inline-block}
+button.primary:hover,a.btn.primary:hover{background:var(--acc2)}
+button.ghost{background:transparent;border:1px solid var(--line);border-radius:7px;padding:7px 12px}
+button.ghost:hover{border-color:var(--mut)}
+button:disabled{opacity:.5;cursor:not-allowed}
+main{display:grid;grid-template-columns:320px 1fr auto;flex:1;min-height:0}
+@media (max-width:900px){ .brand{width:auto} main{grid-template-columns:1fr;flex:none} .detail{position:fixed;inset:0;z-index:5} }
+
+/* force list */
+.force{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:12px;gap:10px;min-height:0;overflow:auto}
+.force-title{font-family:"Oswald",sans-serif;font-size:16px;font-weight:600;background:transparent;border:1px solid transparent}
+.force-title:hover,.force-title:focus{border-color:var(--line)}
+/* Only the entries scroll; the totals and buttons below stay put. The panel
+   itself scrolls only if the window is too short to fit them all. */
+.force-list{display:flex;flex-direction:column;gap:6px;flex:0 1 auto;min-height:140px;overflow-y:auto;padding-right:2px}
+.force-list:empty{display:none}
+.fitem{flex:none}
+.force-empty{color:var(--mut);font-size:13px;padding:8px 2px}
+.fsec{display:flex;justify-content:space-between;font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);padding:6px 2px 0;border-top:1px solid var(--line);margin-top:4px}
+.fitem{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 8px;display:grid;grid-template-columns:1fr auto;gap:4px 8px}
+.fitem{cursor:pointer}
+.fitem:hover{border-color:var(--mut)}
+.fitem.sel{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.fitem .nm{font-weight:600;cursor:pointer;line-height:1.2}
+.fitem .meta{grid-column:1/-1;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--mut)}
+.fitem .rm{background:none;border:0;color:var(--mut);font-size:16px;line-height:1}
+.fitem .cost{font-family:"Oswald",sans-serif;font-weight:600}
+.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.pill button{background:none;border:0;padding:2px 8px;font-size:12px;color:var(--mut)}
+.pill button.on{background:var(--fg);color:var(--panel)}
+.qty{display:inline-flex;align-items:center;gap:4px}
+.qty button{background:none;border:1px solid var(--line);border-radius:5px;width:22px;height:22px;padding:0;line-height:1}
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.totals div{background:var(--panel2);border-radius:7px;padding:6px 8px}
+.totals span{display:block;font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.totals b{font-family:"Oswald",sans-serif;font-size:18px;font-variant-numeric:tabular-nums}
+.check{display:flex;align-items:center;gap:6px;font-size:13px}
+.force-actions{display:flex;gap:6px;flex-wrap:wrap}
+.proposals{border:1px dashed var(--acc);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.proposals .ph{font-size:13px}
+.proposals .pi{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+
+/* results */
+.results{display:flex;flex-direction:column;min-width:0;min-height:0}
+.seg.rtabs{align-self:center;flex:none}
+.rtabs button{white-space:nowrap}
+tr.capped,tr.capped:hover{background:var(--panel2);cursor:default}
+tr.capped td{padding:12px 14px;text-align:center;color:var(--mut)}
+.rtabs span{opacity:.75;font-variant-numeric:tabular-nums}
+tr.grp,tr.grp:hover{background:var(--panel2);cursor:default}
+tr.grp td{font-family:"Oswald",sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+td.fx{white-space:normal;color:var(--mut);font-size:12px;min-width:260px}
+td.n small{color:var(--mut)}
+.table-wrap{overflow:auto;flex:1;min-height:0;scrollbar-gutter:stable}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--panel);font-weight:600;font-size:12px;color:var(--mut);z-index:1}
+td.n,th.n{text-align:right}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel2)}
+tbody tr.sel{background:color-mix(in srgb,var(--acc) 18%,transparent)}
+td.nm{white-space:normal;min-width:220px}
+td.nm small{color:var(--mut);margin-left:4px}
+td.sp{white-space:normal;color:var(--mut);font-size:12px;max-width:220px}
+.add{background:none;border:1px solid var(--line);border-radius:6px;width:26px;height:26px;padding:0;font-size:16px;line-height:1}
+.add:hover{border-color:var(--acc);color:var(--acc)}
+.src{font-size:11px;font-weight:600;letter-spacing:.04em;padding:1px 6px;border-radius:4px;border:1px solid var(--line)}
+.src.Official{background:var(--fg);color:var(--panel);border-color:var(--fg)}
+.src.Approved{background:var(--approved);color:var(--panel);border-color:var(--approved)}
+.src.Approved.unv{background:transparent;color:var(--approved);border-style:dotted}
+.src.Calculated{border-style:dashed}
+.flag{color:var(--warn);font-size:11px;margin-left:4px}
+
+/* detail */
+.detail{width:520px;background:var(--panel);border-left:1px solid var(--line);padding:14px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.dname{font-family:"Oswald",sans-serif;font-weight:600;font-size:18px}
+.dsub{color:var(--mut);font-size:12px}
+.x{background:none;border:0;font-size:22px;color:var(--mut)}
+.seg{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;align-self:flex-start}
+.seg button{background:none;border:0;padding:6px 12px;color:var(--mut)}
+.seg button.on{background:var(--fg);color:var(--panel)}
+.seg.small button{padding:4px 10px;font-size:12px}
+.cardframe{width:100%;max-width:520px;aspect-ratio:3.5/2.5;height:auto;border:0;background:transparent;overflow:hidden;display:block}
+.diff{font-size:13px}
+.diff table td,.diff table th{padding:3px 6px}
+.diff .chg{color:var(--warn);font-weight:600}
+.approval{font-size:12px;color:var(--mut)}
+.dactions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.editor{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.editor h3{margin:0;font-size:15px}
+.editor .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.editor label{display:flex;flex-direction:column;font-size:11px;color:var(--mut);gap:2px}
+.editor label input,.editor label select{width:100%}
+.editor .wide{grid-column:1/-1}
+.costrow{display:flex;gap:10px;align-items:end;flex-wrap:wrap;font-size:13px}
+.costrow label{display:flex;flex-direction:column;font-size:11px;color:var(--mut)}
+.costrow label.check{flex-direction:row;align-items:center;font-size:12px}
+.costrow input{width:80px}
+
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px;width:min(560px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut);margin-bottom:8px}
+dialog textarea{width:100%}
+.import-row{display:flex;align-items:center;gap:8px;margin:12px 0 8px}
+#dlg-about{width:min(720px,92vw);max-height:88vh;overflow:hidden}
+#dlg-about[open]{display:flex;flex-direction:column}
+#about-body{overflow-y:auto;min-height:0;flex:1;padding-right:8px;font-size:13px;line-height:1.45}
+#about-body h3{margin:0 0 8px}
+#about-body h4{margin:16px 0 6px;font-family:"Oswald",sans-serif;font-weight:500;font-size:15px;letter-spacing:.02em}
+#about-body p{margin:6px 0}
+#about-body ul{margin:6px 0;padding-left:18px}
+#about-body li{margin:3px 0}
+#about-body a{color:var(--acc)}
+#about-body table{width:100%;border-collapse:collapse}
+#about-body th,#about-body td{padding:5px 8px;border-top:1px solid var(--line);vertical-align:top;text-align:left}
+#about-body td{white-space:normal}
+#about-body th{width:90px;font-weight:600;white-space:nowrap;position:static}
+#about-body pre{margin:6px 0;padding:8px 10px;background:var(--panel2);border-radius:6px;font-size:12px;overflow-x:auto;white-space:pre}
+.muted{color:var(--mut);font-size:12px}
+.imp{border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:8px;font-size:13px}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--panel);padding:8px 14px;border-radius:8px;font-size:13px;z-index:20}
+[hidden]{display:none !important}
+body.static .server-only{display:none !important}   /* website mode: needs Motor Pool on your computer */
+.detail > *{flex-shrink:0}

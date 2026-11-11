@@ -25,7 +25,9 @@ import argparse
 import io
 import json
 import re
+import shutil
 import subprocess
+from datetime import date
 from datetime import datetime
 from pathlib import Path
 
@@ -226,7 +228,7 @@ def strike_entry(c, write_svg=None) -> dict:
     return out
 
 
-def export_strikes(cards, site: Path, pages: CardPages | None = None) -> list[dict]:
+def export_strikes(cards, site: Path, pages: CardPages | None = None, extra: dict | None = None) -> list[dict]:
     dest = site / STRIKE_IMG_DIR
     dest.mkdir(parents=True, exist_ok=True)
     written = set()
@@ -240,7 +242,10 @@ def export_strikes(cards, site: Path, pages: CardPages | None = None) -> list[di
     for c in cards:
         s = strike_entry(c, write_svg)
         if pages:
-            s["card"] = pages.write(f"{s['id']}.html", c)
+            g = pages.grades(s["id"], c, None)
+            s["card"] = f"{CARD_DIR}/{g['reg']}"
+            if extra is not None:
+                extra[c.id] = {"slug": s["id"], "pages": {"official": g}}
         out.append(s)
     for f in dest.iterdir():
         if f.is_file() and f.name not in written:
@@ -278,17 +283,37 @@ class CardPages:
         self.written.add(name)
         return f"{CARD_DIR}/{name}"
 
-    def unit(self, uid: str, card, art: dict | None) -> dict:
-        """Regular and (if it has one) Veteran card pages for a unit."""
+    def grades(self, stem: str, card, art: dict | None) -> dict:
+        """Regular and (if it has one) Veteran pages for one card, plus what
+        the print summary page needs. File names are relative to cards/."""
         if art:
             card.image, card.image_source = "../" + art["src"], "sprite"
         card.veteran = False
-        pages = {"regular": self.write(f"{uid}.html", card), "veteran": None}
+        out = {"reg": Path(self.write(f"{stem}.html", card)).name, "vet": None, "sum": summary_info(card)}
         if card.vet_cost is not None:
             card.veteran = True
-            pages["veteran"] = self.write(f"{uid}-vet.html", card)
+            out["vet"] = Path(self.write(f"{stem}-vet.html", card)).name
             card.veteran = False
-        return pages
+        return out
+
+    def views(self, slug_id: str, views: dict, art: dict | None) -> dict:
+        """Pages for each card Motor Pool can show for a unit: "official" (the
+        card that prints by default), "calculated" (with any approval) and
+        "generated" (without it). Views holding the same card share pages."""
+        out, done = {}, {}
+        for view, suffix in (("official", ""), ("calculated", ".calc"), ("generated", ".gen")):
+            card = views.get(view)
+            if card is None:
+                continue
+            if id(card) not in done:
+                done[id(card)] = self.grades(slug_id + suffix, card, art)
+            out[view] = done[id(card)]
+        return out
+
+    def unit(self, uid: str, card, art: dict | None) -> dict:
+        """Regular and (if it has one) Veteran card pages for a unit's default card."""
+        g = self.grades(uid, card, art)
+        return {"regular": f"{CARD_DIR}/{g['reg']}", "veteran": g["vet"] and f"{CARD_DIR}/{g['vet']}"}
 
     def finish(self):
         """Write the shared styles and remove cards no longer exported."""
@@ -297,6 +322,90 @@ class CardPages:
         for f in self.dest.glob("*.html"):
             if f.name not in self.written:
                 f.unlink()
+
+
+def summary_info(c) -> dict:
+    """What the website's print summary page shows for a card (the fields
+    cards.summary_html reads)."""
+    if not isinstance(c, Card):        # a strike card
+        return {"name": c.title, "type": c.unit_type, "tons": None, "source": c.source,
+                "approver": c.approver, "skill": None, "vet_skill": None, "cost": c.cost,
+                "vet_cost": None, "strike": True}
+    name = c.chassis + ("" if c.variant == "Standard" else f" {c.variant}")
+    return {"name": name, "type": c.unit_type, "tons": c.tons or None, "source": c.source,
+            "approver": c.approver, "skill": c.skill, "vet_skill": c.vet_skill, "cost": c.cost,
+            "vet_cost": c.vet_cost}
+
+
+# --------------------------------------------------------------------------
+# Motor Pool's own front end (bsp/web) in website mode
+
+WEB = Path(__file__).resolve().parent / "web"
+WEB_FILES = ("app.js", "app.css", "about.html")
+OLD_SITE_FILES = ("style.css",)          # the earlier hand-made site page
+
+
+def site_index(fonts: str) -> str:
+    """bsp/web/index.html for the website: relative paths, and the settings
+    that switch app.js into website mode."""
+    page = (WEB / "index.html").read_text(encoding="utf-8")
+    config = json.dumps({"data": "data/", "cards": f"{CARD_DIR}/", "fonts": fonts})
+    swaps = (('href="/web/app.css"', 'href="app.css"'),
+             ('<script src="/web/app.js"></script>',
+              f"<script>window.MOTORPOOL_STATIC = {config};</script>\n<script src=\"app.js\"></script>"))
+    for old, new in swaps:
+        assert old in page, f"bsp/web/index.html no longer has {old}"
+        page = page.replace(old, new, 1)
+    note = "<!-- Generated by python -m bsp.export_site from bsp/web/index.html: edit that file. -->\n"
+    return page.replace("<!doctype html>\n", "<!doctype html>\n" + note, 1)
+
+
+def write_front_end(site: Path):
+    from .cards import FONTS
+    for name in WEB_FILES:
+        shutil.copyfile(WEB / name, site / name)
+    (site / "index.html").write_text(site_index(FONTS), encoding="utf-8")
+    for name in OLD_SITE_FILES:
+        (site / name).unlink(missing_ok=True)
+
+
+def write_details(cat, ids: list[str], site: Path):
+    """data/unit/<id>.json: what the detail panel shows (Catalog.detail)."""
+    dest = site / "data" / "unit"
+    dest.mkdir(parents=True, exist_ok=True)
+    keep = set()
+    for i in ids:
+        (dest / f"{i}.json").write_text(json.dumps(cat.detail(i), ensure_ascii=False, separators=(",", ":")),
+                                        encoding="utf-8")
+        keep.add(f"{i}.json")
+    for f in dest.glob("*.json"):
+        if f.name not in keep:
+            f.unlink()
+
+
+def write_motor_pool_data(cat, extra: dict, official: bool, site: Path):
+    """data/motorpool.json: what Motor Pool's /api/info, /api/units and
+    /api/strikes return, plus each row's slug and card pages."""
+    from .app import APP_NAME
+    from .cards import BV_PER_POINT
+
+    def with_pages(row):
+        return {**row, **extra[row["id"]]}
+
+    units = [with_pages(r) for r in cat.rows]
+    strikes = [with_pages(cat.strike_row(i)) for i in cat.strikes]
+    n_official = len(cat.official) + len(cat.generic)
+    info = {"app": APP_NAME, "units": len(cat.units), "official": len(cat.official),
+            "official_status": (f"{n_official} official cards" if official else
+                                "Official card values aren't published on this site."),
+            "strikes": len(cat.strikes), "approved": len(cat.approved), "owner": None, "name": "",
+            "settings": {}, "bv_per_point": BV_PER_POINT, "static": True,
+            "about": {"version": __version__, "dist": True, "data_date": date.today().isoformat()}}
+    out = site / "data" / "motorpool.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"info": info, "units": units, "strikes": strikes},
+                              ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    write_details(cat, [r["id"] for r in units + strikes], site)
 
 
 def git_rev() -> str:
@@ -308,40 +417,59 @@ def git_rev() -> str:
 
 
 def build(cat, official: bool = True, site: Path = SITE) -> dict:
-    """The site data for a Motor Pool catalog (bsp.app.Catalog)."""
+    """Write the website for a Motor Pool catalog (bsp.app.Catalog) into
+    `site`: card pages, images, Motor Pool's front end and the data it reads
+    (data/motorpool.json, data/unit/*.json). Returns units.json's data.
+    official=False leaves the official values out everywhere (the catalog is
+    changed to match, so use a catalog made for the export)."""
+    from .app import uid
+    had_official = set(cat.official)
+    if not official:
+        cat.official, cat.generic = {}, {}
+        cat.reload_approvals()
     copy_art = SpriteCopier(cat.art.units_dir, site)
     pages = CardPages(site)
     entries, cards = [], {}
     for u in cat.units:
         off = cat.official_card(u)
-        card = off if (off and official) else cat.calculated(u)
+        calc = cat.calculated(u)
+        card = off or calc
         year = (u.raw.get("year") or [""])[0]
         entry = unit_entry(
             card, u.full_name, motive=MOTIVES.get(card.mode), tonnage=u.tonnage,
             tech=tech_base(u.raw), year=int(year) if str(year).isdigit() else None,
-            mul_id=u.mul_id, has_official=off is not None,
+            mul_id=u.mul_id, has_official=off is not None or u.path in had_official,
             approval=cat.approved.get(u.full_name) if card.source == "Approved" else None,
             art=copy_art(*cat.art.find(u)))
         entries.append((u.path, entry))
-        cards[u.path] = card
-    if official:
-        # Generic official cards (infantry, emplacements...) have no calculated
-        # version, so they're only exported with official values.
-        for i, row in cat.generic.items():
-            c = cat.generic_card(i, image=False)
-            name = cat.generic_row(i)["name"]
-            entries.append((i, unit_entry(c, name, motive=MOTIVES.get(c.mode),
-                                          tech=cat.generic_row(i)["tech"],
-                                          art=copy_art(*cat.art.find_generic(row["name"], row["type"])))))
-            cards[i] = c
+        views = {"official": card, "calculated": calc}
+        if calc.source == "Approved":
+            views["generated"] = cat.calculated(u, use_approval=False)
+        cards[u.path] = (uid(u), views)
+    # Generic official cards (infantry, emplacements...) have no calculated
+    # version, so they're only exported with official values.
+    for i, row in cat.generic.items():
+        c = cat.generic_card(i, image=False)
+        name = cat.generic_row(i)["name"]
+        entries.append((i, unit_entry(c, name, motive=MOTIVES.get(c.mode),
+                                      tech=cat.generic_row(i)["tech"],
+                                      art=copy_art(*cat.art.find_generic(row["name"], row["type"])))))
+        cards[i] = (i, {"official": c})
     for key, e in entries:
         e["_key"] = key
     units = assign_ids(entries)
+    extra = {}                  # Motor Pool id -> {"slug", "pages"}
     for u in units:
-        u["cards"] = pages.unit(u["id"], cards[u.pop("_key")], u.get("art"))
-    strikes = export_strikes(cat.strikes.values(), site, pages)
+        mp_id, views = cards[u.pop("_key")]
+        pv = pages.views(u["id"], views, u.get("art"))
+        u["cards"] = {"regular": f"{CARD_DIR}/{pv['official']['reg']}",
+                      "veteran": pv["official"]["vet"] and f"{CARD_DIR}/{pv['official']['vet']}"}
+        extra[mp_id] = {"slug": u["id"], "pages": pv}
+    strikes = export_strikes(cat.strikes.values(), site, pages, extra)
     pages.finish()
     copy_art.remove_unused()
+    write_motor_pool_data(cat, extra, official, site)
+    write_front_end(site)
     return {
         "schemaVersion": SCHEMA_VERSION,
         "generatedOn": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -372,8 +500,8 @@ def main(argv=None):
         counts[u["provenance"]] = counts.get(u["provenance"], 0) + 1
     print(f"Wrote {len(data['units'])} units "
           f"({', '.join(f'{n} {k}' for k, n in sorted(counts.items()))}) and "
-          f"{len(data['strikes'])} strike cards to {a.out}; art in {site / IMG_DIR}, "
-          f"diagrams in {site / STRIKE_IMG_DIR}")
+          f"{len(data['strikes'])} strike cards to {a.out}, and the website (Motor Pool's own page "
+          f"in website mode, card pages, images) to {site}")
     if cat.strikes_skipped:
         print(f"Skipped strike cards (numbers not readable): {', '.join(cat.strikes_skipped)}")
 

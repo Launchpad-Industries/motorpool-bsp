@@ -1,0 +1,89 @@
+<!-- BSP Card Generator. Copyright (C) 2026 William Becker. GPL v3 or later; see LICENSE.
+     The text of the About dialog. Keep it in our own words, with no rulebook text.
+     When a rule in bsp/derive.py or bsp/cost.py changes, update this file and the
+     "Last updated" date; tests/test_about.py checks the worked example. -->
+<h3>About Motor Pool</h3>
+<p>Motor Pool is an unofficial fan-made force builder for BattleTech Battlefield Support assets.
+Search for units, build a force, and print its cards. It runs entirely on your own computer.</p>
+<p class="muted">Last updated 6 November 2026. The calculations are still being tuned, so this page describes how they work today.</p>
+
+<h4>Where each card comes from</h4>
+<table>
+  <tr><th>Official</th><td>Stats as printed by Catalyst Game Labs. Used whenever a card exists, unless you switch a force entry to Calc.</td></tr>
+  <tr><th>Approved</th><td>Calculated and possibly tweaked, then approved by someone whose signature this app trusts.</td></tr>
+  <tr><th>Unverified</th><td>Approved under someone's name, but without a signature this app trusts, so treat it as that person's opinion.</td></tr>
+  <tr><th>Calculated</th><td>Worked out by the formulas below and not reviewed by anyone.</td></tr>
+</table>
+
+<h4>What's listed</h4>
+<ul>
+  <li><b>Vehicles:</b> every combat vehicle and VTOL in MegaMek's data, plus support vehicles that have an official card.</li>
+  <li><b>Battle armor:</b> squads MegaMek's force generator gives to at least one faction, at standard sizes: 5 suits for Clan, 4 for Inner Sphere, and 6 for the versions it lists (nearly all ComStar and Word of Blake). A design available only at another size keeps that size.</li>
+  <li><b>Infantry and emplacements:</b> the generic official cards only, for now.</li>
+  <li><b>Strikes:</b> air, artillery and minefield options from the Core Rulebook, in our own words.</li>
+</ul>
+
+<h4>How a vehicle becomes a card</h4>
+<table>
+  <tr><th>MP</th><td>The unit's cruise speed.</td></tr>
+  <tr><th>TMM</th><td>The standard Total Warfare movement table, +1 for VTOL, WiGE or stealth.</td></tr>
+  <tr><th>Skill</th><td>6, or 5 for Clan front-line designs. One step better with a targeting computer. 8 for artillery.</td></tr>
+  <tr><th>Range</th><td>The weapon type worth the most Battle Value (BV) sets the range, using the largest standard bracket whose medium range it reaches. If that weapon fires indirectly, a strong direct-fire weapon can set it instead.</td></tr>
+  <tr><th>Damage</th><td>The average damage of the main weapons. Cluster weapons count 0.6 of their missiles or pellets (×1.2 with Artemis IV), and Streaks count in full. Weapons that fall well short on range or value are left out, one reason assets hit less hard than their full units. The total is split into groups, usually of 5, or larger when big guns carry enough of it.</td></tr>
+  <tr><th>Check</th><td>An armor score, 2.5 × armor + 1.5 × structure, adjusted for armor type and movement (hover and WiGE lowest, tracked highest), then matched to a Check level.</td></tr>
+  <tr><th>Threshold</th><td>8 at 75 tons or more, otherwise 5.</td></tr>
+  <tr><th>Specials</th><td>Added from the unit's equipment, such as ECM, TAG, IF, APC, Commander, AMS, Crit-Seeker and No Turret.</td></tr>
+</table>
+
+<h4>What's different for battle armor</h4>
+<ul>
+  <li><b>Movement:</b> jump MP if the suit has jump jets, otherwise walking MP. TMM gets +1 for jumping and +1 for stealth or mimetic armor.</li>
+  <li><b>Weapons:</b> weapons with 2 shots or fewer don't count, unless the suit would otherwise have no attack.</li>
+  <li><b>Damage:</b> one suit's damage × the squad's average cluster hits (2.64 for 4 suits, 3.17 for 5, 4.00 for 6), counted twice, as on the official cards. A squad lands many small hits, so the total is printed in groups of no more than 6 (or the size of one suit's biggest gun, up to 10).</li>
+  <li><b>Check and Threshold:</b> the same armor score, × 2.8 instead of a movement adjustment. Threshold is always 5.</li>
+</ul>
+
+<h4>How cost works</h4>
+<p>Cost is worked out from the card's own stats, not from the unit's Total Warfare BV. The numbers were fitted to the official vehicle cards.</p>
+<pre>Regular = 7.5 + (offense + defense) ÷ 20 + flat specials
+Veteran = the unrounded Regular cost × 1.15
+
+Offense = 9.7 × speed × damage × (long range ÷ 9)^0.6
+          × specials × 1.1^(6 − Skill)
+Defense = 0.6 × Check value × TMM factor × special armor</pre>
+<ul>
+  <li><b>Speed:</b> grows with MP, for example 0.77 at MP 3 and 1.0 at MP 5.</li>
+  <li><b>Check value:</b> 75 at Check 7, +75 per step above, × 2/3 per step below.</li>
+  <li><b>TMM factor:</b> how many more attacks it takes to land a hit. TMM 1 to 5 give × 1.10, 1.27, 1.57, 2.2 and 3.3.</li>
+  <li><b>Offense specials:</b> Crit-Seeker × 1.1, AI × 1.05, No Turret × 0.9.</li>
+  <li><b>Defense specials:</b> reactive, reflective or ballistic-reinforced armor × 1.5, AMS × 1.15.</li>
+  <li><b>Flat points:</b> Commander 15, ECM6 7, ECM3 3.5, TAG 2, probe 1, each Arrow IV 38, and each artillery piece 29 to 57. APC costs about 1.1 per level, more on tougher carriers.</li>
+</ul>
+<p><b>BV equivalent</b> in the force totals is simply BSP cost × 20.</p>
+
+<h4>Worked example: Elemental [MG], 5 suits</h4>
+<p>Its calculated card has MP 3, TMM 2, range 1/2/3, damage 6×2, Skill 5 and Check 9.</p>
+<table>
+  <tr><th>Offense</th><td>9.7 × 0.77 × 12 × (3 ÷ 9)^0.6 × 1.1 = 51.0</td></tr>
+  <tr><th>Defense</th><td>0.6 × 225 × 1.27 = 171.3</td></tr>
+  <tr><th>Regular</th><td>7.5 + (51.0 + 171.3) ÷ 20 = 18.6, which rounds to <b>19</b></td></tr>
+  <tr><th>Veteran</th><td>18.6 × 1.15 = 21.4, which rounds to <b>21</b></td></tr>
+</table>
+<p>The official Elemental card has the same stats but costs 17 (20), so this is a good example of how close the formula usually gets.</p>
+
+<h4>Known limits</h4>
+<ul>
+  <li>Calculated cards are estimates. Priced from their printed stats, 119 official vehicle cards come out 2.5 points off on average, and 79 are within 2 points.</li>
+  <li>Calculated stats can differ from a printed card too. The Differences view shows where.</li>
+  <li>Battle armor costs are a first pass: only 4 official cards exist to check them against.</li>
+  <li>Some suits have no attack on their card, because they carry only anti-personnel weapons, TAG or equipment the model doesn't cover yet, such as mortars and micro bombs.</li>
+  <li>Special battle armor types, such as reactive and reflective, get no Check bonus yet.</li>
+</ul>
+
+<h4>Credits and notices</h4>
+<ul>
+  <li><b>Unit data and sprites:</b> MegaMek Data, © The MegaMek Team, licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Cards calculated from it fall under the same license: credit MegaMek, non-commercial use only, share alike.</li>
+  <li><b>Code:</b> © 2026 William Becker, GNU General Public License v3 or later.</li>
+  <li><b>Fonts:</b> Barlow, Barlow Condensed and Oswald, under the SIL Open Font License.</li>
+</ul>
+<p class="muted">This is an unofficial, non-commercial fan project. It is not affiliated with, endorsed by, or sponsored by The Topps Company, Inc., Catalyst Game Labs, or InMediaRes Productions, LLC. BattleTech, MechWarrior, BattleMech, 'Mech and related names are registered trademarks and/or trademarks of The Topps Company, Inc. Catalyst Game Labs and the Catalyst Game Labs logo are trademarks of InMediaRes Productions, LLC. Cards produced by this tool are not official cards.</p>
