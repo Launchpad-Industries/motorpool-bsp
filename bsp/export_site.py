@@ -31,7 +31,7 @@ from pathlib import Path
 
 from . import __version__
 from .art import SPRITE_CREDIT
-from .cards import Card
+from .cards import CSS as CARD_CSS, Card, card_frame, card_html
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -226,7 +226,7 @@ def strike_entry(c, write_svg=None) -> dict:
     return out
 
 
-def export_strikes(cards, site: Path) -> list[dict]:
+def export_strikes(cards, site: Path, pages: CardPages | None = None) -> list[dict]:
     dest = site / STRIKE_IMG_DIR
     dest.mkdir(parents=True, exist_ok=True)
     written = set()
@@ -236,7 +236,12 @@ def export_strikes(cards, site: Path) -> list[dict]:
         written.add(name)
         return f"{STRIKE_IMG_DIR}/{name}"
 
-    out = [strike_entry(c, write_svg) for c in cards]
+    out = []
+    for c in cards:
+        s = strike_entry(c, write_svg)
+        if pages:
+            s["card"] = pages.write(f"{s['id']}.html", c)
+        out.append(s)
     for f in dest.iterdir():
         if f.is_file() and f.name not in written:
             f.unlink()
@@ -244,6 +249,54 @@ def export_strikes(cards, site: Path) -> list[dict]:
     if len(ids) != len(set(ids)):
         raise SystemExit("Two strike cards have the same name; ids would clash.")
     return out          # file order, as in Motor Pool: air, artillery, minefields
+
+
+CARD_DIR = "cards"                 # relative to site/
+
+
+def card_page(inner: str) -> str:
+    """One pre-drawn card as its own small page: Motor Pool's preview page
+    (cards.card_frame, which scales the card to fit its frame), with the card
+    styles in a shared card.css instead of repeated in every file."""
+    page = card_frame(inner)
+    styles = f"<style>{CARD_CSS}"
+    assert styles in page, "cards.card_frame no longer inlines cards.CSS"
+    return page.replace(styles, '<link rel="stylesheet" href="card.css"><style>', 1)
+
+
+class CardPages:
+    """Writes pre-drawn cards into site/cards/, drawn by Motor Pool's own
+    card code (cards.card_html), so the site's cards match the app's."""
+
+    def __init__(self, site: Path):
+        self.dest = site / CARD_DIR
+        self.written: set[str] = set()
+
+    def write(self, name: str, card) -> str:
+        self.dest.mkdir(parents=True, exist_ok=True)
+        (self.dest / name).write_text(card_page(card_html(card)), encoding="utf-8")
+        self.written.add(name)
+        return f"{CARD_DIR}/{name}"
+
+    def unit(self, uid: str, card, art: dict | None) -> dict:
+        """Regular and (if it has one) Veteran card pages for a unit."""
+        if art:
+            card.image, card.image_source = "../" + art["src"], "sprite"
+        card.veteran = False
+        pages = {"regular": self.write(f"{uid}.html", card), "veteran": None}
+        if card.vet_cost is not None:
+            card.veteran = True
+            pages["veteran"] = self.write(f"{uid}-vet.html", card)
+            card.veteran = False
+        return pages
+
+    def finish(self):
+        """Write the shared styles and remove cards no longer exported."""
+        self.dest.mkdir(parents=True, exist_ok=True)
+        (self.dest / "card.css").write_text(CARD_CSS.lstrip(), encoding="utf-8")
+        for f in self.dest.glob("*.html"):
+            if f.name not in self.written:
+                f.unlink()
 
 
 def git_rev() -> str:
@@ -257,7 +310,8 @@ def git_rev() -> str:
 def build(cat, official: bool = True, site: Path = SITE) -> dict:
     """The site data for a Motor Pool catalog (bsp.app.Catalog)."""
     copy_art = SpriteCopier(cat.art.units_dir, site)
-    entries = []
+    pages = CardPages(site)
+    entries, cards = [], {}
     for u in cat.units:
         off = cat.official_card(u)
         card = off if (off and official) else cat.calculated(u)
@@ -269,6 +323,7 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
             approval=cat.approved.get(u.full_name) if card.source == "Approved" else None,
             art=copy_art(*cat.art.find(u)))
         entries.append((u.path, entry))
+        cards[u.path] = card
     if official:
         # Generic official cards (infantry, emplacements...) have no calculated
         # version, so they're only exported with official values.
@@ -278,6 +333,14 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
             entries.append((i, unit_entry(c, name, motive=MOTIVES.get(c.mode),
                                           tech=cat.generic_row(i)["tech"],
                                           art=copy_art(*cat.art.find_generic(row["name"], row["type"])))))
+            cards[i] = c
+    for key, e in entries:
+        e["_key"] = key
+    units = assign_ids(entries)
+    for u in units:
+        u["cards"] = pages.unit(u["id"], cards[u.pop("_key")], u.get("art"))
+    strikes = export_strikes(cat.strikes.values(), site, pages)
+    pages.finish()
     copy_art.remove_unused()
     return {
         "schemaVersion": SCHEMA_VERSION,
@@ -287,8 +350,8 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
         "credits": CREDITS + (["Official card values: the official Battlefield Support asset cards "
                                "(game statistics only; no official art, logos or rules text)"]
                               if official else []),
-        "units": assign_ids(entries),
-        "strikes": export_strikes(cat.strikes.values(), site),
+        "units": units,
+        "strikes": strikes,
     }
 
 

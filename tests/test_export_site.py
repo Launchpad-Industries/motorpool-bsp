@@ -10,7 +10,8 @@ from pathlib import Path
 import pytest
 
 from bsp.cards import Card
-from bsp.export_site import assign_ids, spec_of, standalone_svg, strike_entry, unit_entry
+from bsp.export_site import (CardPages, assign_ids, export_strikes, spec_of, standalone_svg,
+                              strike_entry, unit_entry)
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = (ROOT / "docs" / "site-data-schema.md").read_text(encoding="utf-8")
@@ -39,7 +40,14 @@ def check_value(name: str, kind: str, v):
         assert isinstance(v, bool), name
 
 
-def validate_unit(u: dict):
+def card_file_ok(site: Path | None, src: str):
+    assert src.startswith("cards/") and src.endswith(".html"), src
+    if site:
+        page = (site / src).read_text(encoding="utf-8")
+        assert 'href="card.css"' in page and 'class=one' in page, src
+
+
+def validate_unit(u: dict, site: Path | None = None):
     required = {k for k, t in UNIT.items() if "?" not in t}
     assert required <= set(u), f"missing {required - set(u)}"
     assert set(u) <= set(UNIT), f"not in schema: {set(u) - set(UNIT)}"
@@ -65,6 +73,11 @@ def validate_unit(u: dict):
     assert (s["skill"]["veteran"] is None) == (u["cost"]["veteran"] is None)
     assert len(s["range"]) == 3 and all(isinstance(x, int) for x in s["range"])
     assert isinstance(s["specials"], list) and all(isinstance(x, str) for x in s["specials"])
+    assert set(u["cards"]) == {"regular", "veteran"}
+    assert (u["cards"]["veteran"] is None) == (u["cost"]["veteran"] is None)
+    for src in u["cards"].values():
+        if src:
+            card_file_ok(site, src)
 
 
 STRIKE = schema_table("Strike")
@@ -74,6 +87,7 @@ def validate_strike(s: dict, site: Path | None = None):
     required = {k for k, t in STRIKE.items() if "?" not in t}
     assert required <= set(s), f"missing {required - set(s)}"
     assert set(s) <= set(STRIKE), f"not in schema: {set(s) - set(STRIKE)}"
+    card_file_ok(site, s["card"])
     for k, v in s.items():
         check_value(k, STRIKE[k], v)
     assert re.fullmatch(r"strike(-[a-z0-9]+)+", s["id"])
@@ -99,7 +113,7 @@ def validate(data: dict, site: Path | None = None):
     names = [u["name"].lower() for u in data["units"]]
     assert names == sorted(names), "units not sorted by name"
     for u in data["units"]:
-        validate_unit(u)
+        validate_unit(u, site)
     for s in data.get("strikes", []):
         validate_strike(s, site)
 
@@ -112,18 +126,23 @@ def card(**kw) -> Card:
     return Card(**d)
 
 
-def test_unit_entry_matches_schema():
+def test_unit_entry_matches_schema(tmp_path):
+    plain = card()
     approved = card(source="Approved", approver="Launchpad", verified=False, drift=["damage"])
     official = card(source="Official", range="Artillery", damage="-", vet_skill=None, vet_cost=None)
     units = assign_ids([
-        ("a", unit_entry(card(), "Scorpion Light Tank (LRM)", motive="Tracked", tonnage=25.0,
+        ("a", unit_entry(plain, "Scorpion Light Tank (LRM)", motive="Tracked", tonnage=25.0,
                          tech="IS", year=3021, mul_id=2730, has_official=True)),
         ("b", unit_entry(approved, "Scorpion Light Tank (LRM)", approval={"on": "2026-10-31"},
                          art={"src": "img/units/x.png", "credit": "c"})),
         ("c", unit_entry(official, "Long Tom Battery")),
     ])
+    pages = CardPages(tmp_path)
+    for u, c in zip(units, (official, plain, approved)):
+        u["cards"] = pages.unit(u["id"], c, u.get("art"))
+    pages.finish()
     validate({"schemaVersion": 1, "generatedOn": "x", "generator": "x", "disclaimer": "x",
-              "credits": [], "units": units})
+              "credits": [], "units": units}, tmp_path)
     calc, appr, arty = units[1], units[2], units[0]
     assert [u["id"] for u in units] == ["long-tom-battery", "scorpion-light-tank-lrm",
                                         "scorpion-light-tank-lrm-2"]
@@ -136,19 +155,31 @@ def test_unit_entry_matches_schema():
     assert arty["cost"]["veteran"] is None and arty["spec"]["skill"]["veteran"] is None
     assert arty["spec"]["range"] == [0, 0, 0] and "Artillery" in arty["spec"]["specials"]
     assert "hasOfficialCard" not in arty
+    # Card pages are Motor Pool's own card drawing, with the styles shared.
+    assert arty["cards"] == {"regular": "cards/long-tom-battery.html", "veteran": None}
+    reg = (tmp_path / appr["cards"]["regular"]).read_text(encoding="utf-8")
+    vet = (tmp_path / appr["cards"]["veteran"]).read_text(encoding="utf-8")
+    assert 'class="grade">REGULAR' in reg and 'class="grade vet">VETERAN' in vet
+    assert 'src="../img/units/x.png"' in reg and 'class="sprite"' in reg
+    assert "Unverified-Launchpad" in reg and ".hd .chassis" not in reg
+    assert ".hd .chassis" in (tmp_path / "cards" / "card.css").read_text(encoding="utf-8")
+    assert sorted(f.name for f in (tmp_path / "cards").iterdir()) == [
+        "card.css", "long-tom-battery.html", "scorpion-light-tank-lrm-2-vet.html",
+        "scorpion-light-tank-lrm-2.html", "scorpion-light-tank-lrm-vet.html", "scorpion-light-tank-lrm.html"]
 
 
 def test_spec_without_veteran_hides_vet_skill():
     assert spec_of(card(vet_cost=None))["skill"] == {"regular": 6, "veteran": None}
 
 
-def test_strike_entries_match_schema():
+def test_strike_entries_match_schema(tmp_path):
     from bsp.strikes import load
     cards, skipped = load(ROOT / "bsp-options.tsv")
     assert not skipped
-    strikes = [strike_entry(c) for c in cards.values()]
+    strikes = export_strikes(cards.values(), tmp_path, CardPages(tmp_path))
     for s in strikes:
-        validate_strike(s)
+        validate_strike(s, tmp_path)
+    assert "LONG TOM" in (tmp_path / "cards" / "strike-long-tom.html").read_text(encoding="utf-8").upper()
     by_id = {s["id"]: s for s in strikes}
     assert len(by_id) == len(strikes)
     lt = by_id["strike-long-tom"]

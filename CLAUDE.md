@@ -129,7 +129,13 @@ blank.
   sprites it uses into `site/img/units/` (never the owner's images folder).
   Strike cards go in their own `strikes` list (Will, 2026-11-09), with their
   hex diagrams as SVG files in `site/img/strikes/`; the site prints them after
-  the units.
+  the units. Every card is **pre-drawn** by Motor Pool's own card code into
+  `site/cards/` (one page per card and grade, styles in `cards/card.css`), so
+  the site's cards match the app's exactly (Will, 2026-11-10). The site's own
+  JS only shows and prints those pages; don't draw cards in JS. Will is still
+  considering making a JavaScript card renderer the master later. Next step
+  agreed in principle: the site to reuse Motor Pool's own front end
+  (`bsp/web/`) in a static mode.
 
 ## App to-do / ideas
 

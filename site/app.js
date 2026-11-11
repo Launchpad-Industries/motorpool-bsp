@@ -29,104 +29,16 @@
     }
     return "Calculated";
   }
-  function provClass(u) {
-    if (u.provenance === "approved" && u.verified === false) return "prov-unverified";
-    return `prov-${u.provenance}`;
-  }
-
-  function cardHTML(u, skill) {
-    const s = u.spec;
-    const vet = skill === "veteran";
-    const cost = vet ? u.cost.veteran : u.cost.regular;
-    const sk = vet ? s.skill.veteran : s.skill.regular;
-    const specials = (s.specials || []).slice();
-    if (s.indirect && !specials.some((x) => /^IF\d/.test(x))) specials.push(`IF${s.indirect}`);
-    const pips = "<i></i>".repeat(Math.max(0, Math.min(12, s.check || 0)));
-    const sub = [u.type, u.motive, u.tonnage ? `${u.tonnage}t` : ""].filter(Boolean).join(" · ");
-    const art = u.art && u.art.src
-      ? `<img class="c-art" src="${esc(u.art.src)}" alt="" loading="lazy">` : "";
-    return `
-      <div class="card ${vet ? "veteran" : "regular"} ${provClass(u)}">
-        <div class="c-head">
-          <div>
-            <div class="c-name">${esc(u.name)}</div>
-            <div class="c-sub">${esc(sub)}</div>
-          </div>
-          <div class="c-cost">${esc(cost)}<br><span class="c-chip">${vet ? "VETERAN" : "REGULAR"}</span></div>
-        </div>
-        <div class="c-stats">
-          <div><b>Move</b><span>${esc(s.move)}</span></div>
-          <div><b>TMM</b><span>${esc(s.tmm)}</span></div>
-          <div><b>Skill</b><span>${esc(sk)}</span></div>
-          <div><b>Range</b><span>${esc((s.range || []).join("/"))}</span></div>
-          <div><b>Damage</b><span>${esc(s.damage)}</span></div>
-          <div><b>IF</b><span>${s.indirect ? esc(s.indirect) : "—"}</span></div>
-          <div><b>Check</b><span>${esc(s.check)}</span></div>
-          <div><b>Thresh.</b><span>${esc(s.threshold)}</span></div>
-        </div>
-        <div class="c-body">
-          <div class="c-specials">
-            <b>Specials:</b> ${specials.length ? esc(specials.join(", ")) : "—"}
-            <div class="c-pips" title="Destroy Check pips">${pips}</div>
-          </div>
-          ${art}
-        </div>
-        <div class="c-foot"><span>Source: ${esc(sourceLabel(u))}</span><span>Unofficial</span></div>
-      </div>`;
-  }
-
-  // ---------- Strike cards (no Veteran grade; schema "Strike") ----------
+  // ---------- Cards ----------
+  // Every card is pre-drawn by Motor Pool's own card code (python -m
+  // bsp.export_site) as a small page in cards/, so it looks exactly like the
+  // app's preview and PDF. The site only shows and prints those pages.
   const STRIKE_TYPE = "__strikes";
   const isStrike = (x) => x && x.kind === "strike";
   const costText = (s) => `${s.cost}${s.per ? ` ${s.per}` : ""}`;
-
-  function writeOnHTML(s) {
-    if (s.writeOn === "target") {
-      return `<div class="s-write"><span>Target hex<i></i></span><span class="short">Turn<i></i></span><span class="used">Used <b class="bx"></b></span></div>`;
-    }
-    if (s.writeOn === "hex") {
-      const n = Math.max(0, Math.min(12, parseInt(s.groups, 10) || 0));
-      const track = Array.from({ length: n }, (_, i) => `<span>${n - i}</span>`).join("");
-      return `<div class="s-write"><span>Hex<i></i></span><span class="track" title="Groups left">${track}</span></div>`;
-    }
-    return "";
-  }
-
-  function strikeCardHTML(s) {
-    const stats = s.tn != null ? `
-      <div class="s-stats">
-        <div><b>Target No.</b><span>${esc(s.tn)}+</span></div>
-        <div><b>Groups ×5</b><span>${esc(s.groups && s.groups !== "none" ? s.groups : "—")}</span></div>
-        <div><b>Type</b><span>${esc(s.attackType || "—")}</span></div>
-      </div>` : "";
-    const cancels = (s.cancels || []).length ? `
-      <div class="s-cancels"><b>Cancels on</b>${s.cancels.map((c) =>
-        `<span>${esc(c.strike)}</span><span class="tn">${esc(c.tn)}+</span>`).join("")}</div>` : "";
-    const diagrams = (s.diagrams || []).map((d) =>
-      `<figure><img src="${esc(d.src)}" alt="${esc(d.caption)}"><figcaption>${esc(d.caption)}</figcaption></figure>`).join("");
-    const chipClass = s.chip === "NOT AN ATTACK" ? "plain" : s.chip === "MINEFIELD" ? "mine" : "strike";
-    return `
-      <div class="card strike">
-        <div class="c-head">
-          <div>
-            <div class="c-sub">${esc(s.support || s.category)}</div>
-            <div class="c-name">${esc(s.name)}</div>
-          </div>
-          <div class="c-cost">${esc(s.cost)}${s.per ? `<small> ${esc(s.per)}</small>` : ""}<br><span class="c-chip ${chipClass}">${esc(s.chip)}</span></div>
-        </div>
-        <div class="s-body">
-          <div class="s-main">
-            ${stats}${cancels}
-            <div class="s-rules"><b>Rules</b> ${esc(s.effect)}${s.rulesRef ? ` <i>(${esc(s.rulesRef)})</i>` : ""}</div>
-            ${writeOnHTML(s)}
-          </div>
-          <div class="s-side">${diagrams}${s.writeOn ? "" : `<div class="used">Used <b class="bx"></b></div>`}</div>
-        </div>
-        <div class="c-foot"><span>Source: ${esc(s.source || "BattleTech Core Rulebook")}</span><span>Unofficial</span></div>
-      </div>`;
-  }
-
-  const anyCardHTML = (x, skill) => (isStrike(x) ? strikeCardHTML(x) : cardHTML(x, skill));
+  const cardPage = (x, skill) => (isStrike(x) ? x.card : skill === "veteran" ? x.cards.veteran : x.cards.regular);
+  const cardFrame = (src, label) =>
+    `<iframe class="cardframe" src="${esc(src)}" title="${esc(label)}"></iframe>`;
 
   // ---------- Browse ----------
   function filtered() {
@@ -166,7 +78,7 @@
       <div class="muted">${esc([s.category, s.support].filter(Boolean).join(" · "))} · ${esc(costText(s))} BSP</div>
       ${s.notes ? `<p>${esc(s.notes)}</p>` : ""}
       <div class="card-pair">
-        <div class="col">${strikeCardHTML(s)}<button data-add="strike">Add to force</button></div>
+        <div class="col">${cardFrame(s.card, `${s.name} card`)}<button data-add="strike">Add to force</button></div>
       </div>
       <p class="muted">Hex diagrams drawn by Motor Pool.</p>`;
   }
@@ -186,8 +98,8 @@
       ${official}
       ${u.notes ? `<p>${esc(u.notes)}</p>` : ""}
       <div class="card-pair">
-        <div class="col">${cardHTML(u, "regular")}<button data-add="regular">Add Regular</button></div>
-        ${hasVet ? `<div class="col">${cardHTML(u, "veteran")}<button data-add="veteran">Add Veteran</button></div>` : ""}
+        <div class="col">${cardFrame(u.cards.regular, `${u.name} Regular card`)}<button data-add="regular">Add Regular</button></div>
+        ${hasVet ? `<div class="col">${cardFrame(u.cards.veteran, `${u.name} Veteran card`)}<button data-add="veteran">Add Veteran</button></div>` : ""}
       </div>
       ${u.art && u.art.credit ? `<p class="muted">Art: ${esc(u.art.credit)}</p>` : ""}`;
   }
@@ -234,17 +146,60 @@
     $("print-btn").disabled = count === 0;
   }
 
-  function printForce() {
-    const cards = [];
-    forceInOrder().forEach(({ f }) => {
-      for (let i = 0; i < f.qty; i++) cards.push(anyCardHTML(byId.get(f.id), f.skill));
-    });
-    const pages = [];
-    for (let i = 0; i < cards.length; i += CARDS_PER_PAGE) {
-      pages.push(`<div class="print-page">${cards.slice(i, i + CARDS_PER_PAGE).join("")}</div>`);
+  // A pre-drawn card page -> its card markup and the page's font links.
+  const pageCache = new Map();
+  function cardPart(src) {
+    if (!pageCache.has(src)) {
+      pageCache.set(src, fetch(src).then((r) => {
+        if (!r.ok) throw new Error(`${src}: HTTP ${r.status}`);
+        return r.text();
+      }).then((text) => {
+        const doc = new DOMParser().parseFromString(text, "text/html");
+        const fonts = [...doc.querySelectorAll('link[href*="fonts"]')].map((l) => l.outerHTML).join("");
+        return { card: doc.querySelector(".one").innerHTML, fonts };
+      }));
     }
-    $("print-sheet").innerHTML = pages.join("");
-    window.print();
+    return pageCache.get(src);
+  }
+
+  // The same print layout as Motor Pool's PDF (cards.document): US Letter,
+  // 2 x 4 cards with dashed cut lines, units first, then strikes.
+  async function printForce() {
+    const btn = $("print-btn");
+    btn.disabled = true;
+    try {
+      const srcs = [];
+      forceInOrder().forEach(({ f }) => {
+        for (let i = 0; i < f.qty; i++) srcs.push(cardPage(byId.get(f.id), f.skill));
+      });
+      const parts = await Promise.all(srcs.map(cardPart));
+      const pages = [];
+      for (let i = 0; i < parts.length; i += CARDS_PER_PAGE) {
+        const cells = parts.slice(i, i + CARDS_PER_PAGE).map((p) => `<div class="cell">${p.card}</div>`).join("");
+        pages.push(`<div class="page"><div class="sheet">${cells}</div></div>`);
+      }
+      const base = new URL("cards/", location.href).href;
+      const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><base href="${esc(base)}">
+        <title>Motor Pool – Battlefield Support - Forces</title>${parts[0] ? parts[0].fonts : ""}
+        <link rel="stylesheet" href="card.css"></head><body>${pages.join("")}</body></html>`;
+      const old = document.getElementById("print-frame");
+      if (old) old.remove();
+      const frame = document.createElement("iframe");
+      frame.id = "print-frame";
+      frame.setAttribute("aria-hidden", "true");
+      frame.style.cssText = "position:fixed;left:-10000px;top:0;width:8.5in;height:11in;border:0";
+      document.body.appendChild(frame);
+      await new Promise((ok) => { frame.onload = ok; frame.srcdoc = doc; });
+      const w = frame.contentWindow, d = w.document;
+      await Promise.all([...d.images].map((img) => img.complete ? null : new Promise((ok) => { img.onload = img.onerror = ok; })));
+      if (d.fonts) await d.fonts.ready;
+      w.focus();
+      w.print();
+    } catch (err) {
+      alert(`Couldn't prepare the cards for printing (${err.message}).`);
+    } finally {
+      btn.disabled = force.length === 0;
+    }
   }
 
   // ---------- Wiring ----------

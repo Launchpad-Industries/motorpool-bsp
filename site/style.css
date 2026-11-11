@@ -29,7 +29,7 @@ button:disabled { opacity: .4; cursor: default; }
 .browse { padding: 1rem; min-width: 0; }
 .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
 .filters input { flex: 1 1 200px; padding: .4rem .6rem; }
-.results-wrap { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 1rem; }
+.results-wrap { display: grid; grid-template-columns: minmax(200px, 320px) minmax(300px, 1fr); gap: 1rem; }
 #results { list-style: none; margin: 0; padding: 0; max-height: 75vh; overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
 #results li { padding: .45rem .7rem; border-bottom: 1px solid var(--line); cursor: pointer; display: flex; justify-content: space-between; gap: .5rem; }
 #results li:hover, #results li.active { background: #f0ebe2; }
@@ -41,86 +41,17 @@ button:disabled { opacity: .4; cursor: default; }
 
 .site-footer { grid-column: 1 / -1; padding: .8rem 1.2rem; font-size: .75rem; color: var(--muted); border-top: 1px solid var(--line); }
 
-/* ---- The card: 3.5in x 2.5in ---- */
-.card {
-  width: 3.5in; height: 2.5in; background: #fff; color: #111;
-  border: 2px solid #111; border-radius: .12in; padding: .1in .12in;
-  display: grid; grid-template-rows: auto auto 1fr auto; gap: .04in;
-  font-size: 8pt; line-height: 1.15; overflow: hidden; position: relative;
-}
-.card.veteran { border-color: var(--vet); }
-.card .c-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .06in; }
-.card .c-name { font-weight: 800; font-size: 10pt; line-height: 1.05; }
-.card .c-sub { color: #555; font-size: 7pt; }
-.card .c-cost { text-align: right; font-weight: 800; font-size: 12pt; }
-.card .c-chip { display: inline-block; font-size: 6pt; font-weight: 800; letter-spacing: .04em; padding: 0 .04in; border-radius: 3px; background: #ddd; }
-.card.veteran .c-chip { background: var(--vet); color: #fff; }
-.card .c-stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #111; }
-.card .c-stats div { padding: .02in .04in; border-right: 1px solid #111; border-bottom: 1px solid #111; }
-.card .c-stats div:nth-child(4n) { border-right: 0; }
-.card .c-stats div:nth-last-child(-n+4) { border-bottom: 0; }
-.card .c-stats b { display: block; font-size: 6pt; color: #555; font-weight: 600; text-transform: uppercase; }
-.card .c-stats span { font-size: 9pt; font-weight: 700; }
-.card .c-body { display: flex; gap: .06in; min-height: 0; }
-.card .c-specials { flex: 1; font-size: 7.5pt; }
-.card .c-art { width: .9in; height: .7in; object-fit: contain; }
-.card .c-pips { display: flex; flex-wrap: wrap; gap: .03in; margin-top: .03in; }
-.card .c-pips i { width: .09in; height: .09in; border: 1px solid #111; border-radius: 50%; display: inline-block; }
-.card .c-foot { font-size: 6pt; color: #333; border-top: 1px solid #111; padding-top: .02in; display: flex; justify-content: space-between; }
-.card.prov-approved .c-foot { border-top-style: solid; color: #555; }
-.card.prov-calculated .c-foot { border-top-style: dashed; }
-.card.prov-unverified .c-foot { border-top-style: dotted; }
-
-/* ---- Strike cards ---- */
+/* ---- Cards: pre-drawn pages (site/cards/), shown in frames like Motor Pool's preview ---- */
+.cardframe { width: 100%; aspect-ratio: 3.5 / 2.5; height: auto; border: 0; background: transparent; overflow: hidden; display: block; }
+.detail { min-width: 0; }
+.card-pair .col { flex: 1 1 240px; min-width: 0; max-width: 420px; align-items: stretch; }
+.card-pair .col button { align-self: flex-start; }
 #results li.group, #force-list li.group { display: block; cursor: default; background: #ebe6dc; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: .3rem .7rem; }
 #force-list li.group { padding: .3rem 0 .2rem; background: none; border-bottom: 0; }
-.card.strike { grid-template-rows: auto 1fr auto; border-color: var(--accent); }
-.card .c-cost small { font-size: 6.5pt; font-weight: 600; }
-.card .c-chip.strike { background: var(--accent); color: #fff; }
-.card .c-chip.mine { background: #6b5a1e; color: #fff; }
-.card .s-body { display: flex; gap: .06in; min-height: 0; }
-.card .s-main { flex: 1; display: flex; flex-direction: column; gap: .04in; min-width: 0; }
-.card .s-stats { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #111; }
-.card .s-stats div { padding: .02in .04in; border-right: 1px solid #111; }
-.card .s-stats div:last-child { border-right: 0; }
-.card .s-stats b, .card .s-cancels b { display: block; font-size: 6pt; color: #555; font-weight: 600; text-transform: uppercase; }
-.card .s-stats span { font-size: 9pt; font-weight: 700; }
-.card .s-cancels { display: grid; grid-template-columns: 1fr auto; column-gap: .06in; border: 1px solid #111; padding: .02in .04in; font-size: 7pt; }
-.card .s-cancels b { grid-column: 1 / -1; }
-.card .s-cancels .tn { font-weight: 700; }
-.card .s-rules { font-size: 7pt; line-height: 1.2; }
-.card .s-rules b { text-transform: uppercase; font-size: 6.5pt; }
-.card .s-rules i { color: #555; }
-.card .s-write { display: flex; gap: .06in; align-items: flex-end; margin-top: auto; font-size: 6pt; text-transform: uppercase; color: #555; }
-.card .s-write > span { display: flex; align-items: flex-end; gap: .03in; flex: 1; }
-.card .s-write > span.short { flex: .6; }
-.card .s-write i { flex: 1; border-bottom: 1px solid #111; height: .14in; }
-.card .s-write .used { flex: 0 0 auto; }
-.card .track { display: flex; gap: .02in; }
-.card .track span { width: .14in; height: .14in; border: 1px solid #111; display: inline-flex; align-items: center; justify-content: center; font-size: 7pt; color: #111; }
-.card .bx { display: inline-block; width: .13in; height: .13in; border: 1px solid #111; vertical-align: middle; }
-.card .s-side { display: flex; flex-direction: column; align-items: center; gap: .02in; width: .85in; }
-.card .s-side figure { margin: 0; display: flex; flex-direction: column; align-items: center; }
-.card .s-side img { display: block; max-width: .8in; max-height: .78in; }
-.card .s-side figcaption { font-size: 5.5pt; color: #555; text-align: center; }
-.card .s-side .used { margin-top: auto; font-size: 6pt; text-transform: uppercase; color: #555; }
-
-#print-sheet { display: none; }
 
 @media (max-width: 800px) {
   #app { grid-template-columns: 1fr; }
   .force { border-right: 0; border-bottom: 1px solid var(--line); }
   .results-wrap { grid-template-columns: 1fr; }
   #results { max-height: 40vh; }
-}
-
-/* ---- Printing: Letter, 2 x 4 cards per page ---- */
-@page { size: letter; margin: .5in .75in; }
-@media print {
-  #app { display: none; }
-  #print-sheet { display: block; }
-  .print-page { display: grid; grid-template-columns: repeat(2, 3.5in); grid-auto-rows: 2.5in; gap: 0; page-break-after: always; break-after: page; }
-  .print-page:last-child { page-break-after: auto; break-after: auto; }
-  .print-page .card { border-radius: 0; }
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

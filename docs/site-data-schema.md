@@ -53,6 +53,7 @@ falls back to calculated values with `hasOfficialCard: true`, in case that's eve
 | `spec` | Spec | The card values. |
 | `cost` | `{ "regular": number, "veteran": number \| null }` | `veteran: null` = no Veteran version (artillery). |
 | `art` | `{ "src": string, "credit": string }?` | Path relative to `site/`, e.g. `"img/units/scorpion.png"`. |
+| `cards` | `{ "regular": string, "veteran": string \| null }` | Pre-drawn card pages relative to `site/`, e.g. `"cards/scorpion-light-tank-lrm.html"` and `"…-vet.html"`; `veteran: null` when there's no Veteran version. See "Card pages" below. |
 | `notes` | string? | Short note shown on the detail panel, not on the card. |
 
 ## Spec
@@ -98,6 +99,18 @@ none of a unit's stats.
 | `diagrams` | `[{ "src": string, "caption": string }]` | SVG files relative to `site/`, e.g. `"img/strikes/long-tom-1.svg"`; each sets its own printed width. |
 | `notes` | string? | Detail panel only, never printed. |
 | `source` | string | `"BattleTech Core Rulebook"` (card footer). |
+| `card` | string | Pre-drawn card page relative to `site/`, e.g. `"cards/strike-long-tom.html"`. |
+
+## Card pages
+
+So the site's cards look exactly like Motor Pool's (decided 2026-11-10), the exporter
+draws every card with Motor Pool's own card code (`bsp/cards.py` `card_html`, strike
+cards `bsp/strikes.py`) and saves each as a small page in `site/cards/`: Motor Pool's
+preview page (`card_frame`, which scales the card to fit its frame) with the shared
+styles in `site/cards/card.css`. Images point at `../img/units/…`. The site shows a page
+in an `<iframe>` (3.5 : 2.5) and prints by taking each page's `.one` contents into
+Motor Pool's print layout (`.page` > `.sheet` > `.cell`, styled by `card.css`).
+The Spec values above stay in `units.json` for search, filters and totals.
 
 ## Exporter (to build in Claude Code)
 
