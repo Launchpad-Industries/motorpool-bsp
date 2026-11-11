@@ -208,6 +208,7 @@ python -m bsp.approvals --mm-data mm-data/data/mekfiles --by Launchpad "Peregrin
 | `bsp/app.py`, `bsp/web/` | Motor Pool, the local browser app |
 | `bsp/dist.py`, `bsp/launcher.py`, `motorpool.py` | Tester build: distribution mode, Edge PDFs, launcher |
 | `tools/build_snapshot.py`, `tools/build.py`, `motorpool.spec`, `packaging/` | Building the tester zip |
+| `bsp/serve_site.py` | Serves `site/` on this computer for a look before pushing (always fresh files) |
 | `bsp/export_site.py` | Builds the public website in `site/`: Motor Pool's own page in website mode, pre-drawn cards, sprites, and `site/data/units.json`; see [docs/site-data-schema.md](docs/site-data-schema.md) |
 | `bsp/sheet.py`, `bsp/sheet_sync.gs` | Command-line pull/push with the Google Sheet (Apps Script link; not used by the app) |
 | `data/card_links.yaml` | Manual card-to-unit links |
@@ -226,7 +227,7 @@ that need the app (tweak, approve, settings, proposals). To refresh it:
 
 ```
 python -m bsp.export_site                      # rebuilds site/ (about a minute)
-python -m http.server 8765 -d site --bind 127.0.0.1   # look at it on http://127.0.0.1:8765
+python -m bsp.serve_site                       # look at it on http://127.0.0.1:8765 (Ctrl+C stops it)
 ```
 
 Then commit and push `site/`; GitHub Pages republishes it. Don't edit the page

@@ -22,6 +22,7 @@ as SVG files in ``site/img/strikes/``.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
 import json
 import re
@@ -259,6 +260,12 @@ def export_strikes(cards, site: Path, pages: CardPages | None = None, extra: dic
 CARD_DIR = "cards"                 # relative to site/
 
 
+def stamp(text: str) -> str:
+    """A short version stamp for a file's contents. Links carry it (?v=...)
+    so a browser never mixes a cached old file with a new page."""
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
+
+
 def card_page(inner: str) -> str:
     """One pre-drawn card as its own small page: Motor Pool's preview page
     (cards.card_frame, which scales the card to fit its frame), with the card
@@ -266,7 +273,7 @@ def card_page(inner: str) -> str:
     page = card_frame(inner)
     styles = f"<style>{CARD_CSS}"
     assert styles in page, "cards.card_frame no longer inlines cards.CSS"
-    return page.replace(styles, '<link rel="stylesheet" href="card.css"><style>', 1)
+    return page.replace(styles, f'<link rel="stylesheet" href="card.css?v={stamp(CARD_CSS)}"><style>', 1)
 
 
 class CardPages:
@@ -345,14 +352,17 @@ WEB_FILES = ("app.js", "app.css", "about.html")
 OLD_SITE_FILES = ("style.css",)          # the earlier hand-made site page
 
 
-def site_index(fonts: str) -> str:
-    """bsp/web/index.html for the website: relative paths, and the settings
-    that switch app.js into website mode."""
+def site_index(fonts: str, data_version: str = "") -> str:
+    """bsp/web/index.html for the website: relative paths with version
+    stamps, and the settings that switch app.js into website mode."""
     page = (WEB / "index.html").read_text(encoding="utf-8")
-    config = json.dumps({"data": "data/", "cards": f"{CARD_DIR}/", "fonts": fonts})
-    swaps = (('href="/web/app.css"', 'href="app.css"'),
+    v = {name: stamp((WEB / name).read_text(encoding="utf-8")) for name in ("app.js", "app.css")}
+    config = json.dumps({"data": "data/", "cards": f"{CARD_DIR}/", "fonts": fonts,
+                         "v": data_version, "css": stamp(CARD_CSS)})
+    swaps = (('href="/web/app.css"', f'href="app.css?v={v["app.css"]}"'),
              ('<script src="/web/app.js"></script>',
-              f"<script>window.MOTORPOOL_STATIC = {config};</script>\n<script src=\"app.js\"></script>"))
+              f"<script>window.MOTORPOOL_STATIC = {config};</script>\n"
+              f"<script src=\"app.js?v={v['app.js']}\"></script>"))
     for old, new in swaps:
         assert old in page, f"bsp/web/index.html no longer has {old}"
         page = page.replace(old, new, 1)
@@ -360,11 +370,11 @@ def site_index(fonts: str) -> str:
     return page.replace("<!doctype html>\n", "<!doctype html>\n" + note, 1)
 
 
-def write_front_end(site: Path):
+def write_front_end(site: Path, data_version: str = ""):
     from .cards import FONTS
     for name in WEB_FILES:
         shutil.copyfile(WEB / name, site / name)
-    (site / "index.html").write_text(site_index(FONTS), encoding="utf-8")
+    (site / "index.html").write_text(site_index(FONTS, data_version), encoding="utf-8")
     for name in OLD_SITE_FILES:
         (site / name).unlink(missing_ok=True)
 
@@ -383,9 +393,10 @@ def write_details(cat, ids: list[str], site: Path):
             f.unlink()
 
 
-def write_motor_pool_data(cat, extra: dict, official: bool, site: Path):
+def write_motor_pool_data(cat, extra: dict, official: bool, site: Path) -> str:
     """data/motorpool.json: what Motor Pool's /api/info, /api/units and
-    /api/strikes return, plus each row's slug and card pages."""
+    /api/strikes return, plus each row's slug and card pages. Returns its
+    version stamp (card pages and unit details are fetched with it)."""
     from .app import APP_NAME
     from .cards import BV_PER_POINT
 
@@ -403,9 +414,11 @@ def write_motor_pool_data(cat, extra: dict, official: bool, site: Path):
             "about": {"version": __version__, "dist": True, "data_date": date.today().isoformat()}}
     out = site / "data" / "motorpool.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps({"info": info, "units": units, "strikes": strikes},
-                              ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    text = json.dumps({"info": info, "units": units, "strikes": strikes},
+                      ensure_ascii=False, separators=(",", ":"))
+    out.write_text(text, encoding="utf-8")
     write_details(cat, [r["id"] for r in units + strikes], site)
+    return stamp(text)
 
 
 def git_rev() -> str:
@@ -468,8 +481,7 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
     strikes = export_strikes(cat.strikes.values(), site, pages, extra)
     pages.finish()
     copy_art.remove_unused()
-    write_motor_pool_data(cat, extra, official, site)
-    write_front_end(site)
+    write_front_end(site, write_motor_pool_data(cat, extra, official, site))
     return {
         "schemaVersion": SCHEMA_VERSION,
         "generatedOn": datetime.now().astimezone().isoformat(timespec="seconds"),

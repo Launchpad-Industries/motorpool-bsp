@@ -22,7 +22,7 @@ async function staticApi(url, body) {
   const ONLY_APP = "Not available on the website: use Motor Pool on your own computer.";
   if (body !== undefined) throw new Error(ONLY_APP);
   const json = x => new Response(JSON.stringify(x), {headers: {"Content-Type": "application/json"}});
-  staticData = staticData || fetch(STATIC.data + "motorpool.json", {cache: "no-cache"})
+  staticData = staticData || fetch(STATIC.data + "motorpool.json" + vq(), {cache: "no-cache"})
     .then(r => { if (!r.ok) throw new Error(`unit data: HTTP ${r.status}`); return r.json(); });
   const d = await staticData;
   if (url === "/api/info") return json(d.info);
@@ -30,7 +30,7 @@ async function staticApi(url, body) {
   if (url === "/api/strikes") return json(d.strikes);
   const m = url.match(/^\/api\/unit\/([\w-]+)$/);
   if (m) {
-    const r = await fetch(`${STATIC.data}unit/${m[1]}.json`);
+    const r = await fetch(`${STATIC.data}unit/${m[1]}.json${vq()}`);
     if (!r.ok) throw new Error("No details for this unit.");
     return r;
   }
@@ -44,8 +44,10 @@ function cardSrc(id, view, grade) {
 }
 function staticPage(id, view, grade) {
   const p = BYID[id].pages, v = p[view] || p.calculated || p.official;
-  return {src: STATIC.cards + ((grade === "vet" && v.vet) || v.reg), sum: v.sum, vet: grade === "vet" && !!v.vet};
+  return {src: STATIC.cards + ((grade === "vet" && v.vet) || v.reg) + vq(), sum: v.sum, vet: grade === "vet" && !!v.vet};
 }
+// The export's version stamp, so a browser never mixes cached files from an older export.
+const vq = (v = STATIC.v) => v ? `?v=${v}` : "";
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 3500); }
 
 let INFO = {}, ROWS = [], STRIKES = [], BYID = {};
@@ -303,7 +305,7 @@ async function staticPrint() {
     w.document.open();
     w.document.write(`<!doctype html><html lang=en><head><meta charset=utf-8><base href="${esc(base)}">`
       + `<meta name=viewport content='width=device-width,initial-scale=1'><title>Motor Pool – ${esc(title)}</title>`
-      + `${STATIC.fonts}<link rel="stylesheet" href="card.css"></head><body>${pages.join("")}`
+      + `${STATIC.fonts}<link rel="stylesheet" href="card.css${vq(STATIC.css)}"></head><body>${pages.join("")}`
       + `<script>addEventListener("load",function(){(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){print();});});<\/script></body></html>`);
     w.document.close();
   } catch (err) { w.close(); toast(err.message); }

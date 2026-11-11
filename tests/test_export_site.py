@@ -44,7 +44,7 @@ def card_file_ok(site: Path | None, src: str):
     assert src.startswith("cards/") and src.endswith(".html"), src
     if site:
         page = (site / src).read_text(encoding="utf-8")
-        assert 'href="card.css"' in page and 'class=one' in page, src
+        assert re.search(r'href="card\.css\?v=[0-9a-f]{8}"', page) and 'class=one' in page, src
 
 
 def validate_unit(u: dict, site: Path | None = None):
@@ -217,11 +217,14 @@ def test_views_share_pages_when_cards_match(tmp_path):
 
 def test_site_index_switches_to_website_mode():
     from bsp.export_site import site_index
-    page = site_index("<link rel=stylesheet href=fonts>")
-    assert 'href="app.css"' in page and '<script src="app.js"></script>' in page
+    page = site_index("<link rel=stylesheet href=fonts>", "abc12345")
+    assert re.search(r'href="app\.css\?v=[0-9a-f]{8}"', page)
+    assert re.search(r'<script src="app\.js\?v=[0-9a-f]{8}"></script>', page)
     assert '"/web/' not in page             # no links to the local server's paths
     cfg = json.loads(re.search(r"window\.MOTORPOOL_STATIC = (\{.*?\});", page).group(1))
-    assert cfg == {"data": "data/", "cards": "cards/", "fonts": "<link rel=stylesheet href=fonts>"}
+    assert cfg["v"] == "abc12345" and re.fullmatch(r"[0-9a-f]{8}", cfg["css"])
+    assert {k: cfg[k] for k in ("data", "cards", "fonts")} == {
+        "data": "data/", "cards": "cards/", "fonts": "<link rel=stylesheet href=fonts>"}
     # The controls that need Motor Pool on your own computer are marked.
     for el in ('id="d-tweak"', 'id="d-approve"', 'id="editor"', 'id="proposals"', 'id="btn-print"'):
         tag = page[page.rindex("<", 0, page.index(el)):page.index(">", page.index(el))]
