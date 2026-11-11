@@ -257,3 +257,15 @@ def test_site_motor_pool_data():
 @pytest.mark.skipif(not SITE_DATA.exists(), reason="no site export")
 def test_site_data_matches_schema():
     validate(json.loads(SITE_DATA.read_text(encoding="utf-8")), SITE_DATA.parent.parent)
+
+
+def test_data_label():
+    from bsp.export_site import data_label
+    content = json.dumps({"units": [1], "strikes": []}, separators=(",", ":"))
+    prev = lambda label, units: {"info": {"about": {"data_date": label}}, "units": units, "strikes": []}
+    assert data_label(None, content, "2026-11-10") == "2026-11-10"
+    assert data_label(prev("2026-11-09.2", [0]), content, "2026-11-10") == "2026-11-10"
+    assert data_label(prev("2026-11-10", [0]), content, "2026-11-10") == "2026-11-10.1"
+    assert data_label(prev("2026-11-10.1", [0]), content, "2026-11-10") == "2026-11-10.2"
+    # Same data as last time: the label stays, even on a later day.
+    assert data_label(prev("2026-11-10.1", [1]), content, "2026-11-12") == "2026-11-10.1"

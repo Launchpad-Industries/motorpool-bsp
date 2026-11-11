@@ -393,7 +393,23 @@ def write_details(cat, ids: list[str], site: Path):
             f.unlink()
 
 
-def write_motor_pool_data(cat, extra: dict, official: bool, site: Path) -> str:
+def data_label(previous: dict | None, content: str, today: str) -> str:
+    """The data version shown under the title: the export date, plus .1, .2...
+    for later exports the same day that changed the data. An export with the
+    same data as last time keeps its label. previous: the last motorpool.json."""
+    if previous:
+        old = (previous.get("info", {}).get("about", {}) or {}).get("data_date", "")
+        same = json.dumps({"units": previous.get("units"), "strikes": previous.get("strikes")},
+                          ensure_ascii=False, separators=(",", ":")) == content
+        if same and old:
+            return old
+        day, _, n = old.partition(".")
+        if day == today:
+            return f"{today}.{int(n or 0) + 1}" if (n or "0").isdigit() else f"{today}.1"
+    return today
+
+
+def write_motor_pool_data(cat, extra: dict, official: bool, site: Path, label: str | None = None) -> str:
     """data/motorpool.json: what Motor Pool's /api/info, /api/units and
     /api/strikes return, plus each row's slug and card pages. Returns its
     version stamp (card pages and unit details are fetched with it)."""
@@ -411,9 +427,15 @@ def write_motor_pool_data(cat, extra: dict, official: bool, site: Path) -> str:
                                 "Official card values aren't published on this site."),
             "strikes": len(cat.strikes), "approved": len(cat.approved), "owner": None, "name": "",
             "settings": {}, "bv_per_point": BV_PER_POINT, "static": True,
-            "about": {"version": __version__, "dist": True, "data_date": date.today().isoformat()}}
+            "about": {"version": __version__, "dist": True, "data_date": ""}}
     out = site / "data" / "motorpool.json"
     out.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        previous = json.loads(out.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        previous = None
+    content = json.dumps({"units": units, "strikes": strikes}, ensure_ascii=False, separators=(",", ":"))
+    info["about"]["data_date"] = label or data_label(previous, content, date.today().isoformat())
     text = json.dumps({"info": info, "units": units, "strikes": strikes},
                       ensure_ascii=False, separators=(",", ":"))
     out.write_text(text, encoding="utf-8")
@@ -429,7 +451,7 @@ def git_rev() -> str:
         return "unknown"
 
 
-def build(cat, official: bool = True, site: Path = SITE) -> dict:
+def build(cat, official: bool = True, site: Path = SITE, label: str | None = None) -> dict:
     """Write the website for a Motor Pool catalog (bsp.app.Catalog) into
     `site`: card pages, images, Motor Pool's front end and the data it reads
     (data/motorpool.json, data/unit/*.json). Returns units.json's data.
@@ -481,7 +503,7 @@ def build(cat, official: bool = True, site: Path = SITE) -> dict:
     strikes = export_strikes(cat.strikes.values(), site, pages, extra)
     pages.finish()
     copy_art.remove_unused()
-    write_front_end(site, write_motor_pool_data(cat, extra, official, site))
+    write_front_end(site, write_motor_pool_data(cat, extra, official, site, label))
     return {
         "schemaVersion": SCHEMA_VERSION,
         "generatedOn": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -500,11 +522,14 @@ def main(argv=None):
     ap.add_argument("--no-official", action="store_true",
                     help="use calculated values even where an official card exists")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help=f"output file (default {DEFAULT_OUT})")
+    ap.add_argument("--data-label", help="data version shown under the title, e.g. 2026-11-10.1 "
+                                         "(default: today's date, with .1, .2... when the data changed "
+                                         "again the same day)")
     a = ap.parse_args(argv)
     from .app import Catalog, load_settings
     cat = Catalog(load_settings())
     site = a.out.resolve().parent.parent       # .../site/data/units.json -> .../site
-    data = build(cat, official=not a.no_official, site=site)
+    data = build(cat, official=not a.no_official, site=site, label=a.data_label)
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     counts: dict[str, int] = {}
