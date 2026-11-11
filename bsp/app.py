@@ -25,13 +25,13 @@ import threading
 import webbrowser
 import zlib
 from dataclasses import asdict
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
 from flask import Flask, Response, abort, jsonify, request, send_from_directory
 
-from . import approvals, dist, signing, strikes
+from . import __version__, approvals, dist, signing, strikes
 from .art import Art
 from .cards import (BV_PER_POINT, Card, apply_values, card_from_generic, card_from_official,
                     card_from_unit, card_frame, card_html, card_values, document,
@@ -515,11 +515,20 @@ def export_proposals(cat: Catalog, items: list[dict], sender: str) -> dict:
         payload.append({"unit": u.full_name, "values": v, "note": it.get("note", "")})
     code = base64.urlsafe_b64encode(zlib.compress(json.dumps(
         {"v": 1, "from": sender, "on": date.today().isoformat(), "items": payload}).encode())).decode()
-    subject = f"{APP_NAME}: {len(payload)} card tweak(s) for approval from {sender}"
-    body = (f"{sender} proposes these card changes:\n\n" + "\n".join(lines) +
+    version = about_version()
+    sent = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    subject = f"[{APP_NAME} tweaks] {len(payload)} card tweak(s) from {sender} | v{__version__}"
+    body = (f"Categories: Card tweaks for approval\nVersion: {version}\nSent: {sent}\nFrom: {sender}\n\n"
+            f"{sender} proposes these card changes:\n\n" + "\n".join(lines) +
             f"\n\nTo review them, open {APP_NAME} > Settings > Import proposals and paste this code:\n\n"
             f"MOTORPOOL:{code}\n")
     return {"subject": subject, "body": body, "code": f"MOTORPOOL:{code}", "count": len(payload)}
+
+
+def about_version() -> str:
+    """The version as shown under the title: "1.5.0 (data 2026-11-10)", or "(dev)"."""
+    d = dist.about().get("data_date", "")
+    return f"{__version__} (data {d})" if d else f"{__version__} (dev)"
 
 
 def fmt(v) -> str:

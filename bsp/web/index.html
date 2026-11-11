@@ -13,7 +13,7 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 </head>
 <body>
 <header class="top">
-  <div class="brand">MOTOR<span>POOL</span><small id="ver"></small><small class="tagline">Unofficial fan-made BattleTech force builder for battlefield support</small></div>
+  <div class="brand">MOTOR<span>POOL</span><small id="ver"></small><b class="beta" title="Still being tested: cards and costs may change">BETA</b><small class="tagline">Unofficial fan-made BattleTech force builder for battlefield support</small></div>
   <input id="q" type="search" placeholder="Search assets… (e.g. drillson, ATM, hover)" autocomplete="off">
   <div class="rtabs seg small" id="r-tabs">
     <button data-tab="assets" class="on">Assets <span id="n-assets"></span></button><button data-tab="strikes">Strikes <span id="n-strikes"></span></button>
@@ -41,6 +41,7 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
     </select>
   </div>
   <div class="tools">
+    <button id="btn-feedback" class="ghost" title="Suggest a change, report a problem or ask for a feature">Feedback</button>
     <button id="btn-about" class="ghost" title="How cards are made, and credits">About</button>
     <button id="btn-settings" class="ghost" title="Settings">Settings</button>
   </div>
@@ -149,6 +150,24 @@ catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
 <dialog id="dlg-about">
   <div id="about-body"></div>
   <div class="dactions"><button id="about-close" class="ghost">Close</button></div>
+</dialog>
+
+<dialog id="dlg-feedback">
+  <h3>Send feedback</h3>
+  <p class="muted">Opens your email program with a message to <span id="fb-to"></span>. Your version and the time are added for you.</p>
+  <div class="fb-cats" id="fb-cats">
+    <label class="check"><input type="checkbox" value="Unit stats suggestion"> Unit stats suggestion</label>
+    <label class="check"><input type="checkbox" value="Unit cost suggestion"> Unit cost suggestion</label>
+    <label class="check"><input type="checkbox" value="Feature request"> Feature request</label>
+    <label class="check"><input type="checkbox" value="Other"> Other</label>
+  </div>
+  <label>Unit (optional) <input id="fb-unit" placeholder="e.g. Drillson Heavy Hover Tank"></label>
+  <label>Your message <textarea id="fb-text" rows="7"></textarea></label>
+  <div class="dactions">
+    <a id="fb-mail" class="btn primary" href="#">Open in email</a>
+    <button id="fb-copy" class="ghost">Copy text</button>
+    <button id="fb-close" class="ghost">Close</button>
+  </div>
 </dialog>
 
 <dialog id="dlg-import">

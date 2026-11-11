@@ -21,6 +21,9 @@ button{cursor:pointer}
 .brand span{color:var(--acc);margin-left:4px}
 .brand small{font-family:"Barlow",sans-serif;font-weight:400;font-size:10px;letter-spacing:0;color:var(--mut)}
 .brand #ver{margin-left:8px}
+.brand .beta{font-family:"Barlow",sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--acc);border:1px solid var(--acc);border-radius:3px;padding:0 3px;margin-left:6px;vertical-align:2px}
+.fb-cats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:4px 0 10px}
+.fb-cats label.check{flex-direction:row;color:var(--fg);margin:0;font-size:13px}
 .brand .tagline{display:block;white-space:nowrap;font-size:10px;line-height:13.2px}
 #q{flex:1;min-width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
 .filters{display:flex;gap:6px;flex-wrap:wrap}

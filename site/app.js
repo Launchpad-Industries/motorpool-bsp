@@ -497,6 +497,45 @@ $("#btn-about").addEventListener("click", async () => {
   $("#about-body").scrollTop = 0;
 });
 $("#about-close").addEventListener("click", () => $("#dlg-about").close());
+
+// ---------------------------------------------------------------- feedback
+// A tagged email to the support address. The subject and first lines follow a
+// fixed pattern (categories, version, data, UTC time) so mail can be sorted
+// automatically.
+const SUPPORT_EMAIL = "motorpool.support@gmail.com";
+const versionTxt = () => { const ab = INFO.about || {}; return `${ab.version || "?"}` + (ab.data_date ? ` (data ${ab.data_date})` : " (dev)"); };
+const utcNow = () => new Date().toISOString().replace(/\.\d+Z$/, "Z");
+function feedbackMail() {
+  const cats = [...document.querySelectorAll("#fb-cats input:checked")].map(i => i.value);
+  const ab = INFO.about || {}, when = utcNow(), unit = $("#fb-unit").value.trim();
+  const subject = `[Motor Pool feedback] ${cats.join(", ") || "Uncategorized"} | v${ab.version || "?"}${unit ? " | " + unit : ""}`;
+  const body = [
+    `Categories: ${cats.join("; ") || "none"}`,
+    `Version: ${versionTxt()}`,
+    `Sent: ${when}`,
+    `From: ${STATIC ? "website" : (ab.dist ? "tester build" : "app")}`,
+    ...(unit ? [`Unit: ${unit}`] : []),
+    "", $("#fb-text").value.trim(), "",
+  ].join("\n");
+  return {cats, subject, body, mailto: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`};
+}
+$("#btn-feedback").addEventListener("click", () => {
+  $("#fb-to").textContent = SUPPORT_EMAIL;
+  if (cur && !$("#detail").hidden && !$("#fb-unit").value) $("#fb-unit").value = cur.u.name;
+  $("#dlg-feedback").showModal();
+});
+$("#fb-mail").addEventListener("click", e => {
+  const m = feedbackMail();
+  if (!m.cats.length) { e.preventDefault(); return toast("Tick at least one kind of feedback."); }
+  if (m.mailto.length > 1900) { e.preventDefault(); return toast("That's too long for an email link: use Copy text and paste it into an email."); }
+  $("#fb-mail").href = m.mailto;
+  setTimeout(() => { if (confirmLight("Did the email go out? Clear the form?")) { $("#fb-text").value = $("#fb-unit").value = ""; document.querySelectorAll("#fb-cats input").forEach(i => i.checked = false); $("#dlg-feedback").close(); } }, 800);
+});
+$("#fb-copy").addEventListener("click", async () => {
+  const m = feedbackMail(), text = `To: ${SUPPORT_EMAIL}\nSubject: ${m.subject}\n\n${m.body}`;
+  try { await navigator.clipboard.writeText(text); toast("Copied."); } catch { toast("Couldn't copy: select the text and copy it yourself."); }
+});
+$("#fb-close").addEventListener("click", () => $("#dlg-feedback").close());
 // Theme is a per-browser choice, applied at once (index.html sets it before first paint).
 $("#theme").value = document.documentElement.dataset.theme;
 $("#theme").addEventListener("change", e => { document.documentElement.dataset.theme = e.target.value; store.set("theme", e.target.value); });

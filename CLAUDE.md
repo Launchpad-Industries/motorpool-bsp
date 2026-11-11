@@ -105,6 +105,14 @@ blank.
   (default motorpool.support@gmail.com, the project's support and feedback
   address since 2026-11-10; saved settings with the old default move to it) with a readable summary + `MOTORPOOL:` import code;
   "Import proposals" in Settings reads it back.
+- **Feedback** button (app and website): a mailto to motorpool.support@gmail.com
+  with tick boxes (Unit stats suggestion, Unit cost suggestion, Feature request,
+  Other). Feedback and tweak emails share a sortable pattern: subject
+  `[Motor Pool feedback] <categories> | v<version>` (or `[Motor Pool tweaks] ...`),
+  then `Categories:`, `Version: 1.5.0 (data 2026-11-10)`, `Sent: <UTC ISO time>`
+  lines first in the body. A **BETA** chip sits beside the version.
+- Data label: `python -m bsp.export_site` labels the data with the date, adding
+  .1, .2... when the data changed again the same day (`--data-label` to set it).
 - **About** button beside Settings shows `bsp/web/about.html`: a plain-language
   description of the model and costing, in our own words, plus credits and
   notices. When a rule changes, in either place, update it and its "Last updated"

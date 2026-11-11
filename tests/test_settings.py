@@ -27,3 +27,13 @@ def test_old_default_moves_to_support_address(tmp_path, monkeypatch):
 
 def test_own_address_is_kept(tmp_path, monkeypatch):
     assert saved(tmp_path, monkeypatch, approval_email="me@example.org")["approval_email"] == "me@example.org"
+
+
+def test_tweak_email_has_version_and_time():
+    import re
+    from bsp import __version__
+    cat = type("Cat", (), {"by_id": {}})()
+    out = app.export_proposals(cat, [], "Launchpad")
+    assert out["subject"].startswith("[Motor Pool tweaks]") and f"v{__version__}" in out["subject"]
+    assert f"Version: {__version__} (" in out["body"]
+    assert re.search(r"^Sent: \d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$", out["body"], re.M)
