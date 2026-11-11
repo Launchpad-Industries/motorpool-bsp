@@ -96,9 +96,9 @@ def test_calculated_card_matches_the_model(client, rows):
 
 
 @pytest.mark.parametrize("suit_name, card_name, variant, official_cost, calculated_cost, differs", [
-    ("Elemental Battle Armor [MG](Sqd5)", "Elemental Battle Armor", "Standard", 17, 19, ["cost", "vet_cost"]),
-    ("Elemental Battle Armor [AP Gauss](Sqd5)", "Elemental Battle Armor (AP Gauss)", "Standard", 19, 23, None),
-    ("Elemental III Battle Armor [AP Gauss](Sqd5)", "Elemental III Battle Armor", "Standard", 26, 26, None),
+    ("Elemental Battle Armor [MG](Sqd5)", "Elemental Battle Armor", "Standard", 17, 21, ["cost", "vet_cost"]),
+    ("Elemental Battle Armor [AP Gauss](Sqd5)", "Elemental Battle Armor (AP Gauss)", "Standard", 19, 26, None),
+    ("Elemental III Battle Armor [AP Gauss](Sqd5)", "Elemental III Battle Armor", "Standard", 26, 29, None),
     ("IS Standard Battle Armor [MG](Sqd4)", "Inner Sphere Battle Armor", "Standard", 13, 15, ["cost", "vet_cost"]),
 ])
 def test_official_cards_are_linked_to_their_suits(client, rows, suit_name, card_name, variant,

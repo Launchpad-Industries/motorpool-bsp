@@ -27,7 +27,9 @@ COST_RULES = {
     "if_weight": 0.8,         # IF X counts as X*5 damage at 7/14/21, x this
     "defense_scale": 0.6,
     "tmm_base_tn": 4,           # TMM by 2D6 hit chance from 4+ (see tmm_factor)
-    "skill_step": 1.1,        # offense x this per point of Skill below 6
+    "skill_mult": 1.15,       # whole cost x this per point of Skill below 6,
+                              # the same as Veteran (Will, 10 Nov 2026)
+    "skill_step": 1.1,        # offense / this per point of Skill above 6 (artillery at 8)
     "veteran": 1.15,
     # Fixed points per launcher / piece. Long Tom (57) from the two Mobile
     # Long Tom cards; the rest scaled from it by one-shot Strike cost
@@ -106,7 +108,8 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
     elif indirect:
         off = rules["if_weight"] * indirect * 5 * (21 / 9) ** rules["range_exponent"]
     off *= speed_factor(mp) * rules["offense_scale"]
-    off *= rules["skill_step"] ** (6 - skill)
+    if skill > 6:
+        off *= rules["skill_step"] ** (6 - skill)
     for key, mult in rules["special_mult"].items():
         if any(s.lower().replace("-", "").startswith(key.lower().replace("-", ""))
                for s in specials):
@@ -133,6 +136,8 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
         if m:
             artillery = True
             raw += rules["artillery_points"].get(m.group(1), 0) * int(m.group(2) or 1)
+    # Better Skill is priced like Veteran: the whole cost x 1.15 per point.
+    raw *= rules["skill_mult"] ** max(0, 6 - skill)
     return {"regular": int(math.floor(raw + 0.5)),
             # Artillery assets can't buy Skill upgrades (BSP rules).
             "veteran": None if artillery else int(math.floor(raw * rules["veteran"] + 0.5)),
