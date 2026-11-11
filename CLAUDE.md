@@ -30,7 +30,8 @@ before starting; both places push to `origin main`.
   before big changes, and is happy for small, obvious fixes to just be done.
 - Keep explanations plain; he's comfortable with git basics and Python via
   an Anaconda Prompt on Windows (Surface Pro, display scaling ~150%).
-- Commit as `William Becker <williamtbecker@gmail.com>` and push to
+- Commit as `William Becker <25192313+williamtbecker@users.noreply.github.com>`
+  (his private GitHub address; never his Gmail, since the repo is public) and push to
   `origin main` when a change is done and tested.
 
 ## Running things (Windows, Anaconda Prompt, from this folder)
