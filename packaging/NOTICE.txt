@@ -4,7 +4,7 @@ Motor Pool - third-party notices
 Motor Pool (BSP Card Generator)
   Copyright (C) 2026 William Becker. Free software under the GNU General
   Public License v3 or later (LICENSE.txt). Source:
-  https://github.com/williamtbecker/bsp-card-generator
+  https://github.com/Launchpad-Industries/motorpool-bsp
 
 MegaMek Data (unit files and unit sprites)
   MegaMek Data (C) The MegaMek Team, https://github.com/MegaMek/mm-data
