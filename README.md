@@ -258,3 +258,6 @@ BattleTech, MechWarrior, BattleMech, 'Mech and related names are registered
 trademarks and/or trademarks of The Topps Company, Inc. Catalyst Game Labs
 and the Catalyst Game Labs logo are trademarks of InMediaRes Productions,
 LLC. Cards produced by this tool are not official cards.
+
+Motor Pool is also an independent project, not affiliated with or endorsed by
+the MegaMek project or MekBay, though it gratefully builds on MegaMek Data.
