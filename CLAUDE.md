@@ -117,7 +117,9 @@ blank.
 - **About** button beside Settings shows `bsp/web/about.html`: a plain-language
   description of the model and costing, in our own words, plus credits and
   notices. When a rule changes, in either place, update it and its "Last updated"
-  date. `tests/test_about.py` checks the worked example against the cost formula.
+  date, and add a line to its **Changelog** (newest first, one dated entry per
+  day, version in brackets; user-visible changes only, in plain words).
+  `tests/test_about.py` checks the worked example against the cost formula.
   No GitHub link while the repository is private.
 - Working title **Motor Pool** (may change once infantry/battle armor arrive).
   Tagline: "Unofficial fan-made BattleTech force builder for battlefield support".
