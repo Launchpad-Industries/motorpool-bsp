@@ -102,8 +102,8 @@ blank.
   Others' approvals are saved locally under their own name, unverified.
 - Tweak → live re-cost → optional cost override → approve, recording changes.
 - "Send tweaks for approval": mailto to the Settings address
-  (williamtbecker@gmail.com for now; Will wants a dedicated address before
-  wider distribution) with a readable summary + `MOTORPOOL:` import code;
+  (default motorpool.support@gmail.com, the project's support and feedback
+  address since 2026-11-10; saved settings with the old default move to it) with a readable summary + `MOTORPOOL:` import code;
   "Import proposals" in Settings reads it back.
 - **About** button beside Settings shows `bsp/web/about.html`: a plain-language
   description of the model and costing, in our own words, plus credits and
@@ -150,7 +150,7 @@ blank.
   right offline.
 - A double-click `Motor Pool.bat` launcher (git pull + start).
 - Tester build: include infantry/emplacement data once the app shows them;
-  a dedicated feedback email address; maybe a calculated-only public build.
+  maybe a calculated-only public build.
 - Infantry and emplacement cards once the model supports them.
 
 ## Licensing

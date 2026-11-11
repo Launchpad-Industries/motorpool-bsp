@@ -44,10 +44,11 @@ USING IT
 SENDING FEEDBACK
 ----------------
 - Card changes: open a card, use Tweak, then "Add to tweaks to send" and
-  "Send tweaks for approval". It opens an email to Will with your changes
-  already written in; just press Send. (If no email program opens, use
+  "Send tweaks for approval". It opens an email to motorpool.support@gmail.com with your
+  changes already written in; just press Send. (If no email program opens, use
   "Copy text" and paste it into an email.)
-- Anything else (bugs, ideas): email Will, or message Launchpad on Discord.
+- Anything else (bugs, ideas): email motorpool.support@gmail.com, or message
+  Launchpad on Discord.
   Please mention the version shown under the title. If something went
   wrong, the black window may show an error message: a copy of that helps.
 

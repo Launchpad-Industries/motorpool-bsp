@@ -46,7 +46,7 @@ WEB = Path(__file__).resolve().parent / "web"
 SETTINGS = signing.HOME / "settings.json"
 DEFAULTS = {
     "name": "",                                   # your approver name
-    "approval_email": "williamtbecker@gmail.com",  # where "Send tweaks for approval" goes
+    "approval_email": "motorpool.support@gmail.com",  # where "Send tweaks for approval" goes
     "mm_data": str(ROOT / "mm-data" / "data" / "mekfiles"),
     "official_tsv": "",                           # export of the official cards (from the Sheet)
     "fluff_dir": "",                              # your own unit images
@@ -56,6 +56,9 @@ COMPARE = ("mp", "mode", "tmm", "range", "skill", "damage", "check", "threshold"
 
 
 PATH_KEYS = ("mm_data", "official_tsv", "fluff_dir")
+# Earlier default approval addresses: settings still holding one move to the
+# current default (an address someone typed in themselves is kept).
+OLD_APPROVAL_EMAILS = ("williamtbecker@gmail.com",)
 
 
 def clean_path(p: str) -> str:
@@ -69,6 +72,8 @@ def load_settings() -> dict:
         s.update(json.loads(SETTINGS.read_text(encoding="utf-8")))
     for k in PATH_KEYS:
         s[k] = clean_path(s.get(k, ""))
+    if s.get("approval_email", "").strip().lower() in OLD_APPROVAL_EMAILS:
+        s["approval_email"] = DEFAULTS["approval_email"]
     if dist.DIST:
         # The packaged app reads only its bundled data.
         s["mm_data"], s["official_tsv"] = str(dist.long_path(Path(DEFAULTS["mm_data"]))), ""
