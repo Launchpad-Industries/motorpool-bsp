@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "generatedOn": "2026-11-12T07:10:56-05:00",
- "generator": "bsp-card-generator 1.5.0 (git 66dbe7f)",
+ "generatedOn": "2026-11-12T07:40:35-05:00",
+ "generator": "bsp-card-generator 1.5.0 (git 5a45e9e)",
  "disclaimer": "Unofficial fan-made content, not affiliated with, endorsed by, or sponsored by The Topps Company, Inc., Catalyst Game Labs, or InMediaRes Productions, LLC. BattleTech is a registered trademark of The Topps Company, Inc.",
  "credits": [
   "Unit data and sprites: MegaMek Data, (C) The MegaMek Team (CC BY-NC-SA 4.0)",
@@ -130,8 +130,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -175,8 +175,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-achileus-4.png",
@@ -220,8 +220,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -265,8 +265,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-achileus-4.png",
@@ -310,8 +310,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -355,8 +355,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-achileus-4.png",
@@ -400,8 +400,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -445,8 +445,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-achileus-4.png",
@@ -490,8 +490,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -536,8 +536,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-achileus-4.png",
@@ -582,8 +582,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-achileus-6.png",
@@ -627,8 +627,8 @@
     ]
    },
    "cost": {
-    "regular": 10,
-    "veteran": 12
+    "regular": 9,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-aegispds-4.png",
@@ -671,7 +671,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/defaults-default-ba.png",
@@ -716,7 +716,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/defaults-default-ba.png",
@@ -932,8 +932,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-afreet-hh-5.png",
@@ -978,8 +978,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 28
+    "regular": 23,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-afreet-5.png",
@@ -1023,8 +1023,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-afreet-5.png",
@@ -1069,8 +1069,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-afreet-5.png",
@@ -1113,8 +1113,8 @@
     ]
    },
    "cost": {
-    "regular": 10,
-    "veteran": 11
+    "regular": 9,
+    "veteran": 10
    },
    "art": {
     "src": "img/units/battle-armor-ailette-4.png",
@@ -1156,8 +1156,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-ailette-4.png",
@@ -1753,8 +1753,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-amazon-4.png",
@@ -1798,8 +1798,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-amazon-4.png",
@@ -1886,8 +1886,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-angerona-4.png",
@@ -1931,8 +1931,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-angerona-4.png",
@@ -2968,8 +2968,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-asura-ai-6.png",
@@ -3013,8 +3013,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-asura-6.png",
@@ -3058,8 +3058,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-asura-6.png",
@@ -6219,8 +6219,8 @@
     ]
    },
    "cost": {
-    "regular": 27,
-    "veteran": 31
+    "regular": 23,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-blackwolfba-5.png",
@@ -6263,8 +6263,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-blackwolfba-lbx-5.png",
@@ -6307,8 +6307,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-blackwolfba-lbx-5.png",
@@ -6351,8 +6351,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-blackwolfba-lbx-5.png",
@@ -6395,8 +6395,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-blackwolfba-5.png",
@@ -7736,8 +7736,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-buraq-5.png",
@@ -7779,8 +7779,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-buraq-5.png",
@@ -7823,8 +7823,8 @@
     ]
    },
    "cost": {
-    "regular": 27,
-    "veteran": 32
+    "regular": 25,
+    "veteran": 29
    },
    "art": {
     "src": "img/units/battle-armor-buraq-support-5.png",
@@ -8296,8 +8296,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-cavalier-4.png",
@@ -8341,8 +8341,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-cavalier-4.png",
@@ -8386,8 +8386,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-cavalier-4.png",
@@ -8431,8 +8431,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-cavalier-4.png",
@@ -8829,8 +8829,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-centaurba-4.png",
@@ -9998,8 +9998,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-clanba-volk-5.png",
@@ -10043,8 +10043,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-clanba-bar-5.png",
@@ -10088,8 +10088,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-clanba-5.png",
@@ -10133,8 +10133,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-clanba-5.png",
@@ -11157,8 +11157,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 21,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-constable-ecm-5.png",
@@ -11202,8 +11202,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-constable-mg-5.png",
@@ -11248,8 +11248,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-constable-ecm-5.png",
@@ -11294,8 +11294,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-constable-mg-5.png",
@@ -11463,8 +11463,8 @@
     ]
    },
    "cost": {
-    "regular": 32,
-    "veteran": 37
+    "regular": 30,
+    "veteran": 34
    },
    "art": {
     "src": "img/units/battle-armor-corona-5.png",
@@ -11507,8 +11507,8 @@
     ]
    },
    "cost": {
-    "regular": 33,
-    "veteran": 38
+    "regular": 31,
+    "veteran": 36
    },
    "art": {
     "src": "img/units/battle-armor-corona-srm-5.png",
@@ -11776,8 +11776,8 @@
     ]
    },
    "cost": {
-    "regular": 38,
-    "veteran": 44
+    "regular": 34,
+    "veteran": 39
    },
    "art": {
     "src": "img/units/battle-armor-cuchulainn-5.png",
@@ -13995,8 +13995,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-djinn-4.png",
@@ -14040,8 +14040,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-djinn-6.png",
@@ -14085,8 +14085,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-djinn-4.png",
@@ -14130,8 +14130,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-djinn-6.png",
@@ -14175,8 +14175,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-djinn-4.png",
@@ -14220,8 +14220,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-djinn-6.png",
@@ -14266,8 +14266,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-djinn-6.png",
@@ -14311,8 +14311,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-djinn-6.png",
@@ -14490,8 +14490,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-dragoonba-5.png",
@@ -14535,8 +14535,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-dragoonba-4.png",
@@ -15053,8 +15053,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co.png",
@@ -15098,8 +15098,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-fl.png",
@@ -15143,8 +15143,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -15189,8 +15189,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co.png",
@@ -15234,8 +15234,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-fl.png",
@@ -15279,8 +15279,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co.png",
@@ -15324,8 +15324,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -15414,8 +15414,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -15459,8 +15459,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-fl.png",
@@ -15504,8 +15504,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co.png",
@@ -15549,8 +15549,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -15639,8 +15639,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -15684,8 +15684,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-elemental-ii-5-co.png",
@@ -15728,8 +15728,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-ii-5-co-la.png",
@@ -15818,8 +15818,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-fl.png",
@@ -15863,8 +15863,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-elemental-5-co-la.png",
@@ -16673,8 +16673,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-fashih-support-4.png",
@@ -16718,8 +16718,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-fashih-support-4.png",
@@ -16763,8 +16763,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -16808,8 +16808,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -16853,8 +16853,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -16898,8 +16898,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -16943,8 +16943,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -16989,8 +16989,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-fashih-4.png",
@@ -17076,8 +17076,8 @@
     ]
    },
    "cost": {
-    "regular": 34,
-    "veteran": 39
+    "regular": 32,
+    "veteran": 37
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-srm-4.png",
@@ -17119,8 +17119,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-ml-4.png",
@@ -17162,8 +17162,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-mg-4.png",
@@ -17205,8 +17205,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-ml-4.png",
@@ -17248,8 +17248,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-ml-4.png",
@@ -17291,8 +17291,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-mg-4.png",
@@ -17334,8 +17334,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-mg-4.png",
@@ -17377,8 +17377,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-srm-4.png",
@@ -17420,8 +17420,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-fenrir-ml-4.png",
@@ -17463,8 +17463,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-fenririi-mrr-4.png",
@@ -17507,8 +17507,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-fenririi-lrm-4.png",
@@ -17550,8 +17550,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-fenririi-ml-4.png",
@@ -17593,8 +17593,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-fenririi-mrr-4.png",
@@ -17636,8 +17636,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 33
+    "regular": 25,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-fenririi-lrm-4.png",
@@ -19408,8 +19408,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-fusilierba-4.png",
@@ -19451,8 +19451,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-fusilierba-4.png",
@@ -20465,8 +20465,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-gladiatorexo-s-4.png",
@@ -20510,8 +20510,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-gladiatorexo-4.png",
@@ -20555,7 +20555,7 @@
     ]
    },
    "cost": {
-    "regular": 9,
+    "regular": 8,
     "veteran": 10
    },
    "art": {
@@ -20950,8 +20950,8 @@
     ]
    },
    "cost": {
-    "regular": 33,
-    "veteran": 38
+    "regular": 29,
+    "veteran": 33
    },
    "art": {
     "src": "img/units/battle-armor-gnome-5.png",
@@ -20994,8 +20994,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 33
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-gnome-5.png",
@@ -21038,8 +21038,8 @@
     ]
    },
    "cost": {
-    "regular": 27,
-    "veteran": 31
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-gnome-5.png",
@@ -21082,8 +21082,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-gnome-5.png",
@@ -21126,8 +21126,8 @@
     ]
    },
    "cost": {
-    "regular": 27,
-    "veteran": 31
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-gnome-5.png",
@@ -21562,8 +21562,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-golem-fa-5.png",
@@ -21605,8 +21605,8 @@
     ]
    },
    "cost": {
-    "regular": 32,
-    "veteran": 37
+    "regular": 27,
+    "veteran": 31
    },
    "art": {
     "src": "img/units/battle-armor-golem-rock-5.png",
@@ -21648,8 +21648,8 @@
     ]
    },
    "cost": {
-    "regular": 28,
-    "veteran": 33
+    "regular": 23,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-golem-5.png",
@@ -21691,8 +21691,8 @@
     ]
    },
    "cost": {
-    "regular": 42,
-    "veteran": 49
+    "regular": 37,
+    "veteran": 43
    },
    "art": {
     "src": "img/units/battle-armor-golem-rock-5.png",
@@ -21736,7 +21736,7 @@
     ]
    },
    "cost": {
-    "regular": 11,
+    "regular": 10,
     "veteran": 12
    },
    "art": {
@@ -21781,8 +21781,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-gorilla-4.png",
@@ -21912,8 +21912,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-gd-heavy-4.png",
@@ -21957,8 +21957,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 13,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-gd-infiltrator-4.png",
@@ -22002,8 +22002,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 13,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-gd-infiltrator-4.png",
@@ -22047,8 +22047,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 13,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-gd-infiltrator-4.png",
@@ -22093,8 +22093,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-gd-infiltrator-4.png",
@@ -22139,8 +22139,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-gd-infiltrator-4.png",
@@ -22185,8 +22185,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-gd-scout-4.png",
@@ -22231,8 +22231,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-gd-standard-4.png",
@@ -22277,8 +22277,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-gd-standard-4.png",
@@ -22323,8 +22323,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-gd-standard-4.png",
@@ -22369,8 +22369,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-gd-standard-4.png",
@@ -22415,8 +22415,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-gd-standard-4.png",
@@ -22461,8 +22461,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 28
+    "regular": 22,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-gd-strike-4.png",
@@ -22507,8 +22507,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-gd-strike-4.png",
@@ -22553,8 +22553,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-gd-strike-4.png",
@@ -22596,8 +22596,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-hrr-4.png",
@@ -22639,8 +22639,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22683,8 +22683,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22726,8 +22726,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-vsp-4.png",
@@ -22769,8 +22769,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22812,8 +22812,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-hfl-4.png",
@@ -22855,8 +22855,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22898,8 +22898,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 22,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22941,8 +22941,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -22985,8 +22985,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-grenadier-4.png",
@@ -23029,8 +23029,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadierii-4.png",
@@ -23074,8 +23074,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-grenadierii-4.png",
@@ -23118,8 +23118,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-grenadierii-c-4.png",
@@ -23162,8 +23162,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-grenadierii-d-4.png",
@@ -23251,8 +23251,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-4.png",
@@ -23296,8 +23296,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-4.png",
@@ -23339,8 +23339,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-cargo-4.png",
@@ -23382,8 +23382,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-drill-4.png",
@@ -23427,8 +23427,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-4.png",
@@ -23470,8 +23470,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-groundhog-4.png",
@@ -25225,8 +25225,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-hauberk-4.png",
@@ -25268,8 +25268,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-hauberk-com-4.png",
@@ -25311,8 +25311,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 20
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-hauberk-ii-4.png",
@@ -28880,8 +28880,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-infiltrator-4.png",
@@ -28926,8 +28926,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-infiltrator-4.png",
@@ -28972,8 +28972,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-infiltratorii-4.png",
@@ -29018,8 +29018,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-infiltratorii-4.png",
@@ -29063,8 +29063,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-infiltratorii-4.png",
@@ -29110,8 +29110,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 20,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-infiltratorii-4.png",
@@ -29155,8 +29155,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-infiltratorii-4.png",
@@ -29198,8 +29198,8 @@
     ]
    },
    "cost": {
-    "regular": 33,
-    "veteran": 38
+    "regular": 28,
+    "veteran": 32
    },
    "art": {
     "src": "img/units/battle-armor-ironhold-at-5.png",
@@ -29241,8 +29241,8 @@
     ]
    },
    "cost": {
-    "regular": 45,
-    "veteran": 52
+    "regular": 40,
+    "veteran": 46
    },
    "art": {
     "src": "img/units/battle-armor-ironhold-fire-5.png",
@@ -29284,8 +29284,8 @@
     ]
    },
    "cost": {
-    "regular": 36,
-    "veteran": 41
+    "regular": 30,
+    "veteran": 35
    },
    "art": {
     "src": "img/units/battle-armor-ironhold-5.png",
@@ -29329,8 +29329,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29374,8 +29374,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29419,8 +29419,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29464,8 +29464,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29509,8 +29509,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29554,8 +29554,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-6.png",
@@ -29599,8 +29599,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29644,8 +29644,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-6.png",
@@ -29689,8 +29689,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29734,8 +29734,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-6.png",
@@ -29779,8 +29779,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29869,8 +29869,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-6.png",
@@ -29914,8 +29914,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-4.png",
@@ -29959,8 +29959,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-is-standard-6.png",
@@ -31701,8 +31701,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -31746,8 +31746,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -31791,8 +31791,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-kage-vc-4.png",
@@ -31836,8 +31836,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -31881,8 +31881,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -31926,8 +31926,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -31971,8 +31971,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -32017,8 +32017,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -32062,8 +32062,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-kage-4.png",
@@ -32447,8 +32447,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-kanazuchi-support-4.png",
@@ -32490,8 +32490,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-kanazuchi-4.png",
@@ -32533,8 +32533,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-kanazuchi-4.png",
@@ -32576,8 +32576,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-kanazuchi-4.png",
@@ -32619,8 +32619,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-kanazuchi-4.png",
@@ -33671,8 +33671,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-kishi-4.png",
@@ -33805,8 +33805,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-kobold-4.png",
@@ -33850,8 +33850,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -33895,8 +33895,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-kobold-4.png",
@@ -33940,8 +33940,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -33986,8 +33986,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-kobold-4.png",
@@ -34032,8 +34032,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -34077,8 +34077,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-kobold-4.png",
@@ -34122,8 +34122,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -34168,8 +34168,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-kobold-4.png",
@@ -34214,8 +34214,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -34261,8 +34261,8 @@
     ]
    },
    "cost": {
-    "regular": 28,
-    "veteran": 32
+    "regular": 25,
+    "veteran": 29
    },
    "art": {
     "src": "img/units/battle-armor-kobold-5.png",
@@ -34306,8 +34306,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-kobold-6.png",
@@ -34435,8 +34435,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-kopis-4.png",
@@ -34479,8 +34479,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-kopis-4.png",
@@ -34523,8 +34523,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-kopis-4.png",
@@ -34566,8 +34566,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-kopis-4.png",
@@ -34609,8 +34609,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 10,
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-kopis-4.png",
@@ -35030,8 +35030,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-leonidas-4.png",
@@ -35076,8 +35076,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 21
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-leonidas-4.png",
@@ -35122,8 +35122,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-leonidas-4.png",
@@ -35169,8 +35169,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-leonidas-4.png",
@@ -35216,8 +35216,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-leonidas-4.png",
@@ -35649,8 +35649,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-longinus-magnetic-4.png",
@@ -35694,8 +35694,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-longinus-magnetic-6.png",
@@ -35739,8 +35739,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-longinus-4.png",
@@ -35784,8 +35784,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-longinus-6.png",
@@ -35829,8 +35829,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-longinus-4.png",
@@ -35874,8 +35874,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-longinus-6.png",
@@ -35919,8 +35919,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-longinus-4.png",
@@ -35964,8 +35964,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-longinus-6.png",
@@ -36009,8 +36009,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-longinus-4.png",
@@ -36054,8 +36054,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-longinus-6.png",
@@ -37559,8 +37559,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-marauderba-4.png",
@@ -42109,8 +42109,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-cap-6.png",
@@ -42152,8 +42152,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 34
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-gauss-6.png",
@@ -42196,8 +42196,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-cap-6.png",
@@ -42239,8 +42239,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-6.png",
@@ -42283,8 +42283,8 @@
     ]
    },
    "cost": {
-    "regular": 30,
-    "veteran": 35
+    "regular": 25,
+    "veteran": 29
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-seeker-6.png",
@@ -42326,8 +42326,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-nephilim-6.png",
@@ -42528,7 +42528,7 @@
     ]
    },
    "cost": {
-    "regular": 16,
+    "regular": 15,
     "veteran": 18
    },
    "art": {
@@ -42574,8 +42574,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-nighthawkpal-6.png",
@@ -42620,7 +42620,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-nighthawkpal-4.png",
@@ -42664,8 +42664,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-nighthawkpal-6.png",
@@ -42709,7 +42709,7 @@
     ]
    },
    "cost": {
-    "regular": 9,
+    "regular": 8,
     "veteran": 10
    },
    "art": {
@@ -42754,8 +42754,8 @@
     ]
    },
    "cost": {
-    "regular": 10,
-    "veteran": 11
+    "regular": 9,
+    "veteran": 10
    },
    "art": {
     "src": "img/units/battle-armor-nighthawkpal-6.png",
@@ -43322,8 +43322,8 @@
     ]
    },
    "cost": {
-    "regular": 28,
-    "veteran": 32
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-ogre-4.png",
@@ -43366,8 +43366,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-ogre-4.png",
@@ -43412,8 +43412,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-oniba-4.png",
@@ -43458,8 +43458,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 22,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-oniba-4.png",
@@ -43505,8 +43505,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-oniba-4.png",
@@ -43551,8 +43551,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-oniba-4.png",
@@ -44373,7 +44373,7 @@
     ]
    },
    "cost": {
-    "regular": 11,
+    "regular": 10,
     "veteran": 12
    },
    "art": {
@@ -46904,8 +46904,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-4.png",
@@ -46948,8 +46948,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-6.png",
@@ -46992,8 +46992,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-4.png",
@@ -47036,8 +47036,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 22,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-6.png",
@@ -47080,8 +47080,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-c-4.png",
@@ -47124,8 +47124,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-c-6.png",
@@ -47168,8 +47168,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-phalanx-d-4.png",
@@ -49319,8 +49319,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-purifier-4.png",
@@ -49364,8 +49364,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 25
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49410,8 +49410,8 @@
     ]
    },
    "cost": {
-    "regular": 11,
-    "veteran": 13
+    "regular": 10,
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-purifier-4.png",
@@ -49456,8 +49456,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49501,8 +49501,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-purifier-4.png",
@@ -49546,8 +49546,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49592,8 +49592,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-purifier-4.png",
@@ -49638,8 +49638,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49683,8 +49683,8 @@
     ]
    },
    "cost": {
-    "regular": 28,
-    "veteran": 32
+    "regular": 23,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49728,8 +49728,8 @@
     ]
    },
    "cost": {
-    "regular": 31,
-    "veteran": 36
+    "regular": 27,
+    "veteran": 31
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49773,8 +49773,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 21,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49818,8 +49818,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 21,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-purifier-6.png",
@@ -49909,8 +49909,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-quirinus-4.png",
@@ -49955,8 +49955,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-quirinus-4.png",
@@ -50001,8 +50001,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-quirinus-4.png",
@@ -50221,8 +50221,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50266,8 +50266,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50311,8 +50311,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50356,8 +50356,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50401,8 +50401,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50446,8 +50446,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50491,8 +50491,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50536,8 +50536,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-raiden-4.png",
@@ -50790,8 +50790,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-ravager-5.png",
@@ -50833,8 +50833,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-ravager-4.png",
@@ -51217,8 +51217,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 33
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-rhinoba-5.png",
@@ -51919,8 +51919,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-roguebear-hr-5.png",
@@ -51963,8 +51963,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 33
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-roguebear-5.png",
@@ -52007,8 +52007,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-roguebear-5.png",
@@ -52051,8 +52051,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-roguebear-hr-5.png",
@@ -52306,8 +52306,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 18,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-rottweiler-cc-4.png",
@@ -52349,8 +52349,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-rottweiler-cc-4.png",
@@ -52393,8 +52393,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-rottweiler-4.png",
@@ -52436,8 +52436,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-rottweiler-4.png",
@@ -53043,8 +53043,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 27
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-salamanderba-5.png",
@@ -53088,8 +53088,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-salamanderba-5.png",
@@ -53133,8 +53133,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-salamanderba-5.png",
@@ -53178,8 +53178,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-salrilla-4.png",
@@ -53223,8 +53223,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-salrilla-4.png",
@@ -56140,8 +56140,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-seirim-ai-6.png",
@@ -56185,8 +56185,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-seirim-ai-6.png",
@@ -56230,8 +56230,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-seirim-6.png",
@@ -56274,8 +56274,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-seafoxba-4.png",
@@ -56847,8 +56847,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 29
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-shedu-ct-6.png",
@@ -56890,8 +56890,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 33
+    "regular": 24,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-shedu-6.png",
@@ -56935,8 +56935,8 @@
     ]
    },
    "cost": {
-    "regular": 30,
-    "veteran": 34
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-shedu-recon-6.png",
@@ -56978,8 +56978,8 @@
     ]
    },
    "cost": {
-    "regular": 27,
-    "veteran": 31
+    "regular": 22,
+    "veteran": 25
    },
    "art": {
     "src": "img/units/battle-armor-shedu-6.png",
@@ -57021,8 +57021,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 34
+    "regular": 24,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-shedu-support-6.png",
@@ -57064,8 +57064,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-4.png",
@@ -57108,8 +57108,8 @@
     ]
    },
    "cost": {
-    "regular": 25,
-    "veteran": 28
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-4.png",
@@ -57151,8 +57151,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-4.png",
@@ -57194,8 +57194,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-srm-4.png",
@@ -57237,8 +57237,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-4.png",
@@ -57280,8 +57280,8 @@
     ]
    },
    "cost": {
-    "regular": 23,
-    "veteran": 27
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-shenlong-srm-4.png",
@@ -57671,8 +57671,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-simianba-4.png",
@@ -57716,8 +57716,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-simianba-4.png",
@@ -57761,8 +57761,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-simianba-4.png",
@@ -57806,8 +57806,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-simianba-4.png",
@@ -58415,8 +58415,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-sloth-4.png",
@@ -58459,8 +58459,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 25,
+    "veteran": 28
    },
    "art": {
     "src": "img/units/battle-armor-sloth-4.png",
@@ -58502,8 +58502,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-sloth-4.png",
@@ -58893,8 +58893,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/defaults-default-ba.png",
@@ -58938,7 +58938,7 @@
     ]
    },
    "cost": {
-    "regular": 12,
+    "regular": 11,
     "veteran": 13
    },
    "art": {
@@ -58983,8 +58983,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-smoothdavid-4.png",
@@ -59240,8 +59240,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 11,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-spectreba-4.png",
@@ -59814,8 +59814,8 @@
     ]
    },
    "cost": {
-    "regular": 35,
-    "veteran": 41
+    "regular": 31,
+    "veteran": 35
    },
    "art": {
     "src": "img/units/battle-armor-stormbird-5.png",
@@ -59858,8 +59858,8 @@
     ]
    },
    "cost": {
-    "regular": 29,
-    "veteran": 34
+    "regular": 25,
+    "veteran": 29
    },
    "art": {
     "src": "img/units/battle-armor-stormbird-5.png",
@@ -60946,8 +60946,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-surat-4.png",
@@ -61456,8 +61456,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-sylph-xr-5.png",
@@ -61501,8 +61501,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-sylph-5.png",
@@ -61546,8 +61546,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-sylph-5.png",
@@ -61591,8 +61591,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-sylph-xr-5.png",
@@ -61799,8 +61799,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 24,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-taranis-4.png",
@@ -61843,8 +61843,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-tengu-lrr-6.png",
@@ -61887,8 +61887,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 28
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-tengu-6.png",
@@ -61932,8 +61932,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-tengu-c3i-6.png",
@@ -61976,8 +61976,8 @@
     ]
    },
    "cost": {
-    "regular": 30,
-    "veteran": 34
+    "regular": 26,
+    "veteran": 30
    },
    "art": {
     "src": "img/units/battle-armor-tengu-6.png",
@@ -62020,8 +62020,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 19,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-tengu-6.png",
@@ -62064,8 +62064,8 @@
     ]
    },
    "cost": {
-    "regular": 21,
-    "veteran": 24
+    "regular": 17,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-tengu-rl-6.png",
@@ -62671,8 +62671,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62715,8 +62715,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 28
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62759,8 +62759,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62803,8 +62803,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 20,
+    "veteran": 23
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62847,8 +62847,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 22,
+    "veteran": 26
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62891,8 +62891,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 19,
+    "veteran": 22
    },
    "art": {
     "src": "img/units/battle-armor-thunderbird-5.png",
@@ -62935,8 +62935,8 @@
     ]
    },
    "cost": {
-    "regular": 32,
-    "veteran": 36
+    "regular": 29,
+    "veteran": 33
    },
    "art": {
     "src": "img/units/battle-armor-thunderbirdii-5.png",
@@ -63021,8 +63021,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-tinstar-4.png",
@@ -63066,8 +63066,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-tinstar-4.png",
@@ -63445,8 +63445,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-4.png",
@@ -63490,8 +63490,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 11
+    "regular": 8,
+    "veteran": 10
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63535,7 +63535,7 @@
     ]
    },
    "cost": {
-    "regular": 11,
+    "regular": 10,
     "veteran": 12
    },
    "art": {
@@ -63581,7 +63581,7 @@
    },
    "cost": {
     "regular": 11,
-    "veteran": 13
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63626,7 +63626,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63671,7 +63671,7 @@
    },
    "cost": {
     "regular": 11,
-    "veteran": 13
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63760,8 +63760,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 11
+    "regular": 8,
+    "veteran": 10
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63805,8 +63805,8 @@
     ]
    },
    "cost": {
-    "regular": 12,
-    "veteran": 14
+    "regular": 10,
+    "veteran": 12
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63850,8 +63850,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 11
+    "regular": 8,
+    "veteran": 10
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63896,7 +63896,7 @@
    },
    "cost": {
     "regular": 18,
-    "veteran": 21
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-tornadopal-6.png",
@@ -63938,8 +63938,8 @@
     ]
    },
    "cost": {
-    "regular": 33,
-    "veteran": 38
+    "regular": 31,
+    "veteran": 36
    },
    "art": {
     "src": "img/units/battle-armor-tortoiseii-4.png",
@@ -63981,8 +63981,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 29
+    "regular": 24,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-tortoiseii-4.png",
@@ -64025,8 +64025,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 29
+    "regular": 24,
+    "veteran": 27
    },
    "art": {
     "src": "img/units/battle-armor-tortoiseii-4.png",
@@ -64068,8 +64068,8 @@
     ]
    },
    "cost": {
-    "regular": 41,
-    "veteran": 47
+    "regular": 39,
+    "veteran": 45
    },
    "art": {
     "src": "img/units/battle-armor-tortoiseii-4.png",
@@ -64295,8 +64295,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-trinity-asterion-upgrade-4.png",
@@ -64340,8 +64340,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-trinity-asterion-upgrade-4.png",
@@ -64385,8 +64385,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-trinity-asterion-4.png",
@@ -64430,8 +64430,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-trinity-asterion-4.png",
@@ -64475,8 +64475,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 18
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-trinity-theseus-rl-4.png",
@@ -64520,8 +64520,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-trinity-theseus-killshot-4.png",
@@ -64565,8 +64565,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 19
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-trinity-theseus-4.png",
@@ -64610,8 +64610,8 @@
     ]
    },
    "cost": {
-    "regular": 15,
-    "veteran": 17
+    "regular": 13,
+    "veteran": 15
    },
    "art": {
     "src": "img/units/battle-armor-trinity-yinglong-bc3-4.png",
@@ -64655,8 +64655,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 19
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-trinity-yinglong-4.png",
@@ -64786,8 +64786,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-4.png",
@@ -64831,8 +64831,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-drill-4.png",
@@ -64876,8 +64876,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-4.png",
@@ -64921,8 +64921,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-drill-4.png",
@@ -64966,8 +64966,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-4.png",
@@ -65011,8 +65011,8 @@
     ]
    },
    "cost": {
-    "regular": 9,
-    "veteran": 10
+    "regular": 8,
+    "veteran": 9
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-drill-4.png",
@@ -65056,7 +65056,7 @@
     ]
    },
    "cost": {
-    "regular": 10,
+    "regular": 9,
     "veteran": 11
    },
    "art": {
@@ -65102,7 +65102,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-lmg-4.png",
@@ -65146,7 +65146,7 @@
     ]
    },
    "cost": {
-    "regular": 10,
+    "regular": 9,
     "veteran": 11
    },
    "art": {
@@ -65192,7 +65192,7 @@
    },
    "cost": {
     "regular": 10,
-    "veteran": 12
+    "veteran": 11
    },
    "art": {
     "src": "img/units/battle-armor-tunnelrat-lmg-4.png",
@@ -65626,8 +65626,8 @@
     ]
    },
    "cost": {
-    "regular": 17,
-    "veteran": 20
+    "regular": 15,
+    "veteran": 17
    },
    "art": {
     "src": "img/units/battle-armor-undine-5.png",
@@ -65672,8 +65672,8 @@
     ]
    },
    "cost": {
-    "regular": 24,
-    "veteran": 27
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-undine-5.png",
@@ -66691,8 +66691,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-void-4.png",
@@ -66736,8 +66736,8 @@
     ]
    },
    "cost": {
-    "regular": 13,
-    "veteran": 15
+    "regular": 12,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-void-ml-4.png",
@@ -66781,8 +66781,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-void-5.png",
@@ -66826,8 +66826,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 13,
+    "veteran": 14
    },
    "art": {
     "src": "img/units/battle-armor-void-4.png",
@@ -66871,8 +66871,8 @@
     ]
    },
    "cost": {
-    "regular": 18,
-    "veteran": 21
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-void-ml-4.png",
@@ -67339,8 +67339,8 @@
     ]
    },
    "cost": {
-    "regular": 32,
-    "veteran": 37
+    "regular": 27,
+    "veteran": 31
    },
    "art": {
     "src": "img/units/battle-armor-warg-5.png",
@@ -67382,8 +67382,8 @@
     ]
    },
    "cost": {
-    "regular": 36,
-    "veteran": 41
+    "regular": 31,
+    "veteran": 35
    },
    "art": {
     "src": "img/units/battle-armor-warg-5.png",
@@ -67820,8 +67820,8 @@
     ]
    },
    "cost": {
-    "regular": 14,
-    "veteran": 16
+    "regular": 12,
+    "veteran": 13
    },
    "art": {
     "src": "img/units/battle-armor-waterelemental-5.png",
@@ -68605,8 +68605,8 @@
     ]
    },
    "cost": {
-    "regular": 22,
-    "veteran": 26
+    "regular": 18,
+    "veteran": 21
    },
    "art": {
     "src": "img/units/battle-armor-wraithba-5.png",
@@ -68650,8 +68650,8 @@
     ]
    },
    "cost": {
-    "regular": 26,
-    "veteran": 30
+    "regular": 21,
+    "veteran": 24
    },
    "art": {
     "src": "img/units/battle-armor-wraithba-5.png",
@@ -68693,8 +68693,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 16,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-xiphos-4.png",
@@ -68736,8 +68736,8 @@
     ]
    },
    "cost": {
-    "regular": 19,
-    "veteran": 22
+    "regular": 15,
+    "veteran": 18
    },
    "art": {
     "src": "img/units/battle-armor-xiphos-b-4.png",
@@ -68779,8 +68779,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 16,
+    "veteran": 19
    },
    "art": {
     "src": "img/units/battle-armor-xiphos-b-4.png",
@@ -70247,8 +70247,8 @@
     ]
    },
    "cost": {
-    "regular": 16,
-    "veteran": 18
+    "regular": 14,
+    "veteran": 16
    },
    "art": {
     "src": "img/units/battle-armor-zou-4.png",
@@ -70291,8 +70291,8 @@
     ]
    },
    "cost": {
-    "regular": 20,
-    "veteran": 23
+    "regular": 18,
+    "veteran": 20
    },
    "art": {
     "src": "img/units/battle-armor-zou-4.png",

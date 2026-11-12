@@ -5,7 +5,7 @@
 <h3>About Motor Pool</h3>
 <p>Motor Pool is an unofficial fan-made force builder for BattleTech Battlefield Support assets.
 Search for units, build a force, and print its cards.</p>
-<p class="muted">Last updated 10 November 2026. The calculations are still being tuned, so this page describes how they work today.</p>
+<p class="muted">Last updated 12 November 2026. The calculations are still being tuned, so this page describes how they work today.</p>
 
 <h4>Where each card comes from</h4>
 <table>
@@ -41,6 +41,7 @@ Search for units, build a force, and print its cards.</p>
   <li><b>Weapons:</b> weapons with 2 shots or fewer don't count, unless the suit would otherwise have no attack.</li>
   <li><b>Damage:</b> one suit's damage × the squad's average cluster hits (2.64 for 4 suits, 3.17 for 5, 4.00 for 6), counted twice, as on the official cards. A squad lands many small hits, so the total is printed in groups of no more than 6 (or the size of one suit's biggest gun, up to 10).</li>
   <li><b>Check and Threshold:</b> the same armor score, × 2.8 instead of a movement adjustment. Threshold is always 5.</li>
+  <li><b>Cost:</b> defense counts × 0.6, because area-effect attacks (artillery, minefields, bombing) do double damage to infantry and battle armor. This puts the Elemental, Elemental (AP Gauss) and Inner Sphere cards within half a point of the official ones.</li>
 </ul>
 
 <h4>How cost works</h4>
@@ -50,7 +51,8 @@ Search for units, build a force, and print its cards.</p>
 Veteran = the unrounded Regular cost × 1.15
 
 Offense = 9.7 × speed × damage × (long range ÷ 9)^0.6 × specials
-Defense = 0.6 × Check value × TMM factor × special armor</pre>
+Defense = 0.6 × Check value × TMM factor × special armor
+          (× 0.6 more for infantry and battle armor)</pre>
 <ul>
   <li><b>Skill:</b> a better Skill is priced exactly like Veteran, since both are one point better in play: a Skill 5 Regular costs what a Skill 6 Veteran with the same stats costs. Artillery, at Skill 8, instead has its offense divided by 1.1 per point.</li>
   <li><b>Speed:</b> grows with MP, for example 0.77 at MP 3 and 1.0 at MP 5.</li>
@@ -66,11 +68,11 @@ Defense = 0.6 × Check value × TMM factor × special armor</pre>
 <p>Its calculated card has MP 3, TMM 2, range 1/2/3, damage 6×2, Skill 5 and Check 9.</p>
 <table>
   <tr><th>Offense</th><td>9.7 × 0.77 × 12 × (3 ÷ 9)^0.6 = 46.4</td></tr>
-  <tr><th>Defense</th><td>0.6 × 225 × 1.27 = 171.3</td></tr>
-  <tr><th>Regular</th><td>(7.5 + (46.4 + 171.3) ÷ 20) × 1.15 (Skill 5) = 21.1, which rounds to <b>21</b></td></tr>
-  <tr><th>Veteran</th><td>21.1 × 1.15 = 24.3, which rounds to <b>24</b></td></tr>
+  <tr><th>Defense</th><td>0.6 × 225 × 1.27 × 0.6 (battle armor) = 102.8</td></tr>
+  <tr><th>Regular</th><td>(7.5 + (46.4 + 102.8) ÷ 20) × 1.15 (Skill 5) = 17.2, which rounds to <b>17</b></td></tr>
+  <tr><th>Veteran</th><td>17.2 × 1.15 = 19.8, which rounds to <b>20</b></td></tr>
 </table>
-<p>The official Elemental card has the same stats but costs 17 (20). Catalyst prices its Skill 5 cards a little below its own Veteran rule; Motor Pool prices them the same as a Veteran, so Clan cards come out a few points higher.</p>
+<p>That is exactly the official Elemental card: same stats, 17 (20).</p>
 
 <h4>Known limits</h4>
 <ul>
@@ -83,7 +85,9 @@ Defense = 0.6 × Check value × TMM factor × special armor</pre>
 
 <h4>Changelog</h4>
 <p class="muted">Newest first. Rule changes alter calculated cards and costs; official cards never change.</p>
-<details open><summary><b>10 November 2026</b> (version 1.5.0)</summary>
+<details open><summary><b>12 November 2026</b></summary>
+<ul><li><b>Battle armor cost:</b> defense counts × 0.6, as area-effect attacks do double damage to them. Battle armor costs drop by up to 7, most by 1–3; the generated Elemental now costs exactly the official 17 (20).</li></ul></details>
+<details><summary><b>10 November 2026</b> (version 1.5.0)</summary>
 <ul>
   <li><b>Cost:</b> a Skill better than 6 is now priced like Veteran, × 1.15 on the whole cost per point. Clan front-line cards and cards with a targeting computer cost a few points more.</li>
   <li>The website now runs Motor Pool's own page, with cards drawn by the same code as the app.</li>
