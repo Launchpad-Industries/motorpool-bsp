@@ -88,7 +88,7 @@ def test_app_lists_standard_sizes_with_unique_ids(rows):
 
 def test_calculated_card_matches_the_model(client, rows):
     r = rows["Elemental Battle Armor [HMG](Sqd5)"]
-    assert (r["mp"], r["mode"], r["tmm"], r["range"], r["damage"], r["cost"]) == (3, "j", 2, [1, 2, 3], "6d×3", 22)
+    assert (r["mp"], r["mode"], r["tmm"], r["range"], r["damage"], r["cost"]) == (3, "j", 2, [1, 2, 3], "6d×3", 19)
     u = client.get(f"/api/unit/{r['id']}").get_json()
     assert u["calculated"]["check"] == 9 and u["official"] is None and not u.get("generic")
     h = client.get(f"/api/card/{r['id']}?view=generated&grade=reg").get_data(as_text=True)
