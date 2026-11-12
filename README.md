@@ -223,15 +223,27 @@ All tunable constants are in `RULES` (`derive.py`) and `COST_RULES`
 
 The website is Motor Pool's own page running without the Python server: same
 layout, search, force list, card previews and print sheet, minus the tools
-that need the app (tweak, approve, settings, proposals). To refresh it:
+that need the app (tweak, approve, settings, proposals). It lives at
+https://launchpad-industries.github.io/motorpool-bsp/.
+
+To publish new cards (after a model change, new approvals or a new
+`official.tsv`), commit those changes, then run one command:
 
 ```
-python -m bsp.export_site                      # rebuilds site/ (about a minute)
-python -m bsp.serve_site                       # look at it on http://127.0.0.1:8765 (Ctrl+C stops it)
+python -m bsp.publish                          # pull, test, export site/, commit it, push
 ```
 
-Then commit and push `site/`; GitHub Pages republishes it. Don't edit the page
-files in `site/` (they're copies of `bsp/web/`).
+It stops if anything is uncommitted or a test fails. The data label under the
+title becomes today's date (date.1, .2... for later changes the same day); the
+app version only changes when `__version__` in `bsp/__init__.py` is bumped for
+an app release. GitHub's "Deploy site" workflow puts it live in about a minute.
+`--dry-run` builds `site/` without committing; to look at it first:
+
+```
+python -m bsp.serve_site                       # http://127.0.0.1:8765 (Ctrl+C stops it)
+```
+
+Don't edit the page files in `site/` (they're copies of `bsp/web/`).
 
 ## Data and licensing
 
