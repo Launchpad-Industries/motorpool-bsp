@@ -14,7 +14,7 @@ ABOUT = Path(__file__).resolve().parent.parent / "bsp" / "web" / "about.html"
 def test_worked_example_matches_the_cost_formula():
     c = cost(3, 2, (6, 2), (1, 2, 3), 5, 9, 0, ["Mechanized", "Nimble", "Spotter", "Swarm"])
     text = ABOUT.read_text(encoding="utf-8")
-    assert (c["regular"], c["veteran"]) == (21, 24)
+    assert (c["regular"], c["veteran"]) == (17, 20)
     assert f'{c["offense_bv"]:.1f}' in text and f'{c["defense_bv"]:.1f}' in text
     assert f'= {c["unrounded"]:.1f}, which rounds to <b>{c["regular"]}</b>' in text
     assert f'{c["unrounded"] * 1.15:.1f}, which rounds to <b>{c["veteran"]}</b>' in text

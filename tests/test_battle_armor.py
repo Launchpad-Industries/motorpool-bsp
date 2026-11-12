@@ -36,22 +36,21 @@ def _card(file_name):
 @need_data
 def test_elemental_mg_matches_official_card_stats():
     # Official generic Elemental (MegaMek links it to [MG] Sqd5): 3j, TMM 2,
-    # 1/2/3, 6x2, Skill 5, Check 9, Threshold 5. Cost 21 by the formula (card 17):
-    # Skill 5 is priced like Veteran, x1.15 on the whole cost (Will, 10 Nov).
+    # 1/2/3, 6x2, Skill 5, Check 9, Threshold 5. Cost 17 (20), the official card's:
+    # Skill 5 x1.15 on the whole cost, infantry defense x0.6 (Will, 10/12 Nov).
     sp, skill, c = _card("Elemental BA [MG] (Sqd5).blk")
     assert (sp.mp, sp.mode, sp.tmm, sp.range, sp.damage) == (3, "j", 2, (1, 2, 3), (6, 2))
     assert (skill, sp.check, sp.threshold) == (5, 9, 5)
     assert {"Mechanized", "Nimble", "Spotter", "Swarm"} <= set(sp.specials)
-    assert c["regular"] == 21
+    assert (c["regular"], c["veteran"]) == (17, 20)   # = the official card
 
 
 @need_data
 def test_elemental_iii_stealth_and_cost():
-    # Stealth +1 TMM; 19 damage in groups of up to 6 (6x3). Cost 29 (card 26)
-    # since Skill 5 is priced like Veteran.
+    # Stealth +1 TMM; 19 damage in groups of up to 6 (6x3). Cost 24 (card 26).
     sp, skill, c = _card("Elemental III BA [AP Gauss](Sqd5).blk")
     assert (sp.tmm, sp.range, sp.damage, sp.check) == (3, (3, 6, 9), (6, 3), 9)
-    assert c["regular"] == 29
+    assert c["regular"] == 24
 
 
 def test_ba_groups_keep_the_total_in_small_hits():

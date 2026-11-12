@@ -56,6 +56,11 @@ COST_RULES = {
     # carrier pays about twice a Check 7 one, not five times. 1.1 per level
     # fitted on the 7 official APC cards (all Check 5-7).
     "apc_points": 1.1,
+    # Infantry Assets (battle armor and conventional; every one has Nimble)
+    # take double damage from area effect: artillery, minefields, bombing.
+    # Their defense counts x0.6, which fits the Elemental, Elemental (AP
+    # Gauss) and IS BA cards within half a point (Will, 12 Nov 2026).
+    "infantry_defense": 0.6,
     "special_mult": {"Crit-Seeker": 1.1,   # +55% crits per crit roll; cards fit best at 1.1
                      "No Turret": 0.9,     # 10% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
@@ -115,6 +120,8 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
                for s in specials):
             off *= mult
     de = rules["defense_scale"] * check_value(check) * tmm_factor(tmm, rules)
+    if any(s.strip().lower() == "nimble" for s in specials):
+        de *= rules["infantry_defense"]
     for key, mult in rules["armor_defense_mult"].items():
         if key in (sp.strip() for sp in specials):
             de *= mult

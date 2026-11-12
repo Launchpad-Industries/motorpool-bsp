@@ -127,6 +127,7 @@ versions of those suits stay calculated.
 | Skill | Same rule as vehicles (`default_skill`): Inner Sphere 6, Clan 5, targeting computer -1 | Elemental 5, Elemental III 5, IS Standard BA 6: no new rule needed |
 | Threshold | 5 | All BA cards |
 | Cost | Vehicle formula unchanged (first pass; Will will revisit) | On the official cards' stats: Elemental 19 (card 17), AP Gauss 20 (19), Elemental III 23 (26), IS BA 15 (13), mean miss ~2 as for vehicles. Generated Elemental III [AP Gauss] (10x2, 3/6/9, TMM 3) costs exactly 26 (30), as printed. Swarm, Mechanized etc. are on every BA, so they're inside the fit. Will, 4 Nov. |
+| Cost: defense (12 Nov) | Defense x0.6 for infantry Assets (any card with Nimble: all battle armor and conventional infantry) | Will, 12 Nov: every generated 1/2/3, 3j, Skill 5 Elemental cost more than the official 17. The book doubles area-effect damage (artillery, minefields, bombing) against infantry Assets, so their Check is worth less than a vehicle's. x0.6 puts the official-stat Elemental at 17.2 (card 17), AP Gauss 18.6 (19), IS BA 12.9 (13); Elemental III 21.1 (26) stays low (its stealth TMM 3 is worth more on Catalyst's card). Generated Elemental [MG] now 17 (20) = official. BA costs fell 0-7, median 2. |
 
 
 Built into the model 4 Nov (`derive_battle_armor` in bsp/derive.py; run with
