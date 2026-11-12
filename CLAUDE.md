@@ -25,7 +25,12 @@ before starting; both places push to `origin main`.
 
 **Publishing the website** (Will, 2026-11-12): after a model change, run the
 **whole** test suite (`python -m pytest tests`) and update every test the
-change moves, About page and changelog included, then commit and push. The
+change moves, About page and changelog included, then commit and push.
+Tests that need MegaMek data **skip** where it isn't downloaded (e.g. a cloud
+session): there, also search `tests/` for the old costs of units the change
+moves (e.g. `test_calculated_card_matches_the_model` in `tests/test_ba_cards.py`
+pins Elemental [HMG]) and update them by working them out, or say in the commit
+that they couldn't be run. The
 website is not rebuilt by that push: Will (or a Claude Code session) runs
 `python -m bsp.publish`, which pulls, tests, exports `site/`, and commits and
 pushes only `site/` as "Website: data <label>". A data-only publish keeps the
