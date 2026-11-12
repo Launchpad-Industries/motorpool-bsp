@@ -5,7 +5,7 @@
 <h3>About Motor Pool</h3>
 <p>Motor Pool is an unofficial fan-made force builder for BattleTech Battlefield Support assets.
 Search for units, build a force, and print its cards.</p>
-<p class="muted">Last updated 6 November 2026. The calculations are still being tuned, so this page describes how they work today.</p>
+<p class="muted">Last updated 10 November 2026. The calculations are still being tuned, so this page describes how they work today.</p>
 
 <h4>Where each card comes from</h4>
 <table>
@@ -45,13 +45,14 @@ Search for units, build a force, and print its cards.</p>
 
 <h4>How cost works</h4>
 <p>Cost is worked out from the card's own stats, not from the unit's Total Warfare BV. The numbers were fitted to the official vehicle cards.</p>
-<pre>Regular = 7.5 + (offense + defense) ÷ 20 + flat specials
+<pre>Regular = (7.5 + (offense + defense) ÷ 20 + flat specials)
+          × 1.15 for each point of Skill better than 6
 Veteran = the unrounded Regular cost × 1.15
 
-Offense = 9.7 × speed × damage × (long range ÷ 9)^0.6
-          × specials × 1.1^(6 − Skill)
+Offense = 9.7 × speed × damage × (long range ÷ 9)^0.6 × specials
 Defense = 0.6 × Check value × TMM factor × special armor</pre>
 <ul>
+  <li><b>Skill:</b> a better Skill is priced exactly like Veteran, since both are one point better in play: a Skill 5 Regular costs what a Skill 6 Veteran with the same stats costs. Artillery, at Skill 8, instead has its offense divided by 1.1 per point.</li>
   <li><b>Speed:</b> grows with MP, for example 0.77 at MP 3 and 1.0 at MP 5.</li>
   <li><b>Check value:</b> 75 at Check 7, +75 per step above, × 2/3 per step below.</li>
   <li><b>TMM factor:</b> how many more attacks it takes to land a hit. TMM 1 to 5 give × 1.10, 1.27, 1.57, 2.2 and 3.3.</li>
@@ -64,12 +65,12 @@ Defense = 0.6 × Check value × TMM factor × special armor</pre>
 <h4>Worked example: Elemental [MG], 5 suits</h4>
 <p>Its calculated card has MP 3, TMM 2, range 1/2/3, damage 6×2, Skill 5 and Check 9.</p>
 <table>
-  <tr><th>Offense</th><td>9.7 × 0.77 × 12 × (3 ÷ 9)^0.6 × 1.1 = 51.0</td></tr>
+  <tr><th>Offense</th><td>9.7 × 0.77 × 12 × (3 ÷ 9)^0.6 = 46.4</td></tr>
   <tr><th>Defense</th><td>0.6 × 225 × 1.27 = 171.3</td></tr>
-  <tr><th>Regular</th><td>7.5 + (51.0 + 171.3) ÷ 20 = 18.6, which rounds to <b>19</b></td></tr>
-  <tr><th>Veteran</th><td>18.6 × 1.15 = 21.4, which rounds to <b>21</b></td></tr>
+  <tr><th>Regular</th><td>(7.5 + (46.4 + 171.3) ÷ 20) × 1.15 (Skill 5) = 21.1, which rounds to <b>21</b></td></tr>
+  <tr><th>Veteran</th><td>21.1 × 1.15 = 24.3, which rounds to <b>24</b></td></tr>
 </table>
-<p>The official Elemental card has the same stats but costs 17 (20), so this is a good example of how close the formula usually gets.</p>
+<p>The official Elemental card has the same stats but costs 17 (20). Catalyst prices its Skill 5 cards a little below its own Veteran rule; Motor Pool prices them the same as a Veteran, so Clan cards come out a few points higher.</p>
 
 <h4>Known limits</h4>
 <ul>
@@ -79,6 +80,36 @@ Defense = 0.6 × Check value × TMM factor × special armor</pre>
   <li>Some suits have no attack on their card, because they carry only anti-personnel weapons, TAG or equipment the model doesn't cover yet, such as mortars and micro bombs.</li>
   <li>Special battle armor types, such as reactive and reflective, get no Check bonus yet.</li>
 </ul>
+
+<h4>Changelog</h4>
+<p class="muted">Newest first. Rule changes alter calculated cards and costs; official cards never change.</p>
+<details open><summary><b>10 November 2026</b> (version 1.5.0)</summary>
+<ul>
+  <li><b>Cost:</b> a Skill better than 6 is now priced like Veteran, × 1.15 on the whole cost per point. Clan front-line cards and cards with a targeting computer cost a few points more.</li>
+  <li>The website now runs Motor Pool's own page, with cards drawn by the same code as the app.</li>
+  <li>Feedback button, a support address, BETA tag, and thanks and credits on this page.</li>
+</ul></details>
+<details><summary><b>9 November 2026</b></summary>
+<ul><li>First public website: browse the cards, build a force and print it.</li></ul></details>
+<details><summary><b>6 November 2026</b> (version 0.1.4)</summary>
+<ul>
+  <li><b>Battle armor damage</b> keeps its total but is printed in groups of no more than 6, as a squad lands many small hits (bigger only for a suit with a single big gun).</li>
+  <li>Battle armor with improved sensors gets PRB. No Crit-Seeker for battle armor for now.</li>
+</ul></details>
+<details><summary><b>5 November 2026</b> (version 0.1.3)</summary>
+<ul>
+  <li><b>Battle armor cards</b>, calculated from MegaMek, in standard squad sizes; the four official cards are linked to their suits.</li>
+  <li>This About page, a Strikes tab beside Assets, and a tidier header.</li>
+</ul></details>
+<details><summary><b>4 November 2026</b></summary>
+<ul><li><b>Strike cards:</b> air strikes, bombing, air cover, artillery, Copperhead, smoke and minefields, with hex diagrams and write-on boxes.</li></ul></details>
+<details><summary><b>2–3 November 2026</b> (versions 0.1.0–0.1.2)</summary>
+<ul><li>First tester build, with the official infantry, battle armor and emplacement cards, and a dark theme.</li></ul></details>
+<details><summary><b>27 October – 1 November 2026</b></summary>
+<ul>
+  <li>The vehicle model: stats and cost worked out from MegaMek data and fitted to the official cards, covering damage groups, range, TMM, cluster weapons and specials.</li>
+  <li>Motor Pool itself: search, force list, card preview, PDF printing, tweaks and signed approvals.</li>
+</ul></details>
 
 <h4>Thank you</h4>
 <p><b>The MegaMek team.</b> Motor Pool is built on MegaMek Data: the unit files and sprites that the
