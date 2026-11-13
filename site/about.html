@@ -32,7 +32,7 @@ Search for units, build a force, and print its cards.</p>
   <tr><th>Damage</th><td>The average damage of the main weapons. Cluster weapons count 0.6 of their missiles or pellets (×1.2 with Artemis IV), and Streaks count in full. Weapons that fall well short on range or value are left out, one reason assets hit less hard than their full units. The total is split into groups, usually of 5, or larger when big guns carry enough of it.</td></tr>
   <tr><th>Check</th><td>An armor score, 2.5 × armor + 1.5 × structure, adjusted for armor type and movement (hover and WiGE lowest, tracked highest), then matched to a Check level.</td></tr>
   <tr><th>Threshold</th><td>8 at 75 tons or more, otherwise 5.</td></tr>
-  <tr><th>Specials</th><td>Added from the unit's equipment, such as ECM, TAG, IF, APC, Commander, AMS, Crit-Seeker and No Turret.</td></tr>
+  <tr><th>Specials</th><td>Added from the unit's equipment, such as ECM, TAG, NARC, IF, APC, Commander, AMS, Crit-Seeker, No Turret, MASH and MFB.</td></tr>
 </table>
 
 <h4>What's different for battle armor</h4>
@@ -42,6 +42,8 @@ Search for units, build a force, and print its cards.</p>
   <li><b>Damage:</b> one suit's damage × the squad's average cluster hits (2.64 for 4 suits, 3.17 for 5, 4.00 for 6), counted twice, as on the official cards. A squad lands many small hits, so the total is printed in groups of no more than 6 (or the size of one suit's biggest gun, up to 10).</li>
   <li><b>Check and Threshold:</b> the same armor score, × 2.8 instead of a movement adjustment. Threshold is always 5.</li>
   <li><b>Cost:</b> defense counts × 0.6, because area-effect attacks (artillery, minefields, bombing) do double damage to infantry and battle armor. This puts the Elemental, Elemental (AP Gauss) and Inner Sphere cards within half a point of the official ones.</li>
+  <li><b>Specials:</b> Fire Resistant, RCA and RFA from the suit's armor; AMS, NARC, TAG, ECM and probes from its equipment. One-shot Narc launchers don't give NARC.</li>
+  <li><b>Swarm:</b> suits that can't swarm (heavy and assault suits, quads, suits without claws or manipulators) have their offense × 0.9. Swarming is powerful but rare in play.</li>
 </ul>
 
 <h4>How cost works</h4>
@@ -59,8 +61,8 @@ Defense = 0.6 × Check value × TMM factor × special armor
   <li><b>Check value:</b> 75 at Check 7, +75 per step above, × 2/3 per step below.</li>
   <li><b>TMM factor:</b> how many more attacks it takes to land a hit. TMM 1 to 5 give × 1.10, 1.27, 1.57, 2.2 and 3.3.</li>
   <li><b>Offense specials:</b> Crit-Seeker × 1.1, AI × 1.05, No Turret × 0.9.</li>
-  <li><b>Defense specials:</b> reactive, reflective or ballistic-reinforced armor × 1.5, AMS × 1.15.</li>
-  <li><b>Flat points:</b> Commander 15, ECM6 7, ECM3 3.5, TAG 2, probe 1, each Arrow IV 38, and each artillery piece 29 to 57. APC costs about 1.1 per level, more on tougher carriers.</li>
+  <li><b>Defense specials:</b> reactive, reflective or ballistic-reinforced armor × 1.5, AMS × 1.15. On battle armor, fire-resistant, reactive and reflective armor × 1.4 (TechManual's battle armor value).</li>
+  <li><b>Flat points:</b> Commander 15, ECM6 7, ECM3 3.5, TAG 2, NARC 1.5, probe 1, each Arrow IV 38, and each artillery piece 29 to 57. APC costs about 1.1 per level, more on tougher carriers.</li>
 </ul>
 <p><b>BV equivalent</b> in the force totals is simply BSP cost × 20.</p>
 
@@ -80,13 +82,14 @@ Defense = 0.6 × Check value × TMM factor × special armor
   <li>Calculated stats can differ from a printed card too. The Differences view shows where.</li>
   <li>Battle armor costs are a first pass: only 4 official cards exist to check them against.</li>
   <li>Some suits have no attack on their card, because they carry only anti-personnel weapons, TAG or equipment the model doesn't cover yet, such as mortars and micro bombs.</li>
-  <li>Special battle armor types, such as reactive and reflective, get no Check bonus yet.</li>
 </ul>
 
 <h4>Changelog</h4>
 <p class="muted">Newest first. Rule changes alter calculated cards and costs; official cards never change.</p>
 <details open><summary><b>12 November 2026</b></summary>
-<ul><li><b>Battle armor cost:</b> defense counts × 0.6, as area-effect attacks do double damage to them. Battle armor costs drop by up to 7, most by 1–3; the generated Elemental now costs exactly the official 17 (20).</li></ul></details>
+<ul><li><b>Battle armor cost:</b> defense counts × 0.6, as area-effect attacks do double damage to them. Battle armor costs drop by up to 7, most by 1–3; the generated Elemental now costs exactly the official 17 (20).</li>
+  <li><b>New specials:</b> Fire Resistant, RCA, RFA and AMS on battle armor; NARC on vehicles (+1.5 cost, as TAG-like support); MASH and MFB. Battle armor with special armor costs 1–3 more.</li>
+  <li><b>Swarm:</b> battle armor that can't swarm costs a little less (offense × 0.9).</li></ul></details>
 <details><summary><b>10 November 2026</b> (version 1.5.0)</summary>
 <ul>
   <li><b>Cost:</b> a Skill better than 6 is now priced like Veteran, × 1.15 on the whole cost per point. Clan front-line cards and cards with a targeting computer cost a few points more.</li>
