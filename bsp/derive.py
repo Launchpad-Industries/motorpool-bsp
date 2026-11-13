@@ -469,6 +469,21 @@ BA_RULES = {
 }
 
 
+def has_narc(items, table: dict) -> bool:
+    """A Narc launcher that can fire more than once (one-shot OS and I-OS
+    launchers don't give the NARC special; Will, 12 Nov 2026)."""
+    for it in items:
+        s = table.get(_clean(it)) or {}
+        nm = (s.get("name") or it).lower()
+        if ("narc" in nm and "pod" not in nm and "ammo" not in nm
+                and not re.search(r"\((i-)?os\)", nm) and not nm.endswith(" os")):
+            return True
+    return False
+
+
+BA_SPECIAL_ARMOR = {35: "Fire Resistant", 37: "RFA", 38: "RCA"}
+
+
 def _launcher_key(text: str):
     t = text.upper().replace("-", " ")
     m = re.search(r"(ADVANCED SRM|SRM|LRM|MRM)\s*(\d+)", t)
@@ -606,10 +621,14 @@ def derive_battle_armor(unit: Unit, table: dict, rules=RULES, ba_rules=None) -> 
         sp.specials.append(f"IF{sp.indirect}")
     if "tag" in names:
         sp.specials.append("TAG")
-    if "narc" in names:
+    if has_narc(unit.equipment.get("Squad", []), table):
         sp.specials.append("NARC")
     if "ecm" in names:
         sp.specials.append("ECM6")
+    if "apds" in names or "antimissile" in names or "anti-missile" in names:
+        sp.specials.append("AMS")
+    if unit.armor_type in BA_SPECIAL_ARMOR:
+        sp.specials.append(BA_SPECIAL_ARMOR[unit.armor_type])
     if "probe" in names or "improvedsensors" in names:
         sp.specials.append("PRB")
     sp.notes.append(f"armor BV {v:.0f}")
@@ -679,5 +698,11 @@ def derive_vehicle(unit: Unit, table: dict, rules=RULES) -> Spec:
         sp.specials.append("ECM6")          # Guardian, Clan, Angel: 6-hex
     if "probe" in names or "beagle" in names:
         sp.specials.append("PRB")
+    if has_narc([w for _, w in unit.weapons()], table):
+        sp.specials.append("NARC")
+    if "mash" in names:
+        sp.specials.append("MASH")
+    if "mobilefieldbase" in names or "mobile field base" in names:
+        sp.specials.append("MFB")
     sp.notes.append(f"armor BV {armor_bv:.0f}")
     return sp

@@ -42,7 +42,8 @@ COST_RULES = {
     # by radius.
     "flat_points": {"Commander": 15, "ECM6": 7, "ECM3": 3.5, "ECM": 7,
                     "PRB": 1,     # sensor, so flat; Beagle 10 BV ~ 0.5 pt
-                    "TAG": 2},   # support, so flat; cards fit 2.5-3, Will felt 2 is the most it's worth
+                    "TAG": 2,
+                    "NARC": 1.5},  # TechManual Narc BV 30; support like TAG, lasts the game (Will, 12 Nov)   # support, so flat; cards fit 2.5-3, Will felt 2 is the most it's worth
     # Special armors multiply defensive BV (MegaMek/TacOps: reactive,
     # reflective and ballistic-reinforced x1.5). Applied to the defense part
     # of cost, not to Check: putting it in Check broke two official cards.
@@ -61,6 +62,13 @@ COST_RULES = {
     # Their defense counts x0.6, which fits the Elemental, Elemental (AP
     # Gauss) and IS BA cards within half a point (Will, 12 Nov 2026).
     "infantry_defense": 0.6,
+    # Battle armor special armors: TechManual counts fire-resistant, reactive
+    # and reflective BA armor at 3.5 BV per point instead of 2.5, x1.4
+    # (Will, 12 Nov). AMS as on vehicles. Used instead of armor_defense_mult.
+    "infantry_armor_mult": {"Fire Resistant": 1.4, "RCA": 1.4, "RFA": 1.4, "AMS": 1.15},
+    # Infantry that can't Swarm: offense x0.9. Swarming is powerful but rare
+    # in play (Will, 12 Nov); every official infantry card has Swarm.
+    "no_swarm_offense": 0.9,
     "special_mult": {"Crit-Seeker": 1.1,   # +55% crits per crit roll; cards fit best at 1.1
                      "No Turret": 0.9,     # 10% off offense; Will: 10-20% is right
                      "AI": 1.05}       # set by hand, not fitted (fit gave 0.44 on 4 cards)
@@ -120,9 +128,12 @@ def cost(mp: int, tmm: int, damage: tuple | None, rng: tuple | None, skill: int,
                for s in specials):
             off *= mult
     de = rules["defense_scale"] * check_value(check) * tmm_factor(tmm, rules)
-    if any(s.strip().lower() == "nimble" for s in specials):
+    infantry = any(s.strip().lower() == "nimble" for s in specials)
+    if infantry:
         de *= rules["infantry_defense"]
-    for key, mult in rules["armor_defense_mult"].items():
+        if not any(s.strip().lower() == "swarm" for s in specials):
+            off *= rules["no_swarm_offense"]
+    for key, mult in (rules["infantry_armor_mult"] if infantry else rules["armor_defense_mult"]).items():
         if key in (sp.strip() for sp in specials):
             de *= mult
     raw = rules["base"] + (off + de) / 20

@@ -86,6 +86,8 @@ Armor modifiers for Check:
 | ECM X | Guardian, Clan or Angel ECM = ECM6; Watchdog = ECM3 | ECM6 +7 points flat; ECM3 +3.5 | From the Savannah (Interdictor) and Browning cards, which have no attack. Flat so unarmed units pay for it. About 2.5× the TechManual's 61 BV: a 6-hex bubble covers the whole force, and the rules limit how many ECM assets you can buy. |
 | IF X | LRM/MML hits (0.6 of missiles, ×1.2 Artemis) ÷ 5, rounded; none under 5 hits. MMLs count in LRM mode (1 point per hit); Thunderbolts count their full damage (one large missile, indirect-capable) | Counted as X × 5 damage at 7/14/21, ×0.8; the larger of IF or direct fire | 26/30. Misses: Condor Upgrade, Maxim, Behemoth (standard), Manticore (HPPC). |
 | No Turret | Vehicle (VTOLs included) has no turret in MegaMek; all four Warrior VTOL cards carry it | Offense ×0.9 | A real disadvantage in play; Will puts it at a 10–20% discount on offense. Fitted 12% off on 25 cards, rounded to one decimal. |
+| MASH, MFB | MASH equipment / mobile field base | printed, no cost | On official cards (2 MASH, Savior MFB) that fit without a cost for them; MFB has no effect in combat. Printed on generated vehicles from 12 Nov. |
+| NARC | Narc launcher fitted (not one-shot OS / I-OS) | +1.5 points flat | Will, 12 Nov 2026. Support for Narc-capable missiles, like TAG, and the pod lasts the game, but it needs its own hit and can't target Assets. TechManual Narc BV 30 = 1.5 points (compact Narc 16, OS 6). No official cards to fit. Now printed on vehicles too (was BA only). |
 | PRB | Active probe fitted | +1 point flat | A sensor, so its value doesn't scale with firepower (Will). TechManual probe BV is 10–25 (½–1¼ points); without a probe adjustment the 8 PRB cards price about 1 point low. Replaced a fitted ×1.08 offense multiplier. |
 | TAG | TAG fitted | +2 points flat | Support for guided weapons, not firepower, so flat. TW BV is 0 (the benefit is counted in the guided weapons). The 8 TAG cards fit best at 2.5–3 points, but only slightly better than 2 (average error 2.0–2.1 vs 2.2); Will thought 2 was already a bit high, so 2. Replaced a fitted ×1.05 offense multiplier. |
 | TC | Targeting computer | Through Skill (one step better) | |
@@ -153,6 +155,17 @@ for Will to review:
   suits: 2 armored gloves also do; magnetic clamps always; assault never);
   Swarm also needs light/medium weight and not UMU.
 - IF: indirect-fire launchers (BA LRMs) give IF from their damage x squad hits.
+- Special armor (Will, 12 Nov): Fire Resistant (armor type 35), RFA (37), RCA
+  (38) printed on BA; defense x1.4 for each, TechManual's BA armor value
+  (3.5 BV per point instead of 2.5, MegaMek BattleArmorBVCalculator). Vehicles
+  keep x1.5 for RCA/RFA. AMS (BA APDS) x1.15 as on vehicles.
+- Swarm (Will, 12 Nov): BA that can't swarm have offense x0.9. TechManual BV
+  counts arm weapons twice for anti-'Mech-capable suits and BSP Swarm doubles
+  damage in the same hex, but Will judged swarming rare in play. Every official
+  infantry card has Swarm, so no fit moves. Mechanized: no cost (TechManual
+  gives it nothing: manipulators 0 BV, magnetic clamps 1 BV).
+- Damage x2 kept (Will, 12 Nov) although with Swarm a squad deals ~4x its TW
+  damage in the same hex; matches all four official cards.
 - No Crit-Seeker for BA for now (Will, 6 Nov): every squad already lands its
   damage in small groups; revisit later.
 - TAG, NARC, ECM6, PRB specials from equipment names; BA improved sensors give PRB (6 Nov).
